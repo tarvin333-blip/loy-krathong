@@ -283,6 +283,24 @@ body.in-battle .devfab,.devfab[hidden],.devbar[hidden]{display:none!important}
 .setrow{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center;padding:8px 10px;border-radius:12px;border:1px solid rgba(var(--rc),.35);background:rgba(var(--rc),.06)}
 .setrow.on{border-color:rgba(var(--rc),.95);background:linear-gradient(90deg,rgba(var(--rc),.22),rgba(var(--rc),.05));box-shadow:0 0 14px rgba(var(--rc),.35)}
 .setrow b{font-size:13px;color:rgb(var(--rc))} .setrow small{grid-column:1;font-size:11px;color:var(--ink-dim)} .setrow .btn{grid-row:1/3;grid-column:2;padding:6px 10px;font-size:12px}
+.card.picker{display:flex;flex-direction:column;padding:0;overflow:hidden;max-height:90%}
+.pk-head{padding:16px 16px 8px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(10,8,30,.4)}
+.pk-slots{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.pk-slot{display:flex;align-items:center;gap:6px;min-height:48px;padding:6px 8px;border-radius:12px;border:1px dashed rgba(255,255,255,.25);background:rgba(255,255,255,.03);min-width:0}
+.pk-slot.full{border:1px solid var(--gold);background:rgba(255,200,97,.1)}
+.pk-slot img,.pk-row img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated;flex:none}
+.pk-slot div,.pk-row div{min-width:0;flex:1;text-align:left}
+.pk-slot b,.pk-row b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk-slot small,.pk-row small{display:block;font-size:11px;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk-x{flex:none;background:none;border:0;color:#ffb3b3;font-size:15px;cursor:pointer;padding:4px}
+.pk-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pk-search{flex:1;min-width:140px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:var(--ink);padding:8px 10px;font:inherit;font-size:14px}
+.pk-sorts{display:flex;gap:4px} .pk-sorts .btn{padding:6px 9px;font-size:12px} .pk-sorts .btn.on{background:var(--gold);color:#2a1600;border-color:var(--gold)}
+.pk-list{flex:1;overflow-y:auto;padding:8px 12px;display:grid;gap:4px;align-content:start;min-height:120px}
+.pk-row{display:flex;align-items:center;gap:8px;width:100%;padding:6px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--ink);font:inherit;cursor:pointer}
+.pk-row.on{border-color:var(--gold);background:rgba(255,200,97,.14)}
+.pk-check{flex:none;font-style:normal;color:var(--gold);opacity:0} .pk-row.on .pk-check{opacity:1}
+.pk-foot{display:flex;gap:8px;justify-content:flex-end;padding:10px 16px 14px;border-top:1px solid rgba(255,255,255,.08);background:rgba(10,8,30,.5)}
 .party{margin:8px 0;padding:10px;border-radius:12px;border:1px solid rgba(140,200,255,.35);background:rgba(140,200,255,.06);display:grid;gap:6px}
 .party-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .pchip{padding:7px 8px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);min-width:0}
@@ -1874,7 +1892,7 @@ function skillsFromSticks(st){ return (st||[]).slice(0,1).map(i=>FORTUNE_SKILL[i
 function myOnlineIds(){ return Object.keys(tokens).filter(id=>cachedReal.some(k=>k.id===id)); }
 function kOf(id){ return cachedReal.find(k=>k.id===id); }
 function backBtn(acts,label,fn){ const b=el("button","btn",label); b.addEventListener("click",fn); acts.append(b); return b; }
-function showCard(build){ closeSheet(); const card=$("card"); card.textContent=""; build(card); card.hidden=false; $("veil").hidden=false; }
+function showCard(build){ closeSheet(); const card=$("card"); card.textContent=""; card.classList.remove("picker"); build(card); card.hidden=false; $("veil").hidden=false; }
 
 async function refreshMyProgs(){
   if(!apiOK) return {};
@@ -2031,21 +2049,31 @@ function teamBonus(progs){ const cls=new Set(progs.map(p=>p&&p.cls).filter(Boole
 async function openPartyPicker(id){
   showCard(card=>{ card.append(el("div","kind","เลือกเพื่อนร่วมทีม")); card.append(el("p","meta","กำลังโหลด…")); });
   let board=[]; try{ board=(await api("?board")).board||[]; }catch(e){}
-  const mine2=myOnlineIds().filter(x=>x!==id).map(x=>({id:x,name:kOf(x).name,type:kOf(x).type,level:(myProgs[x]&&myProgs[x].prog.level)||1,cls:myProgs[x]&&myProgs[x].prog.cls,stars:myProgs[x]&&myProgs[x].prog.stars,mine:true}));
-  const others=board.filter(b=>b.id!==id&&!mine2.some(m=>m.id===b.id));
-  const sel=(partySel[id]||[]).filter(x=>x!==id);
+  const mineL=myOnlineIds().filter(x=>x!==id).map(x=>({id:x,name:kOf(x).name,type:kOf(x).type,level:(myProgs[x]&&myProgs[x].prog.level)||1,cls:myProgs[x]&&myProgs[x].prog.cls,stars:myProgs[x]&&myProgs[x].prog.stars,mine:true}));
+  const all=[...mineL,...board.filter(b=>b.id!==id&&!mineL.some(m=>m.id===b.id))];
+  let sel=(partySel[id]||[]).filter(x=>x!==id&&all.some(a=>a.id===x)), q="", sort="power";
+  const power=b=>(b.level||1)+20*(b.stars||0)+(b.bestDungeon||0)*2;
   showCard(card=>{
-    card.append(el("div","kind","เลือกเพื่อนร่วมทีม (สูงสุด 2)")); card.append(el("h3",null,"ปาร์ตี้ลงดันเจี้ยน"));
-    card.append(el("p","meta","เพื่อนจะสู้ด้วย AI ตามค่าพลัง สกิล คลาส และเครื่องรางที่เจ้าของอัปไว้ · เจ้าของได้ส่วนแบ่ง 20% ของเหรียญ · ยิ่งทีมใหญ่ ปีศาจยิ่งแข็งและมาเยอะขึ้น"));
-    const list=el("div","pick");
-    const row=(b,tag)=>{ const on=sel.includes(b.id); const bt=el("button",on?"on":null); const tx=el("div"); tx.append(el("b",null,(on?"✔ ":"")+b.name+(tag?` · ${tag}`:""))); tx.append(el("small",null,`${b.stars?starStr(b.stars)+" ":""}${(TYPE_BY[b.type]||TYPES[0]).name}${b.cls&&CLASS_INFO[b.cls]?" · "+CLASS_INFO[b.cls].n:""} · Lv.${b.level||1}${b.kills!=null?" · ⚔ "+b.kills:""}${b.bestDungeon?" · ดันเจี้ยน "+b.bestDungeon:""}`)); bt.append(tx);
-      bt.addEventListener("click",()=>{ let s2=sel.filter(x=>x!==b.id); if(!on){ s2.push(b.id); if(s2.length>2) s2=s2.slice(-2); } partySel[id]=s2; lsSet("lk.party",partySel); openPartyPicker(id); }); list.append(bt); };
-    if(mine2.length){ list.append(el("b",null,"กระทงตัวอื่นของฉัน")); mine2.forEach(b=>row(b,"ของฉัน")); }
-    list.append(el("b",null,"จากทำเนียบนักชน")); if(!others.length) list.append(el("p","meta","ยังไม่มีกระทงคนอื่นให้ชวน")); others.slice(0,30).forEach(b=>row(b));
-    card.append(list);
-    const acts=el("div","acts"); const ok=el("button","btn primary",`ตกลง (ทีม ${1+sel.length} ลำ)`); ok.addEventListener("click",()=>openDungeonIntro(id)); acts.append(ok);
-    if(sel.length){ const cl=el("button","btn","ไปคนเดียว"); cl.addEventListener("click",()=>{ partySel[id]=[]; lsSet("lk.party",partySel); openDungeonIntro(id); }); acts.append(cl); }
-    card.append(acts);
+    card.classList.add("picker");
+    const head=el("div","pk-head"); head.append(el("div","kind","ปาร์ตี้ลงดันเจี้ยน · เลือกได้ 2 ลำ"));
+    const slots=el("div","pk-slots"); head.append(slots);
+    const tools=el("div","pk-tools"); const inp=document.createElement("input"); inp.type="search"; inp.placeholder="🔍 ค้นหาชื่อกระทง"; inp.className="pk-search"; tools.append(inp);
+    const sorts=el("div","pk-sorts"); for(const [v,n] of [["power","เก่งสุด"],["level","Lv สูง"],["mine","ของฉัน"]]){ const b=el("button","btn"+(v===sort?" on":""),n); b.dataset.v=v; b.addEventListener("click",()=>{ sort=v; sorts.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===v)); draw(); }); sorts.append(b); } tools.append(sorts);
+    head.append(tools); card.append(head);
+    const list=el("div","pk-list"); card.append(list);
+    const foot=el("div","pk-foot"); const ok=el("button","btn primary",""); ok.addEventListener("click",()=>{ partySel[id]=sel.slice(); lsSet("lk.party",partySel); openDungeonIntro(id); }); const back=el("button","btn","ยกเลิก"); back.addEventListener("click",()=>openDungeonIntro(id)); foot.append(back,ok); card.append(foot);
+    const info=b=>`${b.stars?starStr(b.stars)+" ":""}${b.cls&&CLASS_INFO[b.cls]?CLASS_INFO[b.cls].n+" · ":""}Lv.${b.level||1}${b.bestDungeon?" · 🏰"+b.bestDungeon:""}`;
+    const thumb=t=>{ const im=document.createElement("img"); im.src="img/kr/"+t+".png"; im.alt=""; return im; };
+    function toggle(bid){ if(sel.includes(bid)) sel=sel.filter(x=>x!==bid); else { sel.push(bid); if(sel.length>2) sel=sel.slice(-2); } sync(); }
+    function sync(){ slots.textContent=""; for(let i=0;i<2;i++){ const b=all.find(a=>a.id===sel[i]); const c=el("div","pk-slot"+(b?" full":"")); if(b){ c.append(thumb(b.type)); const t=el("div"); t.append(el("b",null,b.name)); t.append(el("small",null,info(b))); c.append(t); const x=el("button","pk-x","✕"); x.addEventListener("click",()=>toggle(b.id)); c.append(x); } else c.append(el("small",null,`ช่อง ${i+1} · แตะรายชื่อด้านล่าง`)); slots.append(c); }
+      ok.textContent=sel.length?`ลงดันเจี้ยนทีม ${1+sel.length} ลำ ✔`:"ไปคนเดียว"; list.querySelectorAll(".pk-row").forEach(r=>r.classList.toggle("on",sel.includes(r.dataset.id))); }
+    function draw(){ list.textContent=""; let rows=all.filter(b=>!q||b.name.toLowerCase().includes(q));
+      if(sort==="mine") rows=rows.filter(b=>b.mine); else rows=rows.slice().sort((a,b)=>sort==="level"?(b.level||1)-(a.level||1):power(b)-power(a));
+      if(!rows.length) list.append(el("p","meta",sort==="mine"?"ยังไม่มีกระทงตัวอื่นของคุณ":"ไม่พบกระทง"));
+      for(const b of rows.slice(0,60)){ const r=el("button","pk-row"); r.type="button"; r.dataset.id=b.id; r.append(thumb(b.type)); const t=el("div"); t.append(el("b",null,b.name+(b.mine?" · ของฉัน":""))); t.append(el("small",null,info(b))); r.append(t); r.append(el("i","pk-check","✔")); r.addEventListener("click",()=>toggle(b.id)); list.append(r); }
+      sync(); }
+    inp.addEventListener("input",()=>{ q=inp.value.trim().toLowerCase(); draw(); });
+    draw();
   });
 }
 async function openDungeonIntro(id){
@@ -2185,7 +2213,7 @@ function showGacha(id,got){
   sfx(best?"win":"chime"); if(best) for(let i=0;i<(best==="UR"?10:4);i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*200);
 }
 /* ================= ending: Phra Mae Khongkha rises from the river to bless the champion ================= */
-const ENDING_BG=null; // e.g. {src:"img/ending.webp",hor:.55} — falls back to the current river at golden dawn
+const ENDING_BG={src:"img/ending.webp",hor:.56}; // painted dawn river (falls back to the current river at golden dawn while loading)
 const GODDESS=new Image(); GODDESS.src="img/goddess.png";
 let ending=null, endImg=null;
 const END_LINES=["ความมืดแห่งความว่างเปล่าสลายไปแล้ว","พระแม่คงคาเสด็จขึ้นจากสายน้ำ มาอวยพรผู้กล้า","ขอให้ทุกคำอธิษฐานที่ลอยไปกับกระทง จงสมดังใจ","ขอให้ความทุกข์โศกลอยไปกับสายน้ำ เหลือไว้แต่ความสุข ความรัก และแสงสว่าง"];
