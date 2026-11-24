@@ -144,6 +144,41 @@ input::placeholder,textarea::placeholder{color:#8a86a3}
 .li-text{min-width:0;flex:1}
 .li-photo{width:36px;height:36px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2px #e7b24a}
 .siam-no{margin-top:14px}
+
+body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.in-battle .empty, body.in-battle .drawer{display:none!important}
+.bhud{position:fixed;z-index:6;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 92px);width:min(92vw,420px);background:var(--glass);border:1px solid var(--glass-line);border-radius:16px;padding:10px 12px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.bh-row{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
+.bh-row b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.bh-row span{color:var(--ink-dim);flex:none;margin-left:auto}
+.bh-exit{flex:none;border:1px solid rgba(255,255,255,.2);background:transparent;border-radius:8px;padding:1px 8px;font-size:11px}
+.bar{position:relative;height:14px;border-radius:7px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:4px}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:7px;transition:width .15s}
+.bar.hp i{background:linear-gradient(90deg,#ff5f6d,#ffc371 60%,#7cf29a)}
+.bar.sp i{background:linear-gradient(90deg,#6a7cff,#9ff3ff)}
+.bar span{position:absolute;inset:0;font-size:10px;font-weight:700;line-height:14px;text-align:center;color:#fff;text-shadow:0 1px 2px #000;font-variant-numeric:tabular-nums}
+.bskills{position:fixed;z-index:6;left:0;right:0;bottom:0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));display:flex;gap:8px;justify-content:center;flex-wrap:nowrap;pointer-events:none}
+.sk{pointer-events:auto;position:relative;overflow:hidden;width:min(calc((100vw - 60px)/4),120px);min-height:64px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(14,18,48,.85);padding:6px 6px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.sk b{font-size:12px;line-height:1.2}
+.sk small{font-size:10px;color:var(--ink-dim)}
+.sk .key{position:absolute;top:3px;left:6px;font-size:10px;color:var(--ink-dim)}
+.sk.sig{border-color:var(--gold);background:linear-gradient(180deg,rgba(80,58,10,.85),rgba(14,18,48,.85))}
+.sk.ready{box-shadow:0 0 0 1px var(--gold) inset,0 0 18px rgba(255,200,97,.35)}
+.sk:disabled{opacity:.45}
+.sk-exit{pointer-events:auto;align-self:center;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(14,18,48,.85);padding:10px 12px;font-size:12px}
+.pick{display:grid;gap:8px;margin-top:12px}
+.pick button{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);border-radius:12px;padding:10px}
+.pick button:hover{border-color:var(--gold)}
+.pick b{display:block;font-size:14px}
+.pick small{display:block;font-size:11px;color:var(--ink-dim)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.stats div{background:rgba(255,255,255,.06);border-radius:10px;padding:6px;text-align:center;font-size:11px;color:var(--ink-dim)}
+.stats b{display:block;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.sticks{display:grid;gap:8px;margin-top:10px}
+.stick{border:1px solid rgba(255,200,97,.35);background:linear-gradient(90deg,rgba(255,200,97,.12),rgba(255,255,255,.03));border-radius:12px;padding:8px 10px;animation:pop .35s both}
+.stick b{color:var(--gold)}
+.stick p{margin:2px 0 0;font-size:12px;color:var(--ink-dim)}
+.shake{display:inline-block;animation:shake .5s ease-in-out 3}
+@keyframes shake{25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
 </style>
 </head>
 <body>
@@ -159,6 +194,7 @@ input::placeholder,textarea::placeholder{color:#8a86a3}
     <button class="tool" id="btnSound" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/></svg>เสียง</button>
     <button class="tool" id="btnFire"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>จุดพลุ</button>
     <button class="tool" id="btnLantern"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 4h10l2 13H5L7 4z"/><path d="M10 21h4"/></svg>ปล่อยโคม</button>
+    <button class="tool" id="btnBattle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5 21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/></svg>ศึกกระทง</button>
     <button class="tool" id="btnList" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>รายชื่อ</button>
   </div>
 </header>
@@ -212,6 +248,13 @@ input::placeholder,textarea::placeholder{color:#8a86a3}
 </section>
 
 <section class="card" id="card" hidden role="dialog" aria-modal="true"></section>
+
+<div class="bhud" id="bhud" hidden>
+  <div class="bh-row"><b id="bhName"></b><span id="bhMeta"></span><button type="button" class="bh-exit" id="bhExit" aria-label="ออกจากศึก">ออก ✕</button></div>
+  <div class="bar hp"><i id="bhHp"></i><span id="bhHpT"></span></div>
+  <div class="bar sp"><i id="bhSp"></i><span id="bhSpT"></span></div>
+</div>
+<div class="bskills" id="bskills" hidden></div>
 
 <script>
 (() => {
@@ -1061,7 +1104,7 @@ let hitList=[];
 function frame(nowP){
   const dt=Math.min(.05,(nowP-last)/1000); last=nowP;
   const t=(nowP-t0)/1000, now=Date.now();
-  const c=ctx; c.setTransform(DPR,0,0,DPR,0,0);
+  const c=ctx; let shx=0, shy=0; if(battle&&battle.shake>0){ shx=rnd(-1,1)*battle.shake; shy=rnd(-1,1)*battle.shake; battle.shake=Math.max(0,battle.shake-dt*40); } c.setTransform(DPR,0,0,DPR,shx*DPR,shy*DPR);
   c.drawImage(bg,0,0,W,H);
   // sky life
   for(const s of twinkles){ const a=.45+.55*Math.sin(t*2.4+s.p); c.fillStyle=`rgba(255,250,230,${a})`; c.fillRect(s.x-.8,s.y-.8,2.2,2.2); if(s.big&&a>.85){ c.fillStyle=`rgba(255,250,230,${(a-.85)*2})`; c.fillRect(s.x-4,s.y+.2,9,.8); c.fillRect(s.x+.2,s.y-4,.8,9); } }
@@ -1128,6 +1171,7 @@ function frame(nowP){
     for(let j=0;j<3;j++){ const kk=k-j*.18; if(kk<=0) continue; c.beginPath(); c.ellipse(r.x,r.y,r.r*kk,r.r*kk*.3,0,0,TAU); c.stroke(); } }
 
   // ---- krathongs ----
+  if(battle){ hitList=[]; battleStep(dt,t); battleDraw(c,t,dt); } else {
   const list=cachedAll.map(k=>({k,p:kPos(k,t,now)})).sort((a,b)=>a.p.y-b.p.y);
   hitList=list;
   for(const {k,p} of list){
@@ -1162,6 +1206,7 @@ function frame(nowP){
       c.fillText(label,p.x,ly+1,180);
     }
     if(hi){ c.strokeStyle=`rgba(255,210,120,${.5+.5*Math.sin(t*6)})`; c.lineWidth=2; c.beginPath(); c.ellipse(p.x,p.y+p.s*.1,p.s*1.6,p.s*.55,0,0,TAU); c.stroke(); }
+  }
   }
   drawGimmicksFront(c,t,dt);
   // fish
@@ -1369,8 +1414,285 @@ function sceneTap(x,y){
   return false;
 }
 
+/* ================= battle mode (local only: nobody's real krathong is touched) ================= */
+const BSTATS={
+  banana:{hp:120,atk:14,def:11,spd:1.0,pas:"ใบตองเหนียว: แรงชน +15%",sig:"spin"},
+  lotus:{hp:110,atk:11,def:10,spd:1.05,pas:"บัวฟื้นฟู: ฟื้น HP 2/วินาที",sig:"bloom"},
+  bread:{hp:150,atk:10,def:13,spd:.82,pas:"ขนมปังหอม: ปลารอบตัวงับศัตรูที่อยู่ใกล้",sig:"school"},
+  coconut:{hp:165,atk:12,def:18,spd:.75,pas:"กะลาแกร่ง: รับแรงชนน้อยลง 30%",sig:"shell"},
+  pride:{hp:105,atk:15,def:10,spd:1.2,pas:"รุ้งพลังใจ: SP มาไวขึ้น 50%",sig:"rainbow"},
+  cat:{hp:95,atk:16,def:9,spd:1.25,pas:"แมวเหมียว: ชนติดคริ 25% (x1.8)",sig:"claw"},
+  star:{hp:92,atk:13,def:8,spd:1.05,pas:"พลังดวงดาว: สกิลแรงขึ้น 35%",sig:"meteor"}
+};
+const SKILLS={
+  dash:{n:"พุ่งรักแรง",d:"พุ่งชนศัตรูใกล้สุด แรงชน x2",cost:30,c:"255,120,170"},
+  gold:{n:"คลื่นเงินทอง",d:"คลื่นทองผลักศัตรูรอบตัว ดาเมจ 18",cost:45,c:"255,210,90"},
+  shield:{n:"เกราะงานผ่าน",d:"อมตะ 3 วินาที",cost:40,c:"150,220,255"},
+  heal:{n:"สุขภาพดี",d:"ฟื้น HP 40",cost:40,c:"120,255,160"},
+  haste:{n:"ลมส่งท้าย",d:"เร็วขึ้น 1.8 เท่า 5 วินาที",cost:30,c:"180,255,240"},
+  charm:{n:"เสน่ห์แรง",d:"ศัตรูหลงเสน่ห์ ว่ายหนี 4 วินาที",cost:35,c:"255,150,220"},
+  vortex:{n:"น้ำวนลืมแฟนเก่า",d:"น้ำวนดูดศัตรู ดาเมจ 12/วิ 3 วิ",cost:55,c:"120,170,255"},
+  bolt:{n:"ไอเดียฟ้าผ่า",d:"ฟ้าผ่าศัตรูใกล้สุด ดาเมจ 32",cost:45,c:"255,255,170"},
+  fish:{n:"ฝูงปลาเพื่อนซี้",d:"ปลา 3 ตัวไปงับศัตรู",cost:50,c:"255,170,90"},
+  calm:{n:"ใจสงบ",d:"ฟื้น HP 6/วิ 5 วิ และ SP มาไว",cost:25,c:"200,200,255"},
+  spin:{n:"บายศรีพันกลีบ",d:"หมุนฟาดรอบตัว ดาเมจ 22 กระเด็น",cost:40,c:"140,230,120",sig:1},
+  bloom:{n:"บัวบานสะพรั่ง",d:"ฟื้น HP 30 และเกราะ 2 วินาที",cost:45,c:"255,170,210",sig:1},
+  school:{n:"เรียกฝูงปลาใหญ่",d:"ปลา 5 ตัวไปงับศัตรู",cost:45,c:"255,190,110",sig:1},
+  shell:{n:"กะลาครอบ",d:"เกราะ 4 วินาที สะท้อนแรงชน",cost:45,c:"200,150,100",sig:1},
+  rainbow:{n:"รุ้งพุ่งทะยาน",d:"พุ่งทะลุ ดาเมจ 25 และเร็วขึ้น 3 วิ",cost:40,c:"255,140,255",sig:1},
+  claw:{n:"ข่วนแมวเหมียว",d:"ข่วน 3 ครั้ง ครั้งละ 12 ติดคริ",cost:35,c:"255,200,140",sig:1},
+  meteor:{n:"ดาวตกถล่ม",d:"ดาวตก 4 ลูก ลูกละ 18",cost:55,c:"190,220,255",sig:1}
+};
+// each เซียมซี fortune grants one skill
+const FORTUNE_SKILL=["dash","gold","shield","heal","haste","charm","vortex","dash","gold","vortex","fish","bolt","gold","calm","heal","fish"];
+const NPCS=[{name:"กระทงลุงแดง",type:"coconut",candle:"gold"},{name:"แม่ค้าขนมปัง",type:"bread",candle:"white"},{name:"เจ้าแมวส้ม",type:"cat",candle:"pink"},{name:"บัวหลวงแสนงอน",type:"lotus",candle:"pink"},{name:"ดาวตกตัวป่วน",type:"star",candle:"violet"},{name:"สายรุ้งซิ่ง",type:"pride",candle:"blue"},{name:"ใบตองสายบู๊",type:"banana",candle:"gold"}];
+let battle=null;
+const bKeys=new Set();
+function bU(){ return unit(); }
+function laneOf(y){ const a=laneY(0), b=laneY(1); return Math.min(1,Math.max(0,(y-a)/Math.max(1,b-a))); }
+function fSize(f){ return bU()*(.42+laneOf(f.y)*.8); }
+function makeFighter(k,isPlayer,level){
+  const st=BSTATS[k.type]||BSTATS.banana, mul=isPlayer?1:(.85+level*.12);
+  const hp=Math.round(st.hp*1.6*mul);
+  return {k:{...k,seed:k.seed??Math.random()},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:st.atk*(isPlayer?1:(.9+level*.08)),def:st.def,spd:st.spd,
+    x:0,y:0,vx:0,vy:0,alive:true,sinkT:0,buffs:{},hitT:0,aiT:0,skills:[],bump:new Map()};
+}
+function openBattleMenu(){
+  closeSheet(); closeCard(); const card=$("card"); card.textContent="";
+  card.append(el("div","kind","ศึกกระทง ⚔"));
+  card.append(el("h3",null,"เลือกกระทงลงศึก"));
+  card.append(el("p","meta","บังคับกระทงด้วยการลากนิ้วหรือขยับเมาส์บนน้ำ (หรือปุ่มลูกศร/WASD) พุ่งชนให้แรงเพื่อลด HP ศัตรู ใช้ SP ปล่อยสกิล กระทงที่ HP หมดจะล่ม ศึกนี้เล่นในเครื่องคุณเท่านั้น ไม่กระทบกระทงจริงของใคร"));
+  const list=el("div","pick");
+  const mineK=cachedReal.filter(k=>mine.has(k.id)).slice(-6).reverse();
+  const opts=mineK.length?mineK:[{id:"tmp",name:($("inName").value.trim()||"กระทงนิรนาม"),type:form.type,candle:form.candle,seed:.4}];
+  for(const k of opts){ const st=BSTATS[k.type]||BSTATS.banana, sg=SKILLS[st.sig];
+    const b=el("button"); const tx=el("div"); tx.append(el("b",null,k.name+" · "+(TYPE_BY[k.type]||TYPES[0]).name)); tx.append(el("small",null,`HP ${Math.round(st.hp*1.6)} · ATK ${st.atk} · DEF ${st.def} · SPD ${st.spd}`)); tx.append(el("small",null,"ติดตัว: "+st.pas)); tx.append(el("small",null,"สกิลประจำตัว: "+sg.n));
+    b.append(tx); b.addEventListener("click",()=>drawSticks(k,1)); list.append(b); }
+  if(!mineK.length) list.append(el("p","meta","ยังไม่มีกระทงที่ลอยจากเครื่องนี้ ใช้แบบที่เลือกไว้ในหน้าทำกระทงแทน"));
+  // also allow any type
+  const any=el("div","chips"); any.style.marginTop="10px";
+  for(const tp of TYPES){ const c=el("button","chip",tp.name); c.addEventListener("click",()=>drawSticks({id:"tmp-"+tp.id,name:($("inName").value.trim()||tp.name),type:tp.id,candle:form.candle,seed:Math.random()},1)); any.append(c); }
+  card.append(list); card.append(el("div","meta","หรือเลือกแบบกระทง:")); card.append(any);
+  const best=lsGet("lk.bestRound",0); if(best) card.append(el("div","meta","สถิติสูงสุด: ผ่านถึงด่าน "+best));
+  const acts=el("div","acts"); const c=el("button","btn","ปิด"); c.addEventListener("click",closeCard); acts.append(c); card.append(acts);
+  card.hidden=false; $("veil").hidden=false;
+}
+function drawSticks(k,level){
+  const card=$("card"); card.textContent="";
+  const st=BSTATS[k.type]||BSTATS.banana;
+  card.append(el("div","kind","ด่านที่ "+level+" · เขย่าเซียมซีศึก"));
+  const h=el("h3",null,k.name); card.append(h);
+  const stats=el("div","stats"); [["HP",Math.round(st.hp*1.6)],["ATK",st.atk],["DEF",st.def],["SPD",st.spd]].forEach(([a,b])=>{ const d=el("div"); d.append(el("b",null,String(b))); d.append(a); stats.append(d); }); card.append(stats);
+  card.append(el("div","meta","ติดตัว: "+st.pas+" · สกิลประจำตัว: "+SKILLS[st.sig].n+" ("+SKILLS[st.sig].d+")"));
+  const cup=el("div",null,"🎋"); cup.className="shake"; cup.style.cssText="font-size:44px;text-align:center;margin:10px 0"; card.append(cup);
+  const box=el("div","sticks"); card.append(box);
+  const picks=[]; const pool=[...FORTUNES.keys()];
+  for(let i=0;i<3;i++){ const j=pool.splice(Math.random()*pool.length|0,1)[0]; picks.push(j); }
+  sfx("chime");
+  setTimeout(()=>{ cup.remove(); picks.forEach((fi,n)=>{ setTimeout(()=>{ const sk=SKILLS[FORTUNE_SKILL[fi]]; const d=el("div","stick"); const b=el("b",null,`ใบที่ ${fi+1} → ${sk.n}`); d.append(b); d.append(el("p",null,`“${FORTUNES[fi][1]}”`)); d.append(el("p",null,`${sk.d} · ใช้ SP ${sk.cost}`)); box.append(d); sfx("drop"); },n*350); }); },1500);
+  const acts=el("div","acts"); const go=el("button","btn primary","ลงศึก!"); go.addEventListener("click",()=>startBattle(k,picks.map(fi=>FORTUNE_SKILL[fi]),level)); acts.append(go);
+  const back=el("button","btn","ย้อนกลับ"); back.addEventListener("click",openBattleMenu); acts.append(back); card.append(acts);
+  card.hidden=false; $("veil").hidden=false;
+}
+function startBattle(k,fortuneSkills,level){
+  closeCard();
+  const st=BSTATS[k.type]||BSTATS.banana;
+  const P=makeFighter(k,true,level); P.skills=[st.sig,...fortuneSkills];
+  const n=Math.min(3,1+Math.floor((level-1)/2)+(level>=2?1:0));
+  const others=cachedReal.filter(x=>!mine.has(x.id)&&!x.amb).sort(()=>Math.random()-.5);
+  const foes=[]; const npc=[...NPCS].sort(()=>Math.random()-.5);
+  for(let i=0;i<n;i++){ const src=others[i]||npc[i]; const kk={id:"foe"+i,name:src.name,type:src.type,candle:src.candle||"white",seed:Math.random(),photoUrl:src.photoUrl};
+    const f=makeFighter(kk,false,level); const fs=BSTATS[kk.type]||BSTATS.banana; const all=Object.keys(SKILLS).filter(x=>!SKILLS[x].sig); f.skills=[fs.sig,all[Math.random()*all.length|0]]; foes.push(f); }
+  const y0=laneY(.55);
+  P.x=W*.2; P.y=y0;
+  foes.forEach((f,i)=>{ f.x=W*(.62+i*.12); f.y=laneY([.35,.75,.55][i%3]); });
+  battle={P,foes,all:[P,...foes],level,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],minions:[],bolts:[],floaters:[],shake:0};
+  document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false;
+  buildSkillBar(); updateHud(); sfx("bless");
+}
+function endBattle(){ battle=null; document.body.classList.remove("in-battle"); $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
+function buildSkillBar(){
+  const bar=$("bskills"); bar.textContent="";
+  battle.P.skills.forEach((id,i)=>{ const sk=SKILLS[id]; const b=el("button","sk"+(sk.sig?" sig":"")); b.type="button";
+    b.append(el("span","key",String(i+1))); b.append(el("b",null,sk.n)); b.append(el("small",null,"SP "+sk.cost));
+    b.title=sk.d; b.addEventListener("click",e=>{ e.stopPropagation(); castSkill(battle.P,id); }); bar.append(b); });
+}
+function updateHud(){
+  if(!battle) return; const P=battle.P;
+  const tn=(TYPE_BY[P.k.type]||TYPES[0]).name; $("bhName").textContent=P.name===tn?tn:P.name+" · "+tn;
+  $("bhMeta").textContent=`ด่าน ${battle.level} · ศัตรูเหลือ ${battle.foes.filter(f=>f.alive).length}`;
+  $("bhHp").style.width=Math.max(0,P.hp/P.max*100)+"%"; $("bhHpT").textContent=`HP ${Math.max(0,Math.ceil(P.hp))}/${P.max}`;
+  $("bhSp").style.width=Math.min(100,P.sp)+"%"; $("bhSpT").textContent=`SP ${Math.floor(P.sp)}/100`;
+  const btns=$("bskills").querySelectorAll(".sk"); P.skills.forEach((id,i)=>{ const b=btns[i]; if(!b) return; const ok=P.sp>=SKILLS[id].cost&&P.alive&&!battle.over&&battle.count<=0; b.disabled=!ok; b.classList.toggle("ready",ok); });
+}
+function foesOf(f){ return battle.all.filter(o=>o!==f&&o.alive&&(f.isPlayer!==o.isPlayer)); }
+function nearest(f){ let best=null,bd=1e9; for(const o of foesOf(f)){ const d=Math.hypot(o.x-f.x,(o.y-f.y)*1.8); if(d<bd){ bd=d; best=o; } } return best; }
+function floater(x,y,text,col){ battle.floaters.push({x,y,text,col:col||"255,255,255",life:0}); }
+function hurt(f,dmg,src,opts){
+  if(!f.alive||dmg<=0) return 0;
+  if(f.buffs.shield>0){ floater(f.x,f.y-fSize(f)*1.8,"กัน!","150,220,255"); if(f.buffs.reflect>0&&src&&src.alive) hurt(src,dmg*.6,null); return 0; }
+  f.hp-=dmg; f.hitT=.35; floater(f.x+rnd(-10,10),f.y-fSize(f)*1.9,(opts&&opts.crit?"คริ! ":"")+Math.round(dmg),opts&&opts.crit?"255,220,90":(f.isPlayer?"255,120,120":"255,255,255"));
+  if(f.hp<=0){ f.hp=0; f.alive=false; f.sinkT=0; sfx("sink"); ripples.push({x:f.x,y:f.y,r:fSize(f)*3,life:0,dur:2,c:"200,225,255"}); for(let i=0;i<20;i++) sparks.push({x:f.x+rnd(-10,10),y:f.y,vx:rnd(-20,20),vy:rnd(-60,-20),g:-20,life:0,dur:rnd(1,1.8),r:rnd(1.5,3),c:"200,230,255"}); }
+  return dmg;
+}
+function skillMul(f){ return f.k.type==="star"?1.35:1; }
+function castSkill(f,id){
+  const sk=SKILLS[id]; if(!battle||battle.over||battle.count>0||!f.alive||f.sp<sk.cost) return;
+  f.sp-=sk.cost; const u=bU(), m=skillMul(f), tgt=nearest(f), s=fSize(f);
+  const burst=(x,y,c,n)=>{ for(let i=0;i<(n||40);i++){ const a=Math.random()*TAU,sp=rnd(40,200); sparks.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,g:20,drag:1.4,life:0,dur:rnd(.8,1.6),r:rnd(1,2.4),c,twinkle:true}); } };
+  floater(f.x,f.y-s*2.4,sk.n,sk.c);
+  switch(id){
+    case "dash": case "rainbow": if(tgt){ const dx=tgt.x-f.x, dy=(tgt.y-f.y)*1.8, d=Math.hypot(dx,dy)||1; f.vx=dx/d*u*11; f.vy=dy/d*u*11/1.8; } f.buffs.dash=.9; if(id==="rainbow"){ f.buffs.haste=3; f.buffs.pierce=.9; } burst(f.x,f.y,sk.c); break;
+    case "gold": case "spin": { const R=u*(id==="spin"?3.2:4.6); for(const o of foesOf(f)){ const dx=o.x-f.x, dy=(o.y-f.y)*1.8, d=Math.hypot(dx,dy)||1; if(d<R){ hurt(o,(id==="spin"?22:18)*m,f); o.vx+=dx/d*u*8; o.vy+=dy/d*u*8/1.8; } } runeBursts.push({x:f.x,y:f.y,life:0,dur:1,r:R,flat:true,glyph:false,gold:id==="gold"}); burst(f.x,f.y,sk.c,60); break; }
+    case "shield": f.buffs.shield=3; break;
+    case "shell": f.buffs.shield=4; f.buffs.reflect=4; break;
+    case "heal": f.hp=Math.min(f.max,f.hp+40*m); floater(f.x,f.y-s*2,"+"+Math.round(40*m),"120,255,160"); burst(f.x,f.y-s,sk.c); break;
+    case "bloom": f.hp=Math.min(f.max,f.hp+30*m); f.buffs.shield=2; floater(f.x,f.y-s*2,"+"+Math.round(30*m),"120,255,160"); burst(f.x,f.y-s,sk.c,60); break;
+    case "haste": f.buffs.haste=5; burst(f.x,f.y,sk.c); break;
+    case "charm": for(const o of foesOf(f)){ o.buffs.charmed=4; floater(o.x,o.y-fSize(o)*2,"♥","255,150,220"); } break;
+    case "vortex": if(tgt) battle.hazards.push({x:tgt.x,y:tgt.y,life:0,dur:3,owner:f,r:u*3.2,dps:12*m}); break;
+    case "bolt": if(tgt){ hurt(tgt,32*m,f); battle.bolts.push({x:tgt.x,y:tgt.y-fSize(tgt),life:0}); flash={a:.8,x:tgt.x,y:tgt.y,c:"255,255,200"}; } break;
+    case "meteor": { const fs=foesOf(f); for(let i=0;i<4;i++) setTimeout(()=>{ if(!battle) return; const alive=foesOf(f); const o=alive[Math.random()*alive.length|0]; if(!o) return; hurt(o,18*m,f); battle.bolts.push({x:o.x,y:o.y-fSize(o),life:0,meteor:true}); ripples.push({x:o.x,y:o.y,r:u*2,life:0,dur:1.2,c:"190,220,255"}); },i*260); break; }
+    case "fish": case "school": for(let i=0;i<(id==="school"?5:3);i++) battle.minions.push({x:f.x,y:f.y,owner:f,life:0,dur:6,bite:0,p:Math.random()*7}); break;
+    case "calm": f.buffs.calm=5; break;
+    case "claw": if(tgt){ for(let i=0;i<3;i++) setTimeout(()=>{ if(!battle||!tgt.alive) return; hurt(tgt,12*m*1.6,f,{crit:true}); floater(tgt.x+rnd(-14,14),tgt.y-fSize(tgt)*1.4,"แฮ่!","255,200,140"); sfx("bonk"); },i*160); } break;
+  }
+  sfx("bless"); updateHud();
+}
+function battleStep(dt,t){
+  const B=battle; B.t+=dt; const u=bU(); const top=laneY(0), bot=laneY(1);
+  if(B.count>0){ B.count-=dt; if(B.count<=0) sfx("bell"); }
+  const live=B.count<=0&&!B.over;
+  // player input
+  const P=B.P;
+  if(bKeys.size){ let ix=0,iy=0; if(bKeys.has("ArrowLeft")||bKeys.has("a")) ix-=1; if(bKeys.has("ArrowRight")||bKeys.has("d")) ix+=1; if(bKeys.has("ArrowUp")||bKeys.has("w")) iy-=1; if(bKeys.has("ArrowDown")||bKeys.has("s")) iy+=1; B.target={x:P.x+ix*u*5,y:P.y+iy*u*3}; }
+  for(const f of B.all){
+    for(const k in f.buffs) f.buffs[k]=Math.max(0,f.buffs[k]-dt);
+    f.hitT=Math.max(0,f.hitT-dt);
+    if(!f.alive){ f.sinkT+=dt; f.vx*=.95; f.vy*=.95; continue; }
+    if(live){
+      f.sp=Math.min(100,f.sp+dt*(f.isPlayer?9:6)*(f.k.type==="pride"?1.5:1)*(f.buffs.calm>0?2:1));
+      if(f.k.type==="lotus") f.hp=Math.min(f.max,f.hp+2*dt);
+      if(f.buffs.calm>0) f.hp=Math.min(f.max,f.hp+6*dt);
+      if(f.k.type==="bread") for(const o of foesOf(f)){ if(Math.hypot(o.x-f.x,(o.y-f.y)*1.8)<u*2.2){ o._nib=(o._nib||0)+dt; if(o._nib>.6){ o._nib=0; hurt(o,3,f); } } }
+    }
+    let tx,ty;
+    if(f.isPlayer){ tx=B.target.x; ty=B.target.y; }
+    else {
+      f.aiT-=dt; const tg=nearest(f);
+      if(tg){ if(f.buffs.charmed>0){ tx=f.x+(f.x-tg.x); ty=f.y+(f.y-tg.y); } else { tx=tg.x+tg.vx*.4; ty=tg.y+tg.vy*.4; } } else { tx=f.x; ty=f.y; }
+      if(live&&f.aiT<=0){ f.aiT=rnd(.6,1.3); const usable=f.skills.filter(id=>f.sp>=SKILLS[id].cost); if(usable.length&&Math.random()<.45) castSkill(f,usable[Math.random()*usable.length|0]); }
+    }
+    if(live){
+      const dx=tx-f.x, dy=(ty-f.y)*1.8, d=Math.hypot(dx,dy);
+      const acc=u*14*f.spd*(f.buffs.haste>0?1.8:1)*(f.isPlayer?1:.85);
+      if(d>u*.3){ f.vx+=dx/d*acc*dt; f.vy+=dy/d*acc*dt/1.8; }
+    }
+    const damp=f.buffs.dash>0?.4:2.2; f.vx-=f.vx*damp*dt; f.vy-=f.vy*damp*dt;
+    const vmax=u*(f.buffs.dash>0?12:6.5)*f.spd*(f.buffs.haste>0?1.6:1); const sp=Math.hypot(f.vx,f.vy*1.8); if(sp>vmax){ f.vx*=vmax/sp; f.vy*=vmax/sp; }
+    f.x+=f.vx*dt; f.y+=f.vy*dt;
+    const s=fSize(f);
+    if(f.x<s){ f.x=s; f.vx=Math.abs(f.vx)*.6; } if(f.x>W-s){ f.x=W-s; f.vx=-Math.abs(f.vx)*.6; }
+    if(f.y<top){ f.y=top; f.vy=Math.abs(f.vy)*.6; } if(f.y>bot){ f.y=bot; f.vy=-Math.abs(f.vy)*.6; }
+  }
+  // collisions
+  for(let i=0;i<B.all.length;i++) for(let j=i+1;j<B.all.length;j++){
+    const a=B.all[i], b=B.all[j]; if(!a.alive||!b.alive) continue;
+    const dx=b.x-a.x, dy=(b.y-a.y)*1.8, d=Math.hypot(dx,dy)||.01, R=(fSize(a)+fSize(b))*.95;
+    if(d>=R) continue;
+    const nx=dx/d, ny=dy/d, ov=(R-d)/2; a.x-=nx*ov; a.y-=ny*ov/1.8; b.x+=nx*ov; b.y+=ny*ov/1.8;
+    const va=a.vx*nx+a.vy*1.8*ny, vb=b.vx*nx+b.vy*1.8*ny; const rel=va-vb; if(rel<=0) continue;
+    const key=a===B.P?b:a; const last=(a.bump.get(b)||-9); a.bump.set(b,B.t);
+    if(live && a.isPlayer!==b.isPlayer && B.t-last>.25){
+      const ramA=Math.max(0,va)/u, ramB=Math.max(0,-vb)/u;
+      const dmgTo=(atk,def,ram,att,vic)=>{ let dmg=ram*3.4*att.atk/vic.def; if(att.k.type==="banana") dmg*=1.15; if(vic.k.type==="coconut") dmg*=.7; if(att.buffs.dash>0) dmg*=2; let crit=false; if(att.k.type==="cat"&&Math.random()<.25){ dmg*=1.8; crit=true; } return {dmg,crit}; };
+      const A=dmgTo(0,0,ramA,a,b), Bd=dmgTo(0,0,ramB,b,a);
+      if(A.dmg>2){ hurt(b,A.dmg,a,{crit:A.crit}); if(b.buffs.reflect>0) hurt(a,A.dmg*.6,b); }
+      if(Bd.dmg>2){ hurt(a,Bd.dmg,b,{crit:Bd.crit}); if(a.buffs.reflect>0) hurt(b,Bd.dmg*.6,a); }
+      if(A.dmg+Bd.dmg>6){ B.shake=Math.min(12,(A.dmg+Bd.dmg)*.4); sfx("bonk"); const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2; for(let q=0;q<16;q++){ const an=-Math.PI*Math.random(); sparks.push({x:cx,y:cy,vx:Math.cos(an)*rnd(30,120),vy:Math.sin(an)*rnd(60,160),g:260,life:0,dur:rnd(.4,.8),r:rnd(1,2.2),c:"210,230,255"}); } ripples.push({x:cx,y:cy,r:u*2,life:0,dur:1,c:"220,235,255"}); }
+    }
+    const e=a.buffs.pierce>0||b.buffs.pierce>0?.2:.9, imp=rel*(1+e)/2;
+    a.vx-=imp*nx; a.vy-=imp*ny/1.8; b.vx+=imp*nx; b.vy+=imp*ny/1.8;
+  }
+  // hazards, minions
+  for(let i=B.hazards.length-1;i>=0;i--){ const h=B.hazards[i]; h.life+=dt; if(h.life>h.dur){ B.hazards.splice(i,1); continue; }
+    for(const o of B.all){ if(!o.alive||o.isPlayer===h.owner.isPlayer) continue; const dx=h.x-o.x, dy=(h.y-o.y)*1.8, d=Math.hypot(dx,dy); if(d<h.r){ o.vx+=dx/(d||1)*u*10*dt; o.vy+=dy/(d||1)*u*10*dt/1.8; o._vz=(o._vz||0)+dt; if(o._vz>.5){ o._vz=0; hurt(o,h.dps*.5,h.owner); } } } }
+  for(let i=B.minions.length-1;i>=0;i--){ const m=B.minions[i]; m.life+=dt; if(m.life>m.dur||!m.owner.alive){ B.minions.splice(i,1); continue; }
+    const tg=nearest(m.owner); if(!tg) continue; const dx=tg.x-m.x, dy=tg.y-m.y, d=Math.hypot(dx,dy)||1; const sp=u*7; m.x+=dx/d*sp*dt+Math.sin(m.life*8+m.p)*.5; m.y+=dy/d*sp*dt*.6;
+    m.bite-=dt; if(d<fSize(tg)*1.1&&m.bite<=0){ m.bite=.5; hurt(tg,4*skillMul(m.owner),m.owner); } }
+  // end conditions
+  if(!B.over){
+    if(!P.alive) { B.over={win:false,at:B.t}; }
+    else if(B.foes.every(f=>!f.alive)) { B.over={win:true,at:B.t}; sfx("win"); }
+  } else if(B.t-B.over.at>2 && !B.over.shown){ B.over.shown=true; showBattleResult(B.over.win); }
+  updateHud();
+}
+function drawFighter(c,f,t){
+  const s=fSize(f), sp=sprite(f.k,s), photo=f.k.photoUrl?getImg(f.k.photoUrl):null;
+  const sk=f.alive?0:Math.min(1,f.sinkT/1.8); if(sk>=1) return;
+  c.save(); c.translate(f.x,f.y+sk*s*1.2);
+  c.globalAlpha=1-sk*.9;
+  if(!sk){ c.save(); const wl=.3*s; c.translate(0,wl); c.scale(1,-.5); c.translate(0,-wl); c.globalAlpha*=.24; blitSprite(c,sp,s); c.restore(); }
+  drawGlow(c,f.k,s,sk?.3:1);
+  const tilt=Math.sin(t*.9+f.k.seed*7)*.05+Math.max(-.25,Math.min(.25,f.vx/(bU()*30)))+(f.hitT>0?Math.sin(f.hitT*45)*.18:0)+sk*1.2*(f.k.seed>.5?1:-1);
+  c.rotate(tilt);
+  if(sk){ c.beginPath(); c.rect(-s*3,-s*3,s*6,s*3.3-sk*s*1.2); c.clip(); }
+  blitSprite(c,sp,s); if(photo) drawPhoto(c,photo,s);
+  if(!sk) krDynamic(c,f.k,s,t); else { c.strokeStyle="rgba(200,200,220,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(0,-.7*s); for(let j=1;j<6;j++) c.lineTo(Math.sin(t*2+j)*s*.15*j,-.7*s-j*s*.25); c.stroke(); }
+  c.restore();
+  if(f.buffs.shield>0&&f.alive){ c.save(); c.globalCompositeOperation="lighter"; c.strokeStyle=`rgba(150,220,255,${.5+.3*Math.sin(t*8)})`; c.lineWidth=2; c.fillStyle="rgba(150,220,255,.08)"; c.beginPath(); c.ellipse(f.x,f.y-s*.4,s*1.5,s*1.3,0,0,TAU); c.fill(); c.stroke(); c.restore(); }
+  if(f.buffs.charmed>0&&f.alive){ c.fillStyle="#ff8fc8"; c.font=`700 ${Math.max(12,s*.5)}px sans-serif`; c.textAlign="center"; c.fillText("♥",f.x+Math.sin(t*4)*s*.4,f.y-s*2.2); }
+  if(f.alive){ // name + hp bar
+    const w=Math.max(46,s*2.2), y=f.y-s*1.75; c.fillStyle="rgba(8,10,35,.7)"; c.fillRect(f.x-w/2-1,y-1,w+2,7);
+    const r=f.hp/f.max; c.fillStyle=r>.5?"#7cf29a":r>.25?"#ffc371":"#ff5f6d"; c.fillRect(f.x-w/2,y,w*r,5);
+    c.font=`600 ${Math.max(10,Math.min(13,s*.38))}px "Bai Jamjuree",sans-serif`; c.textAlign="center"; c.fillStyle=f.isPlayer?"#ffd36a":"#fff3dc"; c.fillText((f.isPlayer?"★ ":"")+f.name,f.x,y-4,160);
+  }
+}
+function battleDraw(c,t,dt){
+  const B=battle;
+  for(const h of B.hazards){ const a=1-h.life/h.dur; c.save(); c.translate(h.x,h.y); c.scale(1,.32); c.rotate(h.life*6); c.strokeStyle=`rgba(140,180,255,${.6*a})`; c.lineWidth=2; for(let k=0;k<4;k++){ c.beginPath(); c.arc(0,0,h.r*(.3+k*.22),k,k+4.2); c.stroke(); } c.restore(); }
+  const order=[...B.all].sort((a,b)=>a.y-b.y);
+  for(const f of order) drawFighter(c,f,t);
+  for(const m of B.minions){ c.save(); c.translate(m.x,m.y); const s=bU()*.35; c.rotate(Math.sin(m.life*10)*.3); c.fillStyle="#ffa14a"; c.beginPath(); c.ellipse(0,0,s,s*.4,0,0,TAU); c.fill(); c.beginPath(); c.moveTo(-s*.9,0); c.lineTo(-s*1.5,-s*.4); c.lineTo(-s*1.5,s*.4); c.fill(); c.restore(); }
+  for(let i=B.bolts.length-1;i>=0;i--){ const b=B.bolts[i]; b.life+=dt; if(b.life>.45){ B.bolts.splice(i,1); continue; } const a=1-b.life/.45; c.save(); c.globalCompositeOperation="lighter";
+    if(b.meteor){ c.strokeStyle=`rgba(190,220,255,${a})`; c.lineWidth=4; c.beginPath(); c.moveTo(b.x-120,b.y-260*(1-b.life)); c.lineTo(b.x,b.y); c.stroke(); }
+    else { c.strokeStyle=`rgba(255,255,200,${a})`; c.lineWidth=3; c.beginPath(); let x=b.x+rnd(-40,40), y=0; c.moveTo(x,y); while(y<b.y){ y+=rnd(20,45); x+=(b.x-x)*.3+rnd(-18,18); c.lineTo(x,Math.min(y,b.y)); } c.stroke(); }
+    c.restore(); }
+  for(let i=B.floaters.length-1;i>=0;i--){ const f=B.floaters[i]; f.life+=dt; if(f.life>1.1){ B.floaters.splice(i,1); continue; } const a=1-f.life/1.1; c.font='800 16px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.lineWidth=3; c.strokeStyle=`rgba(10,10,30,${a})`; c.fillStyle=`rgba(${f.col},${a})`; const y=f.y-f.life*40; c.strokeText(f.text,f.x,y); c.fillText(f.text,f.x,y); }
+  if(B.count>0){ const n=Math.ceil(B.count), k=B.count-Math.floor(B.count); c.font=`800 ${60+k*40}px "Bai Jamjuree",sans-serif`; c.textAlign="center"; c.fillStyle=`rgba(255,215,120,${k})`; c.fillText(String(n),W/2,H*.45); }
+  else if(B.t<4){ /* "ชน!" right after countdown */ const k=Math.max(0,1-(B.t-3)); if(k>0&&B.t>3){ c.font='800 64px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.fillStyle=`rgba(255,120,140,${k})`; c.fillText("ชน!",W/2,H*.45); } }
+}
+function showBattleResult(win){
+  const B=battle; const card=$("card"); card.textContent="";
+  if(win){
+    const best=lsGet("lk.bestRound",0); if(B.level>best) lsSet("lk.bestRound",B.level);
+    const f=FORTUNES[Math.random()*FORTUNES.length|0];
+    card.append(el("div","kind","ชนะ! ด่านที่ "+B.level));
+    card.append(el("h3",null,"“"+B.P.name+"” ลอยอยู่ลำสุดท้าย"));
+    card.append(el("p","siam-text","รางวัลผู้ชนะ: “"+f[1]+"”"));
+    const acts=el("div","acts"); const nx=el("button","btn primary","ด่านต่อไป"); nx.addEventListener("click",()=>{ const k=B.P.k; endBattle(); drawSticks(k,B.level+1); }); acts.append(nx);
+    const bk=el("button","btn","กลับไปลอยกระทง"); bk.addEventListener("click",()=>{ endBattle(); closeCard(); }); acts.append(bk); card.append(acts);
+    for(let i=0;i<4;i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*300);
+  } else {
+    card.append(el("div","kind","กระทงล่ม…"));
+    card.append(el("h3",null,"ไม่เป็นไรนะ แม่คงคาให้โอกาสเสมอ"));
+    card.append(el("p","meta","ผ่านมาถึงด่าน "+B.level+" ลองเลือกกระทงแบบอื่น หรือเขย่าเซียมซีใหม่ให้ได้สกิลที่เข้ากว่า"));
+    const acts=el("div","acts"); const again=el("button","btn primary","ลองด่านนี้ใหม่"); again.addEventListener("click",()=>{ const k=B.P.k; endBattle(); drawSticks(k,B.level); }); acts.append(again);
+    const bk=el("button","btn","กลับไปลอยกระทง"); bk.addEventListener("click",()=>{ endBattle(); closeCard(); }); acts.append(bk); card.append(acts);
+  }
+  card.hidden=false; $("veil").hidden=false;
+}
+cv.addEventListener("pointerdown",e=>{ if(!battle) return; battle.target={x:e.clientX,y:e.clientY}; battle.down=true; });
+cv.addEventListener("pointermove",e=>{ if(!battle) return; if(battle.down||e.pointerType==="mouse") battle.target={x:e.clientX,y:e.clientY}; });
+addEventListener("pointerup",()=>{ if(battle) battle.down=false; });
+addEventListener("keydown",e=>{ if(!battle) return; const k=e.key.length===1?e.key.toLowerCase():e.key; if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","w","a","s","d"].includes(k)){ bKeys.add(k); e.preventDefault(); } if(/^[1-4]$/.test(k)){ const id=battle.P.skills[+k-1]; if(id) castSkill(battle.P,id); } });
+addEventListener("keyup",e=>{ const k=e.key.length===1?e.key.toLowerCase():e.key; bKeys.delete(k); });
+$("bhExit").addEventListener("click",()=>{ endBattle(); toast("ออกจากศึกแล้ว"); });
+$("btnBattle").addEventListener("click",()=>{ unlockAudio(); if(battle){ toast("กำลังอยู่ในศึก"); return; } openBattleMenu(); });
+
 /* ================= canvas interaction ================= */
 cv.addEventListener("click", e=>{
+  if(battle) return;
   const x=e.clientX, y=e.clientY;
   unlockAudio();
   for(const m of meteors){ if(Math.hypot(x-m.x,y-m.y)<70){ toast("ทันพอดี! อธิษฐานกับดาวตกแล้ว ขอให้เป็นจริง"); for(let i=0;i<30;i++){ const a=Math.random()*TAU; sparks.push({x:m.x,y:m.y,vx:Math.cos(a)*rnd(20,80),vy:Math.sin(a)*rnd(20,80),g:10,life:0,dur:1.2,r:1.6,c:"255,250,220",twinkle:true}); } sfx("bless"); return; } }
@@ -1430,6 +1752,10 @@ function sfx(kind,soft){
   else if(kind==="whistle"){ const o=AC.createOscillator(),g=AC.createGain(); o.frequency.setValueAtTime(600,n); o.frequency.exponentialRampToValueAtTime(1800,n+.9); g.gain.setValueAtTime(.02,n); g.gain.linearRampToValueAtTime(0,n+.9); o.connect(g); g.connect(master); o.start(n); o.stop(n+1); }
   else if(kind==="boom"){ const s=AC.createBufferSource(); s.buffer=noiseBuf(1.5,true); const f=AC.createBiquadFilter(); f.type="lowpass"; f.frequency.value=300; const g=AC.createGain(); g.gain.setValueAtTime(.9,n); g.gain.exponentialRampToValueAtTime(.0001,n+1.4); s.connect(f); f.connect(g); g.connect(master); s.start(n);
     const s2=AC.createBufferSource(); s2.buffer=noiseBuf(1); const f2=AC.createBiquadFilter(); f2.type="highpass"; f2.frequency.value=3000; const g2=AC.createGain(); g2.gain.setValueAtTime(0,n); g2.gain.linearRampToValueAtTime(.06,n+.2); g2.gain.exponentialRampToValueAtTime(.0001,n+1); s2.connect(f2); f2.connect(g2); g2.connect(master); s2.start(n); }
+  else if(kind==="bonk"){ const o=AC.createOscillator(),g=AC.createGain(); o.type="triangle"; o.frequency.setValueAtTime(180,n); o.frequency.exponentialRampToValueAtTime(70,n+.18); g.gain.setValueAtTime(.35,n); g.gain.exponentialRampToValueAtTime(.0001,n+.25); o.connect(g); g.connect(master); o.start(n); o.stop(n+.3);
+    const s2=AC.createBufferSource(); s2.buffer=noiseBuf(.3); const f2=AC.createBiquadFilter(); f2.type="bandpass"; f2.frequency.value=900; const g2=AC.createGain(); g2.gain.setValueAtTime(.18,n); g2.gain.exponentialRampToValueAtTime(.0001,n+.25); s2.connect(f2); f2.connect(g2); g2.connect(master); s2.start(n); }
+  else if(kind==="sink"){ const o=AC.createOscillator(),g=AC.createGain(); o.type="sine"; o.frequency.setValueAtTime(520,n); o.frequency.exponentialRampToValueAtTime(90,n+1.2); g.gain.setValueAtTime(.15,n); g.gain.exponentialRampToValueAtTime(.0001,n+1.3); o.connect(g); g.connect(master); o.start(n); o.stop(n+1.4); }
+  else if(kind==="win"){ [0,2,4,7,9,7].forEach((i,j)=>tone(PENTA[i]*(j>3?2:1),n+j*.13,1.4,.11,"triangle")); }
   else if(kind==="bell"){ [[196,3.2,.22],[392.5,2.4,.08],[588,1.8,.05],[784*1.01,1.2,.03]].forEach(([f,d,v])=>tone(f,n,d,v,"sine")); }
   else if(kind==="horn"){ [110,138.6].forEach(f=>{ const o=AC.createOscillator(),g=AC.createGain(),lp=AC.createBiquadFilter(); o.type="sawtooth"; o.frequency.value=f; lp.type="lowpass"; lp.frequency.value=600; g.gain.setValueAtTime(0,n); g.gain.linearRampToValueAtTime(.08,n+.05); g.gain.setValueAtTime(.08,n+.5); g.gain.linearRampToValueAtTime(0,n+.7); o.connect(lp); lp.connect(g); g.connect(master); o.start(n); o.stop(n+.75); }); }
   else if(kind==="bless"){ [0,2,4,5,7,9].forEach((i,j)=>tone(PENTA[i],n+j*.08,1.2,.09,"triangle")); }
