@@ -1,0 +1,287 @@
+{
+ "frames": [
+  {
+   "filename": "lk-impact 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 1.png",
+   "frame": {
+    "x": 136,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 2.png",
+   "frame": {
+    "x": 272,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 3.png",
+   "frame": {
+    "x": 408,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 4.png",
+   "frame": {
+    "x": 0,
+    "y": 121,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 5.png",
+   "frame": {
+    "x": 136,
+    "y": 121,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 6.png",
+   "frame": {
+    "x": 272,
+    "y": 121,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 7.png",
+   "frame": {
+    "x": 408,
+    "y": 121,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 8.png",
+   "frame": {
+    "x": 0,
+    "y": 242,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-impact 9.png",
+   "frame": {
+    "x": 136,
+    "y": 242,
+    "w": 136,
+    "h": 121
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 136,
+    "h": 121
+   },
+   "sourceSize": {
+    "w": 136,
+    "h": 121
+   },
+   "pivot": {
+    "x": 0.5073529411764706,
+    "y": 0.512396694214876
+   },
+   "duration": 71
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-impact.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 544,
+   "h": 363
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 69,
+   "y": 62
+  },
+  "frameTags": [
+   {
+    "name": "lk-impact",
+    "from": 0,
+    "to": 9,
+    "direction": "forward"
+   }
+  ]
+ }
+}

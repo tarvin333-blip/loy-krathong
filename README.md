@@ -77,5 +77,5 @@ npx netlify-cli deploy --prod
 ## เอฟเฟกต์สกิล (VFX)
 - ภาพเอฟเฟกต์อยู่ที่ `public/img/vfx/*.png` ขนาดและจำนวนเฟรมอยู่ใน `vfx.json`
 - 14 แบบนำมาจากคลัง VFX ในเกม bara-duel ของเจ้าของเว็บ
-- 4 แบบ (lotus, fish, rainbow, meteor) แต่งใหม่ด้วย PixelLab ผ่าน `tools/vfx_gen.py`
+- 5 แบบ (lotus, fish, rainbow, meteor, impact) แต่งใหม่ด้วย PixelLab ผ่าน `tools/vfx_gen.py`
 - รวบรวมไฟล์ใหม่ด้วย `python3 tools/vfx_pack.py <โฟลเดอร์คลัง VFX ของเกม>`

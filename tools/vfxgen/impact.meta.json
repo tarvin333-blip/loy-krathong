@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "4f9d3746-7cee-46f1-996c-0b2cde1e485d",
+  "canvas": {
+   "h": 121,
+   "w": 136
+  },
+  "frames": 10,
+  "fps": 14,
+  "loop": false,
+  "anchor": {
+   "x": 69,
+   "y": 62,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-impact.gif": "https://api.pixellab.ai/mcp/pixel-tools/6c528997-9577-4192-b3d6-905609f3fb63/lk-impact.gif",
+  "lk-impact.png": "https://api.pixellab.ai/mcp/pixel-tools/6c528997-9577-4192-b3d6-905609f3fb63/lk-impact.png",
+  "lk-impact.json": "https://api.pixellab.ai/mcp/pixel-tools/6c528997-9577-4192-b3d6-905609f3fb63/lk-impact.json"
+ }
+}
