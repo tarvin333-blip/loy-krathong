@@ -157,8 +157,8 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
 .bar.sp i{background:linear-gradient(90deg,#6a7cff,#9ff3ff)}
 .bar span{position:absolute;inset:0;font-size:10px;font-weight:700;line-height:14px;text-align:center;color:#fff;text-shadow:0 1px 2px #000;font-variant-numeric:tabular-nums}
 .bskills{position:fixed;z-index:6;left:0;right:0;bottom:0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));display:flex;gap:8px;justify-content:center;flex-wrap:nowrap;pointer-events:none}
-.sk{pointer-events:auto;position:relative;overflow:hidden;width:min(calc((100vw - 60px)/4),120px);min-height:64px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(14,18,48,.85);padding:6px 6px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.sk b{font-size:12px;line-height:1.2}
+.sk{pointer-events:auto;position:relative;overflow:hidden;width:min(calc((100vw - 44px)/2),170px);min-height:70px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(14,18,48,.85);padding:6px 6px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.sk b{font-size:14px;line-height:1.2}
 .sk small{font-size:10px;color:var(--ink-dim)}
 .sk .key{position:absolute;top:3px;left:6px;font-size:10px;color:var(--ink-dim)}
 .sk.sig{border-color:var(--gold);background:linear-gradient(180deg,rgba(80,58,10,.85),rgba(14,18,48,.85))}
@@ -1450,7 +1450,7 @@ const BSTATS={
   star:{hp:92,atk:13,def:8,spd:1.05,pas:"พลังดวงดาว: สกิลแรงขึ้น 35%",sig:"meteor"}
 };
 const SKILLS={
-  dash:{n:"พุ่งรักแรง",d:"พุ่งชนศัตรูใกล้สุด แรงชน x2",cost:30,c:"255,120,170"},
+  dash:{n:"พุ่งรักแรง",d:"พุ่งชนศัตรูใกล้สุด แรงชน x1.6",cost:30,c:"255,120,170"},
   gold:{n:"คลื่นเงินทอง",d:"คลื่นทองผลักศัตรูรอบตัว ดาเมจ 18",cost:45,c:"255,210,90"},
   shield:{n:"เกราะงานผ่าน",d:"อมตะ 3 วินาที",cost:40,c:"150,220,255"},
   heal:{n:"สุขภาพดี",d:"ฟื้น HP 40",cost:40,c:"120,255,160"},
@@ -1492,7 +1492,7 @@ function makeFighter(k,isPlayer,o){
   return {k:{...k,seed:k.seed??Math.random()},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,
     x:0,y:0,vx:0,vy:0,alive:true,sinkT:0,buffs:{},hitT:0,aiT:0,skills:[],bump:new Map()};
 }
-function skillsFromSticks(st){ return (st||[]).map(i=>FORTUNE_SKILL[i]).filter(Boolean); }
+function skillsFromSticks(st){ return (st||[]).slice(0,1).map(i=>FORTUNE_SKILL[i]).filter(Boolean); }
 function myOnlineIds(){ return Object.keys(tokens).filter(id=>cachedReal.some(k=>k.id===id)); }
 function kOf(id){ return cachedReal.find(k=>k.id===id); }
 function backBtn(acts,label,fn){ const b=el("button","btn",label); b.addEventListener("click",fn); acts.append(b); return b; }
@@ -1567,7 +1567,7 @@ function openUpgrade(id){
     card.append(el("div","meta","ติดตัว: "+st.pas));
     const sk=[st.sig,...skillsFromSticks(P.sticks)]; card.append(skillList(sk));
     const acts=el("div","acts");
-    const rr=el("button","btn",P.sticks?"เขย่าเซียมซีใหม่ (40)":"เขย่าเซียมซีรับสกิล (ฟรี)"); rr.disabled=!!P.sticks&&P.coins<40;
+    const rr=el("button","btn",P.sticks?"เสี่ยงเซียมซีใหม่ (40)":"เสี่ยงเซียมซีรับสกิล (ฟรี)"); rr.disabled=!!P.sticks&&P.coins<40;
     rr.addEventListener("click",async()=>{ rr.disabled=true; try{ const j=await post("?action=sticks",{id,token:tokens[id]}); myProgs[id].prog=j.prog; sfx("chime"); openUpgrade(id); }catch(e){ toast(e.message); rr.disabled=false; } });
     acts.append(rr); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
   });
@@ -1605,9 +1605,9 @@ async function prepareFight(id,mode,defK){
 function drawPracticeSticks(k){
   showCard(card=>{
     const st=BSTATS[k.type]||BSTATS.banana;
-    card.append(el("div","kind","ฝึกซ้อม · เขย่าเซียมซีศึก")); card.append(el("h3",null,k.name));
+    card.append(el("div","kind","ฝึกซ้อม · เซียมซีศึก")); card.append(el("h3",null,k.name));
     card.append(statGrid(statsFor(k.type,null)));
-    const picks=[]; const pool=[...FORTUNES.keys()]; for(let i=0;i<3;i++) picks.push(pool.splice(Math.random()*pool.length|0,1)[0]);
+    const picks=[]; const pool=[...FORTUNES.keys()]; picks.push(pool[Math.random()*pool.length|0]);
     card.append(skillList([st.sig,...picks.map(i=>FORTUNE_SKILL[i])]));
     const acts=el("div","acts"); const go=el("button","btn primary","ลงศึก!"); go.addEventListener("click",()=>startBattle(k,picks.map(i=>FORTUNE_SKILL[i]),{mode:"practice",level:1})); acts.append(go);
     backBtn(acts,"ย้อนกลับ",openPractice); card.append(acts);
@@ -1736,7 +1736,7 @@ function battleStep(dt,t){
     }
     if(live){
       const dx=tx-f.x, dy=(ty-f.y)*1.8, d=Math.hypot(dx,dy);
-      const acc=u*14*f.spd*(f.buffs.haste>0?1.8:1)*(f.isPlayer?1:.85);
+      const acc=u*14*f.spd*(f.buffs.haste>0?1.8:1)*(f.isPlayer?1:Math.min(.85,.62+battle.level*.05));
       if(d>u*.3){ f.vx+=dx/d*acc*dt; f.vy+=dy/d*acc*dt/1.8; }
     }
     const damp=f.buffs.dash>0?.4:2.2; f.vx-=f.vx*damp*dt; f.vy-=f.vy*damp*dt;
@@ -1756,7 +1756,7 @@ function battleStep(dt,t){
     const key=a===B.P?b:a; const last=(a.bump.get(b)||-9); a.bump.set(b,B.t);
     if(live && a.isPlayer!==b.isPlayer && B.t-last>.25){
       const ramA=Math.max(0,va)/u, ramB=Math.max(0,-vb)/u;
-      const dmgTo=(atk,def,ram,att,vic)=>{ let dmg=ram*3.4*att.atk/vic.def; if(att.k.type==="banana") dmg*=1.15; if(vic.k.type==="coconut") dmg*=.7; if(att.buffs.dash>0) dmg*=2; let crit=false; if(att.k.type==="cat"&&Math.random()<.25){ dmg*=1.8; crit=true; } return {dmg,crit}; };
+      const dmgTo=(atk,def,ram,att,vic)=>{ let dmg=ram*2.6*att.atk/vic.def; if(att.k.type==="banana") dmg*=1.15; if(vic.k.type==="coconut") dmg*=.7; if(att.buffs.dash>0) dmg*=1.6; let crit=false; if(att.k.type==="cat"&&Math.random()<.25){ dmg*=1.8; crit=true; } dmg=Math.min(dmg,vic.max*.25); return {dmg,crit}; };
       const A=dmgTo(0,0,ramA,a,b), Bd=dmgTo(0,0,ramB,b,a);
       if(A.dmg>2){ hurt(b,A.dmg,a,{crit:A.crit}); if(b.buffs.reflect>0) hurt(a,A.dmg*.6,b); }
       if(Bd.dmg>2){ hurt(a,Bd.dmg,b,{crit:Bd.crit}); if(a.buffs.reflect>0) hurt(b,Bd.dmg*.6,a); }
@@ -1839,7 +1839,7 @@ async function showBattleResult(win){
 cv.addEventListener("pointerdown",e=>{ if(!battle) return; battle.target={x:e.clientX,y:e.clientY}; battle.down=true; });
 cv.addEventListener("pointermove",e=>{ if(!battle) return; if(battle.down||e.pointerType==="mouse") battle.target={x:e.clientX,y:e.clientY}; });
 addEventListener("pointerup",()=>{ if(battle) battle.down=false; });
-addEventListener("keydown",e=>{ if(!battle) return; const k=e.key.length===1?e.key.toLowerCase():e.key; if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","w","a","s","d"].includes(k)){ bKeys.add(k); e.preventDefault(); } if(/^[1-4]$/.test(k)){ const id=battle.P.skills[+k-1]; if(id) castSkill(battle.P,id); } });
+addEventListener("keydown",e=>{ if(!battle) return; const k=e.key.length===1?e.key.toLowerCase():e.key; if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","w","a","s","d"].includes(k)){ bKeys.add(k); e.preventDefault(); } if(/^[1-2]$/.test(k)){ const id=battle.P.skills[+k-1]; if(id) castSkill(battle.P,id); } });
 addEventListener("keyup",e=>{ const k=e.key.length===1?e.key.toLowerCase():e.key; bKeys.delete(k); });
 $("bhExit").addEventListener("click",()=>{ endBattle(); toast("ออกจากศึกแล้ว"); });
 $("btnBattle").addEventListener("click",()=>{ unlockAudio(); if(battle){ toast("กำลังอยู่ในศึก"); return; } openBattleMenu(); });

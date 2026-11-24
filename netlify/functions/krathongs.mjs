@@ -30,7 +30,7 @@ const upCost = (lv) => 25 + lv * 15;
 const sha = (t) => createHash("sha256").update(String(t)).digest("hex");
 const newToken = () => randomBytes(18).toString("base64url");
 const level = (p) => 1 + STATS.reduce((a, k) => a + (p.lv?.[k] || 0), 0);
-const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; for (let i = 0; i < 3; i++) out.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]); return out; };
+const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; out.push(pool[Math.floor(Math.random() * pool.length)]); return out; };
 const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
 function newProg(item, token) {
   return { id: item.id, key: item.key, name: item.name, type: item.type, tokenHash: sha(token), coins: START_COINS,
