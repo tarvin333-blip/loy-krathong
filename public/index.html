@@ -279,6 +279,10 @@ body.in-battle .devfab,.devfab[hidden],.devbar[hidden]{display:none!important}
 .gcard.ur>*{position:relative}
 @keyframes gpop{from{transform:scale(.2) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
 @keyframes gspin{to{transform:rotate(360deg)}}
+.sets{display:grid;gap:6px;margin:6px 0 10px}
+.setrow{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center;padding:8px 10px;border-radius:12px;border:1px solid rgba(var(--rc),.35);background:rgba(var(--rc),.06)}
+.setrow.on{border-color:rgba(var(--rc),.95);background:linear-gradient(90deg,rgba(var(--rc),.22),rgba(var(--rc),.05));box-shadow:0 0 14px rgba(var(--rc),.35)}
+.setrow b{font-size:13px;color:rgb(var(--rc))} .setrow small{grid-column:1;font-size:11px;color:var(--ink-dim)} .setrow .btn{grid-row:1/3;grid-column:2;padding:6px 10px;font-size:12px}
 .cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
 .cls-box b{color:#bcd4ff}
 .tut-ic{font-size:44px;line-height:1;text-align:center;margin:6px 0 2px;filter:drop-shadow(0 0 14px rgba(255,200,97,.55))}
@@ -664,6 +668,8 @@ function drawRelicAura(c,k,s,t){ const rl=k.relics; if(!rl||!rl.length) return; 
     if(r==="crown") drawLoopVfx(c,"hellaura",0,wl+s*.25,s*4.4,t+(k.seed||0)*3,1); if(r==="lotus") drawLoopVfx(c,"holyaura",0,wl+s*.25,s*4.2,t+(k.seed||0)*3+.5,1); } }
 // equipped relics hang beside the krathong as little glowing charms
 function drawRelicCharms(c,k,s,t){ const rl=k.relics; if(!rl||!rl.length||s<9) return; const top=-krTop(k,s);
+  const sk=activeSet({relics:rl.map(x=>x[0])}); if(sk){ const col=SETS[sk].col, pu=.6+.4*Math.sin(t*3+(k.seed||0)*5); c.save(); c.globalCompositeOperation="lighter"; c.strokeStyle=`rgba(${col},${.7*pu})`; c.lineWidth=Math.max(1.5,s*.06); c.setLineDash([s*.2,s*.14]); c.lineDashOffset=-t*s; c.beginPath(); c.ellipse(0,top*.42,s*1.25,s*.5,0,Math.PI,TAU); c.stroke(); c.setLineDash([]);
+    c.translate(0,waterLine(k,s)); c.scale(1,.3); c.strokeStyle=`rgba(${col},${.55*pu})`; c.lineWidth=3; c.beginPath(); c.arc(0,0,s*1.7,0,TAU); c.stroke(); c.restore(); }
   rl.forEach(([r],i)=>{ const R=RELICS[r], im=RELIC_IMG[r]; if(!R||!im||!im.complete||!im.naturalWidth) return; const side=i?1:-1, sz=Math.max(12,s*(R.rar==="UR"?.78:.62));
     const x=side*s*1.25+Math.sin(t*1.3+i*2+(k.seed||0)*5)*s*.06, y=top*.42+Math.sin(t*2+i*1.7+(k.seed||0)*7)*s*.12;
     c.save(); c.globalCompositeOperation="lighter"; c.fillStyle=rg(c,x,y,0,sz*.95,[[0,`rgba(${RAR_COL[R.rar]},.55)`],[1,`rgba(${RAR_COL[R.rar]},0)`]]); c.beginPath(); c.arc(x,y,sz*.95,0,TAU); c.fill(); c.restore();
@@ -1741,6 +1747,10 @@ const SKILLS={
   hellfire:{n:"เสาเพลิงนรก",d:"เสาไฟผุดใต้ศัตรู ดาเมจ 30",cost:50,c:"255,90,60",sig:1,mon:1},
   abyss:{n:"เพลิงบาดาลปะทุ",d:"ไฟนรกปะทุใต้ศัตรู ดาเมจ 40 กระเด็น",cost:45,c:"255,60,60",sig:1,mon:1},
   doom:{n:"วงแหวนวันสิ้นโลก",d:"คลื่นปีศาจแผ่ทั้งสนาม ดาเมจ 26 และสาป",cost:60,c:"255,40,80",sig:1,mon:1},
+  nagawrath:{n:"นาคาพิโรธ",d:"พญานาคซัดคลื่นใส่ศัตรูทุกตัว ลำละ 34 กระเด็น",cost:60,c:"80,230,210",sig:1,set:1},
+  moonward:{n:"แสงจันทร์คุ้มภัย",d:"ฟื้น HP 25% · เกราะ 3 วิ · ล้างพิษ/สาป/ช้า",cost:55,c:"220,230,255",sig:1,set:1},
+  asuraslash:{n:"ฟันเพลิงอสูร",d:"ฟันเพลิงเป็นแนวยาว ดาเมจ 55",cost:50,c:"255,90,60",sig:1,set:1},
+  garudastorm:{n:"พายุครุฑ",d:"พายุผลักศัตรูทั้งสนาม ลำละ 22 · เร็วขึ้น 4 วิ",cost:50,c:"255,210,90",sig:1,set:1},
   frost:{n:"ลมหนาวเยือกแข็ง",d:"วงน้ำแข็ง ดาเมจ 20 และช้าลง",cost:40,c:"140,230,255",sig:1,mon:1},
   web:{n:"ใยแมงมุม",d:"ใยเหนียวทำให้ว่ายช้า",cost:40,c:"220,230,200",sig:1,mon:1},
   raise:{n:"ปลุกศพ",d:"ร่ายปลุกปีศาจที่ล่มให้ฟื้น (ชนขัดจังหวะได้)",cost:55,c:"190,110,255",sig:1,mon:1},
@@ -1797,8 +1807,25 @@ const RELICS={
   eye:{n:"ตากะโหลกสาป",rar:"SSR",d:L=>`ชนติดคริ +${Math.round(12*rs(L))}% และคริแรง x2.2`},
   drop:{n:"หยดน้ำบาดาล",rar:"SSR",d:L=>`ฟื้น HP ${(3*rs(L)).toFixed(1)}/วิ และ SP มาไว +20%`},
   crown:{n:"มงกุฎราชาปีศาจ",rar:"UR",d:L=>`ATK +12% · ชนแล้วไฟนรกระเบิดรอบตัว ${Math.round(12*rs(L))} ดาเมจ · ออร่าไฟนรก`},
-  lotus:{n:"ดวงใจบัวทอง",rar:"UR",d:L=>`ทุกค่า +${Math.round(6*rs(L))}% · ล่มแล้วฟื้นคืนชีพ 1 ครั้ง (${Math.round(30+5*L)}% HP) · ออร่าบัวทอง`}
+  lotus:{n:"ดวงใจบัวทอง",rar:"UR",d:L=>`ทุกค่า +${Math.round(6*rs(L))}% · ล่มแล้วฟื้นคืนชีพ 1 ครั้ง (${Math.round(30+5*L)}% HP) · ออร่าบัวทอง`},
+  // set pieces (wear both pieces of a set to unlock its set skill)
+  nagascale:{n:"เกล็ดพญานาค",rar:"SSR",set:"naga",d:L=>`DEF +${Math.round(15*rs(L))}% · HP +${Math.round(5*rs(L))}%`},
+  nagaorb:{n:"แก้วมณีนาคา",rar:"UR",set:"naga",d:L=>`พลังสกิล +${Math.round(15*rs(L))}% · SP มาไว +15%`},
+  moonpin:{n:"ปิ่นจันทรา",rar:"SR",set:"moon",d:L=>`HP +${Math.round(10*rs(L))}%`},
+  moonlantern:{n:"โคมกระต่ายจันทร์",rar:"SSR",set:"moon",d:L=>`ฟื้น HP ${(2*rs(L)).toFixed(1)}/วิ · SP มาไว +10%`},
+  asuraring:{n:"แหวนอสูร",rar:"SR",set:"asura",d:L=>`ATK +${Math.round(8*rs(L))}% · ชนติดคริ +5%`},
+  asurablade:{n:"ดาบเพลิงอสูร",rar:"SSR",set:"asura",d:L=>`ATK +${Math.round(12*rs(L))}% · แรงชน +10%`},
+  garudafeather:{n:"ขนครุฑ",rar:"SSR",set:"garuda",d:L=>`SPD +${Math.round(10*rs(L))}%`},
+  garudawheel:{n:"กงจักรวายุ",rar:"UR",set:"garuda",d:L=>`SPD +6% · ATK +${Math.round(10*rs(L))}% · พุ่งชนแรงขึ้น 25%`}
 };
+const SETS={
+  naga:{n:"เซ็ตพญานาค",pcs:["nagascale","nagaorb"],skill:"nagawrath",col:"80,230,210"},
+  moon:{n:"เซ็ตจันทรา",pcs:["moonpin","moonlantern"],skill:"moonward",col:"220,230,255"},
+  asura:{n:"เซ็ตอสูรเพลิง",pcs:["asuraring","asurablade"],skill:"asuraslash",col:"255,90,60"},
+  garuda:{n:"เซ็ตครุฑวายุ",pcs:["garudafeather","garudawheel"],skill:"garudastorm",col:"255,210,90"}
+};
+function activeSet(prog){ const eq=(prog&&prog.relics)||[]; for(const [k,S] of Object.entries(SETS)) if(S.pcs.every(x=>eq.includes(x))) return k; return null; }
+function setSkills(prog){ const k=activeSet(prog); return k?[SETS[k].skill]:[]; }
 const RAR_COL={R:"170,200,220",SR:"110,180,255",SSR:"200,130,255",UR:"255,190,80"};
 function rs(L){ return 1+.25*((L||1)-1); }
 function relicsOf(prog){ if(!prog) return []; return (prog.relics||[]).filter(r=>RELICS[r]).map(r=>[r,(prog.inv&&prog.inv[r])||1]); }
@@ -1807,12 +1834,14 @@ function statsFor(type,prog){ const b=BSTATS[type]||BSTATS.banana, L=(prog&&prog
   let hp=b.hp*1.6*(1+.08*(L.hp||0))*sm, atk=(b.atk+1.5*(L.atk||0))*sm, def=(b.def+1.5*(L.def||0))*sm, spd=b.spd*(1+.03*(L.spd||0))*(1+.02*st), sk=1+.1*(L.sk||0);
   let ramMul=1, spMul=1, critC=0;
   if(cl==="warrior"){ atk*=1.15; ramMul=1.15; } if(cl==="guardian"){ hp*=1.2; def*=1.2; } if(cl==="mystic"){ sk*=1.25; spMul=1.3; } if(cl==="racer"){ spd*=1.12; critC=.15; }
-  let critM=1.8, regen=0, hellBurst=0, revive=0;
+  let critM=1.8, regen=0, hellBurst=0, revive=0, dashMul=1;
   for(const [r,L] of relicsOf(prog)){ const m=rs(L);
     if(r==="scale") hp*=1+.08*m; if(r==="feather") spd*=1+.05*m; if(r==="fang") atk*=1+.10*m; if(r==="shell") def*=1+.12*m;
     if(r==="eye"){ critC+=.12*m; critM=2.2; } if(r==="drop"){ regen+=3*m; spMul*=1.2; }
-    if(r==="crown"){ atk*=1.12; hellBurst=12*m; } if(r==="lotus"){ const g=1+.06*m; hp*=g; atk*=g; def*=g; spd*=g; revive=.30+.05*L; } }
-  return {hp:Math.round(hp),atk:+atk.toFixed(1),def:+def.toFixed(1),spd:+spd.toFixed(2),sk:+sk.toFixed(2),ramMul,spMul,critC,critM,regen,hellBurst,revive}; }
+    if(r==="crown"){ atk*=1.12; hellBurst=12*m; }
+    if(r==="nagascale"){ def*=1+.15*m; hp*=1+.05*m; } if(r==="nagaorb"){ sk*=1+.15*m; spMul*=1.15; } if(r==="moonpin") hp*=1+.10*m; if(r==="moonlantern"){ regen+=2*m; spMul*=1.1; }
+    if(r==="asuraring"){ atk*=1+.08*m; critC+=.05; } if(r==="asurablade"){ atk*=1+.12*m; ramMul*=1.1; } if(r==="garudafeather") spd*=1+.10*m; if(r==="garudawheel"){ spd*=1.06; atk*=1+.10*m; dashMul=1.25; } if(r==="lotus"){ const g=1+.06*m; hp*=g; atk*=g; def*=g; spd*=g; revive=.30+.05*L; } }
+  return {hp:Math.round(hp),atk:+atk.toFixed(1),def:+def.toFixed(1),spd:+spd.toFixed(2),sk:+sk.toFixed(2),ramMul,spMul,critC,critM,regen,hellBurst,revive,dashMul}; }
 const CLASS_LV=20, CLASS_COST=200;
 function classOpen(P){ return !!P&&((P.level||1)>=CLASS_LV||(P.stars||0)>=1); }
 function classSkills(prog){ const c=prog&&prog.cls&&CLASS_INFO[prog.cls]; return c?[c.skill]:[]; }
@@ -1820,7 +1849,7 @@ function starStr(n){ return n?"★".repeat(n):""; }
 function makeFighter(k,isPlayer,o){
   o=o||{}; const st=BSTATS[k.type]||BSTATS.banana, S=statsFor(k.type,o.prog), hs=o.hpS||1, as=o.atkS||1;
   const hp=Math.round(S.hp*hs);
-  return {k:{...k,seed:k.seed??Math.random(),cls:(o.prog&&o.prog.cls)||k.cls||null,stars:(o.prog&&o.prog.stars)||k.stars||0,relics:o.prog?relicsOf(o.prog):(k.relics||[])},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,ramMul:S.ramMul,spMul:S.spMul,critC:S.critC,critM:S.critM,regen:S.regen,hellBurst:S.hellBurst,revive:S.revive,big:o.big||1,boss:!!o.boss,duel:!!o.duel,
+  return {k:{...k,seed:k.seed??Math.random(),cls:(o.prog&&o.prog.cls)||k.cls||null,stars:(o.prog&&o.prog.stars)||k.stars||0,relics:o.prog?relicsOf(o.prog):(k.relics||[])},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,ramMul:S.ramMul,spMul:S.spMul,critC:S.critC,critM:S.critM,regen:S.regen,hellBurst:S.hellBurst,revive:S.revive,dashMul:S.dashMul,big:o.big||1,boss:!!o.boss,duel:!!o.duel,
     x:0,y:0,vx:0,vy:0,alive:true,sinkT:0,buffs:{},hitT:0,aiT:0,skills:[],bump:new Map()};
 }
 function skillsFromSticks(st){ return (st||[]).slice(0,1).map(i=>FORTUNE_SKILL[i]).filter(Boolean); }
@@ -1879,7 +1908,7 @@ const TUTORIAL=[
   ["🎋","เซียมซีสกิล","เขย่าเซียมซีครั้งแรกฟรี ได้สกิลเสริม 1 สกิล ไม่ชอบเขย่าใหม่ได้ (40 เหรียญ)"],
   ["🛡","คลาส (ปลดที่ Lv."+CLASS_LV+")","อัปค่าพลังครบ "+(CLASS_LV-1)+" ครั้ง กระทงถึง Lv."+CLASS_LV+" ก็เลือกคลาสได้เลย ฟรีครั้งแรก มี นักรบ / ผู้พิทักษ์ / จอมเวท / นักซิ่ง ได้โบนัส + สกิลคลาส เปลี่ยนได้ทีหลัง ("+CLASS_COST+" เหรียญ)"],
   ["🏰","ดันเจี้ยน","ลงไปปราบกระทงปีศาจ 10 ชั้น เลือดไม่รีเซ็ต (ฟื้น 30% ทุกชั้น) ผ่านแต่ละชั้นจะเลือกลงต่อหรือถอยกลับพร้อมเหรียญก็ได้ ชั้น 5 มีขุนพลปีศาจ ชั้น 10 คือราชาปีศาจยักษ์"],
-  ["🎁","หีบสมบัติ & เครื่องราง","ผ่านดันเจี้ยนชั้น 10 / 15 / 20 ได้ตั๋วหีบสมบัติ (หรือซื้อด้วยเหรียญ) สุ่มเครื่องราง 4 แรร์ R / SR / SSR / UR ใส่ได้ 2 ช่อง ได้ซ้ำเลเวลขึ้น UR มีออร่าสวยๆ ติดกระทงด้วย"],
+  ["🎁","หีบสมบัติ & เครื่องราง","ผ่านดันเจี้ยนชั้น 10 / 15 / 20 ได้ตั๋วหีบสมบัติ (หรือซื้อด้วยเหรียญ) สุ่มเครื่องราง 4 แรร์ R / SR / SSR / UR ใส่ได้ 2 ช่อง ได้ซ้ำเลเวลขึ้น UR มีออร่าสวยๆ ติดกระทงด้วย · ใส่ 2 ชิ้นของเซ็ตเดียวกัน (พญานาค / จันทรา / อสูรเพลิง / ครุฑวายุ) ได้สกิลเซ็ตเพิ่มอีก 1 ปุ่ม"],
   ["🤺","ท้าดวล","ท้ากระทงของคนอื่นได้ ระบบจะใช้ค่าพลังที่เขาอัปไว้สู้แทน ใครมาท้าคุณ ดูได้ที่ “ใครมาท้าฉัน”"],
   ["★","ยกระดับดาว (เป้าหมายระยะยาว)","อัปค่าพลังทุกตัวจนตัน แล้วกดยกระดับ จะได้ ★ ค่าพลัง +8% และเพดานเลเวลสูงขึ้น"]
 ];
@@ -1917,7 +1946,7 @@ let dunRun=null;
 function inDungeon(){ return !!(battle&&battle.mode==="dungeon"); }
 /* dungeon scene: a painted cave (until a backdrop image is set) with dark mirrored water, fog and rising embers */
 // painted backdrops per depth: {from: first floor, src}. Floors with no image use the painted cave below.
-const DUNGEON_BGS=[{from:1,src:"img/dungeon1.webp",hor:.52},{from:4,src:"img/dungeon3.webp",hor:.43},{from:7,src:"img/dungeon2.webp",hor:.525,lava:true},{from:11,src:"img/dungeon4.webp",hor:.55,ice:true},{from:16,src:"img/dungeon2.webp",hor:.525,lava:true}];
+const DUNGEON_BGS=[{from:1,src:"img/dungeon1.webp",hor:.52},{from:4,src:"img/dungeon3.webp",hor:.43},{from:7,src:"img/dungeon2.webp",hor:.525,lava:true},{from:11,src:"img/dungeon4.webp",hor:.55,ice:true},{from:16,src:"img/dungeon5.webp",hor:.54,void:true}];
 let dunCv=null, dunKey="", dunImg=null, dunImgSrc="", DUNGEON_BG=null, dunFog=[], dunEmbers=[];
 function pickDungeonBg(floor){ let b=null; for(const d of DUNGEON_BGS) if(floor>=d.from) b=d; DUNGEON_BG=b; if(b&&dunImgSrc!==b.src){ dunImgSrc=b.src; dunImg=new Image(); dunImg.onload=()=>{ dunKey=""; }; dunImg.src=b.src; } if(!b){ dunImg=null; dunImgSrc=""; } dunKey=""; }
 function buildDungeonBg(){
@@ -1960,11 +1989,11 @@ function drawDungeon(c,t,dt){
   }
   // drifting fog
   if(!dunFog.length) for(let i=0;i<7;i++) dunFog.push({x:Math.random(),y:Math.random(),s:.6+Math.random(),v:(Math.random()-.5)*.02,c:"150,60,140"});
-  const fogC=DUNGEON_BG&&DUNGEON_BG.lava?"255,70,30":DUNGEON_BG&&DUNGEON_BG.ice?"110,150,255":DUNGEON_BG?"90,200,190":null;
+  const fogC=DUNGEON_BG&&DUNGEON_BG.lava?"255,70,30":DUNGEON_BG&&DUNGEON_BG.ice?"110,150,255":DUNGEON_BG&&DUNGEON_BG.void?"150,80,255":DUNGEON_BG?"90,200,190":null;
   c.save(); c.globalCompositeOperation="lighter"; for(const f of dunFog){ if(fogC) f.c=fogC; f.x=(f.x+f.v*dt+1.2)%1.2; const fx=(f.x-.1)*W, fy=HOR+(f.y-.5)*H*.25, r=W*.18*f.s; c.fillStyle=rg(c,fx,fy,0,r,[[0,`rgba(${f.c},.10)`],[1,`rgba(${f.c},0)`]]); c.beginPath(); c.ellipse(fx,fy,r,r*.4,0,0,TAU); c.fill(); } c.restore();
 }
 function drawDungeonFront(c,t,dt){
-  if(dunEmbers.length<60&&Math.random()<dt*30) dunEmbers.push({x:Math.random()*W,y:H+5,vx:rnd(-10,10),vy:-rnd(20,60),life:0,dur:rnd(4,8),r:rnd(.8,2.2),c:DUNGEON_BG&&DUNGEON_BG.ice?(Math.random()<.6?"170,220,255":"200,160,255"):Math.random()<(DUNGEON_BG&&DUNGEON_BG.lava?.97:.4)?"255,110,60":"120,255,200"});
+  if(dunEmbers.length<60&&Math.random()<dt*30) dunEmbers.push({x:Math.random()*W,y:H+5,vx:rnd(-10,10),vy:-rnd(20,60),life:0,dur:rnd(4,8),r:rnd(.8,2.2),c:DUNGEON_BG&&DUNGEON_BG.void?(Math.random()<.6?"200,150,255":"140,200,255"):DUNGEON_BG&&DUNGEON_BG.ice?(Math.random()<.6?"170,220,255":"200,160,255"):Math.random()<(DUNGEON_BG&&DUNGEON_BG.lava?.97:.4)?"255,110,60":"120,255,200"});
   c.save(); c.globalCompositeOperation="lighter";
   for(let i=dunEmbers.length-1;i>=0;i--){ const e=dunEmbers[i]; e.life+=dt; if(e.life>e.dur){ dunEmbers.splice(i,1); continue; } e.x+=(e.vx+Math.sin(t*1.3+i)*12)*dt; e.y+=e.vy*dt; const a=Math.sin(Math.PI*e.life/e.dur)*.8;
     c.fillStyle=`rgba(${e.c},${a})`; c.beginPath(); c.arc(e.x,e.y,e.r,0,TAU); c.fill(); c.fillStyle=`rgba(${e.c},${a*.12})`; c.beginPath(); c.arc(e.x,e.y,e.r*4,0,TAU); c.fill(); }
@@ -2057,7 +2086,7 @@ $("devbar").addEventListener("click",e=>{ const d=e.target.dataset&&e.target.dat
 function relicIcon(id){ const im=document.createElement("img"); im.src="img/relic/"+id+".png"; im.alt=RELICS[id].n; return im; }
 function rarTag(r){ const t=el("span","rar",r); t.style.setProperty("--rc",RAR_COL[r]); return t; }
 function relicSlots(P,id){ const box=el("div","relic-slots"); const eq=P.relics||[];
-  for(let i=0;i<2;i++){ const r=eq[i], d=el("div","rslot"+(r?" full":"")); if(r&&RELICS[r]){ const L=(P.inv&&P.inv[r])||1; d.style.borderColor=`rgba(${RAR_COL[RELICS[r].rar]},.8)`; d.append(relicIcon(r)); const t=el("div"); const b=el("b"); b.append(rarTag(RELICS[r].rar),RELICS[r].n+` Lv.${L}`); t.append(b); t.append(el("small",null,RELICS[r].d(L))); d.append(t); }
+  for(let i=0;i<2;i++){ const r=eq[i], d=el("div","rslot"+(r?" full":"")); if(r&&RELICS[r]){ const L=(P.inv&&P.inv[r])||1; d.style.borderColor=`rgba(${RAR_COL[RELICS[r].rar]},.8)`; d.append(relicIcon(r)); const t=el("div"); const b=el("b"); b.append(rarTag(RELICS[r].rar),RELICS[r].n+` Lv.${L}`); t.append(b); t.append(el("small",null,RELICS[r].d(L)+(RELICS[r].set?` · ${SETS[RELICS[r].set].n}`:""))); d.append(t); }
     else d.append(el("small",null,`ช่องเครื่องราง ${i+1} · ว่าง`)); if(id) d.addEventListener("click",()=>openRelics(id)); box.append(d); }
   return box; }
 async function equipRelics(id,list){ try{ const j=await post("?action=equip",{id,token:tokens[id],relics:list}); myProgs[id].prog=j.prog; sfx("bless"); }catch(e){ toast(e.message); } openRelics(id); }
@@ -2075,9 +2104,12 @@ function openRelics(id){
     mk("เปิด 1 (3,000 เหรียญ)",{pay:"coins",n:1},P.coins>=3000);
     card.append(ga);
     card.append(el("b",null,"ช่องที่ใส่อยู่ (2 ช่อง)")); card.append(relicSlots(P,null));
+    { const as=activeSet(P); const box=el("div","sets"); for(const [k2,S2] of Object.entries(SETS)){ const sk2=SKILLS[S2.skill], own=S2.pcs.filter(x=>(P.inv||{})[x]).length; const d=el("div","setrow"+(as===k2?" on":"")); d.style.setProperty("--rc",S2.col);
+      d.append(el("b",null,`${S2.n} ${as===k2?"✔ ใช้งานอยู่":`(มี ${own}/2)`}`)); d.append(el("small",null,`${S2.pcs.map(x=>RELICS[x].n).join(" + ")} → สกิล “${sk2.n}”: ${sk2.d}`));
+      if(own===2&&as!==k2){ const b=el("button","btn primary","ใส่ทั้งเซ็ต"); b.addEventListener("click",()=>equipRelics(id,S2.pcs.slice())); d.append(b); } box.append(d); } card.append(box); }
     const grid=el("div","rgrid"); const eq=P.relics||[];
     for(const [r,R] of Object.entries(RELICS).sort((a,b)=>({UR:0,SSR:1,SR:2,R:3})[a[1].rar]-({UR:0,SSR:1,SR:2,R:3})[b[1].rar])){ const L=(P.inv&&P.inv[r])||0; const it=el("div","ritem"+(L?"":" locked")); it.style.setProperty("--rc",RAR_COL[R.rar]);
-      it.append(relicIcon(r)); const t=el("div"); const b=el("b"); b.append(rarTag(R.rar),L?`${R.n} Lv.${L}`:R.n); t.append(b); t.append(el("small",null,L?R.d(L):"ยังไม่เคยได้ · "+R.d(1))); it.append(t);
+      it.append(relicIcon(r)); const t=el("div"); const b=el("b"); b.append(rarTag(R.rar),L?`${R.n} Lv.${L}`:R.n); t.append(b); t.append(el("small",null,(L?R.d(L):"ยังไม่เคยได้ · "+R.d(1))+(R.set?` · ${SETS[R.set].n}`:""))); it.append(t);
       if(L){ const on=eq.includes(r); const btn=el("button","btn"+(on?"":" primary"),on?"ถอด":"ใส่"); btn.addEventListener("click",()=>{ let nx=eq.filter(x=>x!==r); if(!on){ if(nx.length>=2) nx=nx.slice(1); nx.push(r); } equipRelics(id,nx); }); it.append(btn); }
       grid.append(it); }
     card.append(grid);
@@ -2139,7 +2171,7 @@ function openUpgrade(id){
     if(box) card.append(box);
     card.append(el("b",null,"เครื่องราง (แตะเพื่อเปลี่ยน)")); card.append(relicSlots(P,id));
     card.append(el("div","meta","ติดตัว: "+st.pas));
-    const sk=[st.sig,...skillsFromSticks(P.sticks),...classSkills(P)]; card.append(skillList(sk));
+    const sk=[st.sig,...skillsFromSticks(P.sticks),...classSkills(P),...setSkills(P)]; card.append(skillList(sk));
     const acts=el("div","acts");
     const rr=el("button","btn",P.sticks?"เสี่ยงเซียมซีใหม่ (40)":"เสี่ยงเซียมซีรับสกิล (ฟรี)"); rr.disabled=!!P.sticks&&P.coins<40;
     rr.addEventListener("click",async()=>{ rr.disabled=true; try{ const j=await post("?action=sticks",{id,token:tokens[id]}); myProgs[id].prog=j.prog; sfx("chime"); openUpgrade(id); }catch(e){ toast(e.message); rr.disabled=false; } });
@@ -2180,7 +2212,7 @@ async function prepareFight(id,mode,defK){
   let defProg=null; if(mode==="duel"){ try{ defProg=(await api("?prog="+encodeURIComponent(defK.id))).prog; }catch(e){} }
   const level=mode==="pve"?Math.max(1,P.pve||1):1;
   showCard(card=>{
-    const st=BSTATS[k.type]||BSTATS.banana, sk=[st.sig,...skillsFromSticks(P.sticks),...classSkills(P)];
+    const st=BSTATS[k.type]||BSTATS.banana, sk=[st.sig,...skillsFromSticks(P.sticks),...classSkills(P),...setSkills(P)];
     card.append(el("div","kind",mode==="pve"?(level%5===0?`ด่านฝึกที่ ${level} · ด่านบอส 👑 (เหรียญ x2)`:`ด่านฝึกที่ ${level}`):"ท้าดวล"));
     card.append(el("h3",null,k.name+` (Lv.${P.level})`));
     card.append(statGrid(statsFor(k.type,P))); card.append(skillList(sk));
@@ -2231,13 +2263,13 @@ function openInbox(){
 function startBattle(k,fortuneSkills,opts){
   closeCard(); opts=opts||{mode:"practice",level:1}; const level=opts.level||1;
   const st=BSTATS[k.type]||BSTATS.banana;
-  const P=makeFighter(k,true,{prog:opts.prog}); P.skills=[st.sig,...fortuneSkills,...classSkills(opts.prog)];
+  const P=makeFighter(k,true,{prog:opts.prog}); P.skills=[st.sig,...fortuneSkills,...classSkills(opts.prog),...setSkills(opts.prog)];
   const foes=[];
   if(opts.mode==="duel"){
     const dk={id:"foe0",name:opts.defK.name,type:opts.defK.type,candle:opts.defK.candle||"white",seed:Math.random(),photoUrl:opts.defK.photoUrl};
     const D=makeFighter(dk,false,{prog:opts.defProg,duel:true,hpS:1.15}); const ds=BSTATS[dk.type]||BSTATS.banana;
     const dsk=opts.defProg&&opts.defProg.sticks?skillsFromSticks(opts.defProg.sticks):(()=>{ const all=Object.keys(SKILLS).filter(x=>!SKILLS[x].sig); return [all[Math.random()*all.length|0]]; })();
-    D.skills=[ds.sig,...dsk,...classSkills(opts.defProg)]; foes.push(D);
+    D.skills=[ds.sig,...dsk,...classSkills(opts.defProg),...setSkills(opts.defProg)]; foes.push(D);
   } else if(opts.mode==="dungeon"){
     foes.push(...dungeonFoes(opts.floor,opts.prog));
   } else {
@@ -2311,7 +2343,7 @@ function hurt(f,dmg,src,opts){
   return dmg;
 }
 /* ---- pixel VFX (PixelLab): sheets in img/vfx, frames left-to-right then top-to-bottom ---- */
-const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12},"frost":{"w":106,"h":78,"n":10,"fps":12},"voidhole":{"w":232,"h":212,"n":32,"fps":10},"tentacle":{"w":116,"h":255,"n":16,"fps":14},"hellaura":{"w":73,"h":115,"n":8,"fps":12},"holyaura":{"w":96,"h":112,"n":12,"fps":12},"gachaburst":{"w":150,"h":155,"n":7,"fps":16},"webshot":{"w":96,"h":96,"n":14,"fps":14},"necro":{"w":172,"h":70,"n":12,"fps":12},"shadowclone":{"w":69,"h":120,"n":16,"fps":12},"eclipse":{"w":128,"h":128,"n":16,"fps":12},"starimpact":{"w":146,"h":184,"n":18,"fps":18},"crystalbreak":{"w":60,"h":79,"n":12,"fps":12},"spiritpop":{"w":57,"h":45,"n":8,"fps":12},"bossportal":{"w":288,"h":412,"n":22,"fps":14},"lootdrop":{"w":83,"h":154,"n":14,"fps":15}};
+const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12},"frost":{"w":106,"h":78,"n":10,"fps":12},"voidhole":{"w":232,"h":212,"n":32,"fps":10},"tentacle":{"w":116,"h":255,"n":16,"fps":14},"hellaura":{"w":73,"h":115,"n":8,"fps":12},"holyaura":{"w":96,"h":112,"n":12,"fps":12},"gachaburst":{"w":150,"h":155,"n":7,"fps":16},"webshot":{"w":96,"h":96,"n":14,"fps":14},"necro":{"w":172,"h":70,"n":12,"fps":12},"shadowclone":{"w":69,"h":120,"n":16,"fps":12},"eclipse":{"w":128,"h":128,"n":16,"fps":12},"starimpact":{"w":146,"h":184,"n":18,"fps":18},"crystalbreak":{"w":60,"h":79,"n":12,"fps":12},"spiritpop":{"w":57,"h":45,"n":8,"fps":12},"bossportal":{"w":288,"h":412,"n":22,"fps":14},"lootdrop":{"w":83,"h":154,"n":14,"fps":15},"nagawave":{"w":187,"h":375,"n":10,"fps":14},"moonlight":{"w":96,"h":112,"n":16,"fps":12},"fireslash":{"w":164,"h":90,"n":8,"fps":16},"garudastorm":{"w":128,"h":136,"n":16,"fps":12}};
 const VFX={}; for(const [n,m] of Object.entries(VFX_META)){ const im=new Image(); VFX[n]={...m,img:im,ok:false}; im.onload=()=>{ VFX[n].ok=true; VFX[n].cols=Math.max(1,Math.floor(im.width/m.w)); }; im.src="img/vfx/"+n+".png"; }
 const vfxPlays=[];
 // size = drawn height in multiples of the fighter size; opts: follow (fighter), flip, flat (squash y), add (glow blend), dy (offset in sizes), back (draw behind fighters)
@@ -2389,6 +2421,12 @@ function castSkill(f,id){
       floater(sx,sy-u*2.4,"หลบในวงบัว!","255,230,140","skill");
       tele(f,{x:f.x,y:f.y,r:Math.max(W,H),dur:2.6,col:"255,40,80",global:true,then:()=>{ const sf=battle.safe; battle.safe=null; f.casting=null; playVfx(VFX.doomring&&VFX.doomring.ok?"doomring":"formation",f.x,f.y,8,{flat:.55,add:true,back:true}); runeBursts.push({x:f.x,y:f.y,life:0,dur:1.4,r:Math.max(W,H)*.6,flat:true,glyph:true,col:"255,40,80"}); battle.shake=18;
         for(const o of foesOf(f)){ if(sf&&Math.hypot(o.x-sf.x,(o.y-sf.y)*1.8)<sf.r){ floater(o.x,o.y-fSize(o)*2,"รอด!","255,230,140","skill"); continue; } hurt(o,55*m,f); o.buffs.cursed=5; o.vx+=Math.sign(o.x-f.x||1)*u*12; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); } }}); break; }
+    case "__setfx": break;
+    case "nagawrath": { battle.banner={text:sk.n,col:sk.c,t:0}; battle.shake=12; foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; playVfx(vfxOr("nagawave","fish"),o.x,o.y,5.6,{dy:-1.6}); hurt(o,34*m,f); o.vx+=Math.sign(o.x-f.x||1)*u*12; ripples.push({x:o.x,y:o.y,r:u*2.4,life:0,dur:1.3,c:"120,240,220"}); },150+i*160)); break; }
+    case "moonward": { f.hp=Math.min(f.max,f.hp+f.max*.25*m/skillMul(f)*Math.min(1.4,skillMul(f))); f.buffs.shield=3; for(const b of ["poison","cursed","slow"]) f.buffs[b]=0; playVfx(vfxOr("moonlight","holyhand"),f.x,f.y,4,{follow:f,dy:-1.2,add:true}); floater(f.x,f.y-s*2.2,"ล้างคำสาป!","220,230,255","skill"); break; }
+    case "asuraslash": if(tgt){ const a=Math.atan2((tgt.y-f.y)*1.8,tgt.x-f.x), L=Math.max(W,H)*.6; for(let q=0;q<3;q++) playVfx(vfxOr("fireslash","crescent"),f.x+Math.cos(a)*u*(3+q*3.2),f.y+Math.sin(a)*u*(3+q*3.2)/1.8-s*.4,4.6,{flip:Math.cos(a)<0,speed:.7,rot:Math.sin(a)*.6}); battle.shake=10;
+      for(const o of foesOf(f)){ const dx=o.x-f.x, dy=(o.y-f.y)*1.8, along=dx*Math.cos(a)+dy*Math.sin(a), off=Math.abs(-dx*Math.sin(a)+dy*Math.cos(a)); if(along>0&&along<L&&off<fSize(o)*1.6+u){ hurt(o,55*m,f,{crit:true}); o.vx+=Math.cos(a)*u*8; } } } break;
+    case "garudastorm": { playVfx(vfxOr("garudastorm","whirl"),f.x,f.y,4.6,{follow:f,dy:-1}); f.buffs.haste=4; battle.shake=8; for(const o of foesOf(f)){ const dx=o.x-f.x, dy=(o.y-f.y)*1.8, d=Math.hypot(dx,dy)||1; hurt(o,22*m,f); o.vx+=dx/d*u*16; o.vy+=dy/d*u*16/1.8; } break; }
     case "frost": if(tgt){ const x=tgt.x, y=tgt.y; tele(f,{x,y,r:u*2.3,dur:.9,col:"120,220,255",then:()=>{ playVfx("frost",x,y,3.4,{dy:-.5,add:true}); },hit:o=>{ hurt(o,20*m,f); o.buffs.slow=3; floater(o.x,o.y-fSize(o)*2.2,"เยือกแข็ง!","150,230,255"); }}); } break;
     case "web": { const ts=tgt?[[tgt.x,tgt.y],[tgt.x+rnd(-1,1)*u*4,tgt.y+rnd(-1,1)*u*1.5]]:[]; ts.forEach(([x,y])=>tele(f,{x,y,r:u*2.2,dur:.7,col:"230,240,210",then:()=>{ battle.pools.push({x,y,r:u*2.2,life:0,dur:6,owner:f,m,web:true}); playVfx(vfxOr("webshot","crossclaw"),x,y,3,{dy:-.3}); }})); break; }
     case "raise": { const dead=battle.foes.filter(o=>!o.alive&&o.mon&&!o.boss&&o.sinkT<30); f.casting={t:2.2,dur:2.2,name:sk.n,interrupt:true}; playVfx("dread",f.x,f.y,3,{follow:f,dy:-1.4}); playVfx(vfxOr("necro","formation"),f.x,f.y,2.2,{dy:.1,back:true});
@@ -2407,6 +2445,9 @@ function castSkill(f,id){
       f.hp=Math.min(f.max,f.hp+f.max*.04); floater(f.x,f.y-s*2,"เกราะวิญญาณ! ชนผีให้แตก","170,200,255","skill"); break;
     case "claw": if(tgt){ for(let i=0;i<3;i++) setTimeout(()=>{ if(!battle||!tgt.alive) return; hurt(tgt,12*m*1.6,f,{crit:true}); playVfx("crossclaw",tgt.x+rnd(-8,8),tgt.y,2.4,{follow:tgt,dy:-.7,flip:Math.random()<.5}); floater(tgt.x+rnd(-14,14),tgt.y-fSize(tgt)*1.4,"แฮ่!","255,200,140"); sfx("bonk"); },i*160); } break;
   }
+  if(sk.set){ battle.banner={text:sk.n,col:sk.c,t:0}; flash={a:.9,x:f.x,y:f.y,c:sk.c}; battle.slow=Math.max(battle.slow||0,.35);
+    runeBursts.push({x:f.x,y:f.y,life:0,dur:1.4,r:s*5,flat:true,glyph:true,col:sk.c}); runeBursts.push({x:f.x,y:f.y,life:0,dur:1.9,r:s*8,flat:true,glyph:false,col:sk.c});
+    for(let q=0;q<50;q++){ const a=Math.random()*TAU, sp=rnd(60,260); sparks.push({x:f.x,y:f.y-s*.6,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.6-40,g:30,drag:1.6,life:0,dur:rnd(.8,1.6),r:rnd(1.2,2.8),c:sk.c,twinkle:true}); } }
   skillVfx(id,f,tgt); sfx("bless"); updateHud();
 }
 function battleStep(dt,t){
@@ -2459,7 +2500,7 @@ function battleStep(dt,t){
     const key=a===B.P?b:a; const last=(a.bump.get(b)||-9); a.bump.set(b,B.t);
     if(live && a.isPlayer!==b.isPlayer && B.t-last>.25){
       const ramA=Math.max(0,va)/u, ramB=Math.max(0,-vb)/u;
-      const dmgTo=(atk,def,ram,att,vic)=>{ let dmg=ram*2.6*att.atk/vic.def*(att.ramMul||1); if(att.k.type==="banana") dmg*=1.15; if(vic.k.type==="coconut") dmg*=.7; if(att.buffs.dash>0) dmg*=1.6; let crit=false; if(Math.random()<(att.k.type==="cat"?.25:0)+(att.critC||0)){ dmg*=(att.critM||1.8); crit=true; } dmg=Math.min(dmg,vic.max*.25); return {dmg,crit}; };
+      const dmgTo=(atk,def,ram,att,vic)=>{ let dmg=ram*2.6*att.atk/vic.def*(att.ramMul||1); if(att.k.type==="banana") dmg*=1.15; if(vic.k.type==="coconut") dmg*=.7; if(att.buffs.dash>0) dmg*=1.6*(att.dashMul||1); let crit=false; if(Math.random()<(att.k.type==="cat"?.25:0)+(att.critC||0)){ dmg*=(att.critM||1.8); crit=true; } dmg=Math.min(dmg,vic.max*.25); return {dmg,crit}; };
       const A=dmgTo(0,0,ramA,a,b), Bd=dmgTo(0,0,ramB,b,a); A.crit=!!A.crit; Bd.crit=!!Bd.crit;
       if(A.dmg>2){ hurt(b,A.dmg,a,{crit:A.crit}); if(b.buffs.reflect>0) hurt(a,A.dmg*.6,b); }
       if(Bd.dmg>2){ hurt(a,Bd.dmg,b,{crit:Bd.crit}); if(a.buffs.reflect>0) hurt(b,Bd.dmg*.6,a); }
@@ -2659,7 +2700,7 @@ async function showBattleResult(win){
 cv.addEventListener("pointerdown",e=>{ if(!battle) return; battle.target={x:e.clientX,y:e.clientY}; battle.down=true; });
 cv.addEventListener("pointermove",e=>{ if(!battle) return; if(battle.down||e.pointerType==="mouse") battle.target={x:e.clientX,y:e.clientY}; });
 addEventListener("pointerup",()=>{ if(battle) battle.down=false; });
-addEventListener("keydown",e=>{ if(!battle) return; const k=e.key.length===1?e.key.toLowerCase():e.key; if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","w","a","s","d"].includes(k)){ bKeys.add(k); e.preventDefault(); } if(/^[1-3]$/.test(k)){ const id=battle.P.skills[+k-1]; if(id) castSkill(battle.P,id); } });
+addEventListener("keydown",e=>{ if(!battle) return; const k=e.key.length===1?e.key.toLowerCase():e.key; if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","w","a","s","d"].includes(k)){ bKeys.add(k); e.preventDefault(); } if(/^[1-5]$/.test(k)){ const id=battle.P.skills[+k-1]; if(id) castSkill(battle.P,id); } });
 addEventListener("keyup",e=>{ const k=e.key.length===1?e.key.toLowerCase():e.key; bKeys.delete(k); });
 $("bhExit").addEventListener("click",async()=>{ if(inDungeon()&&dunRun){ const fl=battle.opts.floor-1; dunRun.kills+=battle.foes.filter(f=>!f.alive).length; endBattle(); const j=await finishDungeon(fl); dungeonSummary(j,fl,false); return; } endBattle(); toast("ออกจากศึกแล้ว"); });
 $("btnBattle").addEventListener("click",()=>{ unlockAudio(); if(battle){ toast("กำลังอยู่ในศึก"); return; } openBattleMenu(); });

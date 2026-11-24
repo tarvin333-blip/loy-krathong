@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "babd2f4f-8822-46ca-9e64-99d5ac322b93",
+  "canvas": {
+   "h": 375,
+   "w": 187
+  },
+  "frames": 10,
+  "fps": 14,
+  "loop": false,
+  "anchor": {
+   "x": 89,
+   "y": 311,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-nagawave.gif": "https://api.pixellab.ai/mcp/pixel-tools/aa9b8b1e-2156-4994-b85f-6f9f9925c843/lk-nagawave.gif",
+  "lk-nagawave.png": "https://api.pixellab.ai/mcp/pixel-tools/aa9b8b1e-2156-4994-b85f-6f9f9925c843/lk-nagawave.png",
+  "lk-nagawave.json": "https://api.pixellab.ai/mcp/pixel-tools/aa9b8b1e-2156-4994-b85f-6f9f9925c843/lk-nagawave.json"
+ }
+}

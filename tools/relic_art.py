@@ -13,6 +13,14 @@ D = {
  'drop':   ('SSR',"a teardrop of deep abyssal water in a crystal vial glowing cyan"),
  'crown':  ('UR', "the crimson demon king's spiked black crown wreathed in hellfire"),
  'lotus':  ('UR', "a radiant golden lotus heart blossom with a holy flame inside"),
+ 'nagascale': ('SSR', "a large iridescent emerald and gold Thai naga serpent scale engraved with ornate Thai patterns"),
+ 'nagaorb':   ('UR',  "a glowing sacred naga jewel orb, a luminous turquoise pearl held in the coils of a tiny golden Thai naga with a crested head"),
+ 'moonpin':   ('SR',  "an elegant silver Thai hairpin topped with a crescent moon and small pearls"),
+ 'moonlantern':('SSR',"a small glowing paper lantern shaped like a full moon with a white rabbit silhouette on it, soft silver light"),
+ 'asuraring': ('SR',  "a heavy black iron ring with a fierce red Thai yaksha demon face, embers glowing in its eyes"),
+ 'asurablade':('SSR', "a curved Thai demon sword with a black and gold hilt shaped like a yaksha head and a blade wreathed in red fire"),
+ 'garudafeather':('SSR',"a long majestic golden-red Garuda feather with glowing wind swirls around it"),
+ 'garudawheel':('UR', "a radiant golden divine chakra wheel weapon with blades, wind currents and a Garuda wing motif, holy light"),
 }
 if __name__ == '__main__':
     before = gens()

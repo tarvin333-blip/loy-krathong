@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "e14a727e-d89e-4668-a004-3e96d9859b95",
+  "canvas": {
+   "h": 136,
+   "w": 128
+  },
+  "frames": 16,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 64,
+   "y": 124,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-garudastorm.gif": "https://api.pixellab.ai/mcp/pixel-tools/ce780fb5-84b7-41ae-b5fd-49b490d81cd6/lk-garudastorm.gif",
+  "lk-garudastorm.png": "https://api.pixellab.ai/mcp/pixel-tools/ce780fb5-84b7-41ae-b5fd-49b490d81cd6/lk-garudastorm.png",
+  "lk-garudastorm.json": "https://api.pixellab.ai/mcp/pixel-tools/ce780fb5-84b7-41ae-b5fd-49b490d81cd6/lk-garudastorm.json"
+ }
+}

@@ -1,0 +1,287 @@
+{
+ "frames": [
+  {
+   "filename": "lk-nagawave 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 1.png",
+   "frame": {
+    "x": 187,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 2.png",
+   "frame": {
+    "x": 374,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 3.png",
+   "frame": {
+    "x": 561,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 4.png",
+   "frame": {
+    "x": 0,
+    "y": 375,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 5.png",
+   "frame": {
+    "x": 187,
+    "y": 375,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 6.png",
+   "frame": {
+    "x": 374,
+    "y": 375,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 7.png",
+   "frame": {
+    "x": 561,
+    "y": 375,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 8.png",
+   "frame": {
+    "x": 0,
+    "y": 750,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-nagawave 9.png",
+   "frame": {
+    "x": 187,
+    "y": 750,
+    "w": 187,
+    "h": 375
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 187,
+    "h": 375
+   },
+   "sourceSize": {
+    "w": 187,
+    "h": 375
+   },
+   "pivot": {
+    "x": 0.47593582887700536,
+    "y": 0.8293333333333334
+   },
+   "duration": 71
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-nagawave.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 748,
+   "h": 1125
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 89,
+   "y": 311
+  },
+  "frameTags": [
+   {
+    "name": "lk-nagawave",
+    "from": 0,
+    "to": 9,
+    "direction": "forward"
+   }
+  ]
+ }
+}

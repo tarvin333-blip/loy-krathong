@@ -1,0 +1,235 @@
+{
+ "frames": [
+  {
+   "filename": "lk-fireslash 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "sourceSize": {
+    "w": 164,
+    "h": 90
+   },
+   "pivot": {
+    "x": 0.4817073170731707,
+    "y": 0.7444444444444445
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-fireslash 1.png",
+   "frame": {
+    "x": 164,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "sourceSize": {
+    "w": 164,
+    "h": 90
+   },
+   "pivot": {
+    "x": 0.4817073170731707,
+    "y": 0.7444444444444445
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-fireslash 2.png",
+   "frame": {
+    "x": 328,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "sourceSize": {
+    "w": 164,
+    "h": 90
+   },
+   "pivot": {
+    "x": 0.4817073170731707,
+    "y": 0.7444444444444445
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-fireslash 3.png",
+   "frame": {
+    "x": 0,
+    "y": 90,
+    "w": 164,
+    "h": 90
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "sourceSize": {
+    "w": 164,
+    "h": 90
+   },
+   "pivot": {
+    "x": 0.4817073170731707,
+    "y": 0.7444444444444445
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-fireslash 4.png",
+   "frame": {
+    "x": 164,
+    "y": 90,
+    "w": 164,
+    "h": 90
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "sourceSize": {
+    "w": 164,
+    "h": 90
+   },
+   "pivot": {
+    "x": 0.4817073170731707,
+    "y": 0.7444444444444445
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-fireslash 5.png",
+   "frame": {
+    "x": 328,
+    "y": 90,
+    "w": 164,
+    "h": 90
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "sourceSize": {
+    "w": 164,
+    "h": 90
+   },
+   "pivot": {
+    "x": 0.4817073170731707,
+    "y": 0.7444444444444445
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-fireslash 6.png",
+   "frame": {
+    "x": 0,
+    "y": 180,
+    "w": 164,
+    "h": 90
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "sourceSize": {
+    "w": 164,
+    "h": 90
+   },
+   "pivot": {
+    "x": 0.4817073170731707,
+    "y": 0.7444444444444445
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-fireslash 7.png",
+   "frame": {
+    "x": 164,
+    "y": 180,
+    "w": 164,
+    "h": 90
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 164,
+    "h": 90
+   },
+   "sourceSize": {
+    "w": 164,
+    "h": 90
+   },
+   "pivot": {
+    "x": 0.4817073170731707,
+    "y": 0.7444444444444445
+   },
+   "duration": 63
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-fireslash.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 492,
+   "h": 270
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 79,
+   "y": 67
+  },
+  "frameTags": [
+   {
+    "name": "lk-fireslash",
+    "from": 0,
+    "to": 7,
+    "direction": "forward"
+   }
+  ]
+ }
+}

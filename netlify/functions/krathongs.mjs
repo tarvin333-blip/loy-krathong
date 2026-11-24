@@ -39,7 +39,9 @@ const capOf = (p) => MAX_LV + 5 * (p.stars || 0);                // each star li
 const ascendCost = (p) => 2500 * ((p.stars || 0) + 1);
 const DUNGEON_FLOORS = 20, DUNGEON_MIN_SEC_PER_FLOOR = 9, DUNGEON_CLEAR_BONUS = 500, DEEP_CLEAR_BONUS = 1500;
 // gacha relics: 4 rarities x 2; duplicates level the relic up to 5
-const RELICS = { scale: "R", feather: "R", fang: "SR", shell: "SR", eye: "SSR", drop: "SSR", crown: "UR", lotus: "UR" };
+const RELICS = { scale: "R", feather: "R", fang: "SR", shell: "SR", eye: "SSR", drop: "SSR", crown: "UR", lotus: "UR",
+  // set pieces: wear both pieces of a set for its set skill
+  moonpin: "SR", asuraring: "SR", moonlantern: "SSR", asurablade: "SSR", nagascale: "SSR", garudafeather: "SSR", nagaorb: "UR", garudawheel: "UR" };
 const RARITY_RATE = [["UR", 0.03], ["SSR", 0.12], ["SR", 0.30], ["R", 0.55]];
 const GACHA_COIN_COST = 3000, PITY = 40, RELIC_MAX = 5, DUP_REFUND = 500, RELIC_SLOTS = 2;
 // boss loot at the end of a dungeon run: [floor, drop chance, rarity table]

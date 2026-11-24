@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "1f03d106-4b48-484b-a369-aba8cefd44fb",
+  "canvas": {
+   "h": 112,
+   "w": 96
+  },
+  "frames": 16,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 48,
+   "y": 56,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-moonlight.gif": "https://api.pixellab.ai/mcp/pixel-tools/e28d44be-fac8-475c-9257-bb4d62cb3014/lk-moonlight.gif",
+  "lk-moonlight.png": "https://api.pixellab.ai/mcp/pixel-tools/e28d44be-fac8-475c-9257-bb4d62cb3014/lk-moonlight.png",
+  "lk-moonlight.json": "https://api.pixellab.ai/mcp/pixel-tools/e28d44be-fac8-475c-9257-bb4d62cb3014/lk-moonlight.json"
+ }
+}
