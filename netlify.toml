@@ -1,5 +1,3 @@
 [build]
   publish = "public"
   functions = "netlify/functions"
-  # fill in the absolute site address that link previews (Facebook, LINE, X) need
-  command = "sed -i \"s#__SITE_URL__#${URL}#g\" public/index.html"

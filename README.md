@@ -68,7 +68,7 @@ npx netlify-cli deploy --prod
 ## ภาพปกตอนแชร์ลิงก์ (Facebook, LINE, X)
 - ภาพปกอยู่ที่ `public/img/og-cover.jpg` ขนาด 1200×630
 - ป้ายกำกับ og:* อยู่ใน `<head>` ของ `public/index.html`
-- Facebook ต้องการลิงก์ภาพแบบเต็ม ตอน deploy คำสั่ง build ใน `netlify.toml` จะแทน `__SITE_URL__` ด้วยที่อยู่เว็บจริง (ตัวแปร `URL` ของ Netlify)
+- Facebook ต้องการลิงก์ภาพแบบเต็ม ตอนนี้ใช้ https://remarkable-fenglisu-d58300.netlify.app ถ้าเปลี่ยนโดเมน ให้แก้ที่อยู่ในป้าย og:url, og:image และ twitter:image
 - ถ่ายภาพปกใหม่: รัน `node tools/og/ogserver.mjs` แล้วตามด้วย `node tools/og/shoot.js` (ต้องมี Playwright) ภาพจะออกมาเป็น og_raw.png ย่อเหลือ 1200×630 แล้ววางทับไฟล์เดิม
 - กระทงในภาพปกเป็นชื่อสมมติทั้งหมด
 - ถ้า Facebook ยังโชว์ภาพเก่า ให้เปิด https://developers.facebook.com/tools/debug/ วางลิงก์ แล้วกด "Scrape Again"
