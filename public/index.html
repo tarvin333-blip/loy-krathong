@@ -2245,16 +2245,21 @@ function drawEnding(c,t,dt){
   c.strokeStyle=`rgba(255,240,190,${.22*ease})`; c.lineWidth=6; c.beginPath(); c.arc(hx,hy,hr*1.03,0,TAU); c.stroke(); c.restore();
   // goddess rising out of the river: the painted pond under her is cut away and her waist fades into the water
   const gImg=goddessMasked();
-  if(gImg){ const wy=waterY, wf=(wy-top)/gs;
+  if(gImg){ const wy=waterY;
+    // ripples + foam are split: the far half is drawn before her, the near half after, so the water wraps around her
+    const ripples2=(front)=>{ c.save(); c.globalCompositeOperation="lighter";
+      for(let r2=0;r2<4;r2++){ const rr=((t*.45+r2/4)%1), rx=gs*(.22+rr*.6); c.strokeStyle=`rgba(255,232,180,${.4*(1-rr)*ease*(front?1:.7)})`; c.lineWidth=1.6; c.beginPath(); c.ellipse(gx,wy,rx,rx*.14,0,front?0:Math.PI,front?Math.PI:TAU); c.stroke(); }
+      for(let q=0;q<18;q++){ const a=q/18*TAU+t*.6, sn=Math.sin(a); if((sn>0)!==front) continue; const rx=gs*(.2+.04*Math.sin(t*3+q)), x=gx+Math.cos(a)*rx, y=wy+sn*rx*.12; c.fillStyle=`rgba(255,250,230,${.55*ease*(.5+.5*Math.sin(t*4+q*1.7))})`; c.beginPath(); c.arc(x,y,1.4+gs*.004,0,TAU); c.fill(); }
+      c.restore(); };
+    ripples2(false);
     c.save(); c.beginPath(); c.rect(0,0,W,wy+gs*.004); c.clip(); c.imageSmoothingEnabled=false; c.drawImage(gImg,gx-gs/2,top,gs,gs); c.restore();
     // wavy reflection: thin mirrored strips that sway and fade with depth
-    const N=26, depth=gs*.42; for(let j=0;j<N;j++){ const u0=j/N, yy=wy+u0*depth, sh=depth/N, srcY=(Math.min(wf,WAIST)-u0*depth/gs)*gImg.height, srcH=Math.max(1,(depth/gs)*gImg.height/N);
+    const wf=(wy-top)/gs, N=26, depth=gs*.42; for(let j=0;j<N;j++){ const u0=j/N, yy=wy+u0*depth, sh=depth/N, srcY=(Math.min(wf,WAIST)-u0*depth/gs)*gImg.height, srcH=Math.max(1,(depth/gs)*gImg.height/N);
       if(srcY<0) break; c.save(); c.globalAlpha=.32*ease*(1-u0)*(1-u0); c.imageSmoothingEnabled=false; c.drawImage(gImg,0,srcY,gImg.width,srcH,gx-gs/2+Math.sin(t*2.2+j*.9)*gs*.012*(1+u0*2),yy,gs,sh+1); c.restore(); }
-    // glowing waterline + foam where she meets the surface
-    c.save(); c.globalCompositeOperation="lighter"; c.translate(gx,wy); c.scale(1,.16);
-    c.fillStyle=rg(c,0,0,0,gs*.42,[[0,`rgba(255,240,200,${.55*ease})`],[.45,`rgba(255,210,150,${.22*ease})`],[1,"rgba(255,200,140,0)"]]); c.beginPath(); c.arc(0,0,gs*.42,0,TAU); c.fill(); c.restore();
-    c.save(); c.globalCompositeOperation="lighter"; for(let q=0;q<18;q++){ const a=q/18*TAU+t*.6, rx=gs*(.2+.04*Math.sin(t*3+q)), x=gx+Math.cos(a)*rx, y=wy+Math.sin(a)*rx*.12; c.fillStyle=`rgba(255,250,230,${.55*ease*(.5+.5*Math.sin(t*4+q*1.7))})`; c.beginPath(); c.arc(x,y,1.4+gs*.004,0,TAU); c.fill(); } c.restore();
-    c.save(); c.globalCompositeOperation="lighter"; for(let r2=0;r2<4;r2++){ const rr=((t*.45+r2/4)%1); c.strokeStyle=`rgba(255,232,180,${.4*(1-rr)*ease})`; c.lineWidth=1.6; c.beginPath(); c.ellipse(gx,wy,gs*(.22+rr*.6),gs*(.22+rr*.6)*.14,0,0,TAU); c.stroke(); } c.restore(); }
+    // light on the water around her: only below the surface line, never over her body
+    c.save(); c.beginPath(); c.rect(0,wy-1,W,H); c.clip(); c.globalCompositeOperation="lighter"; c.translate(gx,wy); c.scale(1,.16);
+    c.fillStyle=rg(c,0,0,0,gs*.42,[[0,`rgba(255,240,200,${.5*ease})`],[.45,`rgba(255,210,150,${.2*ease})`],[1,"rgba(255,200,140,0)"]]); c.beginPath(); c.arc(0,0,gs*.42,0,TAU); c.fill(); c.restore();
+    ripples2(true); }
   // golden lotus petals drifting down
   if(E.petals.length<70&&Math.random()<dt*28) E.petals.push({x:Math.random()*W,y:-10,vx:rnd(-12,12),vy:rnd(30,70),r:rnd(0,TAU),vr:rnd(-2,2),s:rnd(3,7),c:Math.random()<.6?"255,215,140":"255,170,200"});
   c.save(); for(let i=E.petals.length-1;i>=0;i--){ const q=E.petals[i]; q.x+=(q.vx+Math.sin(t+i)*14)*dt; q.y+=q.vy*dt; q.r+=q.vr*dt; if(q.y>H+10){ E.petals.splice(i,1); continue; } c.save(); c.translate(q.x,q.y); c.rotate(q.r); c.fillStyle=`rgba(${q.c},.9)`; c.beginPath(); c.ellipse(0,0,q.s,q.s*.45,0,0,TAU); c.fill(); c.restore(); } c.restore();
