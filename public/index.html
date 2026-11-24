@@ -246,7 +246,7 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
 .ascend small{grid-column:1;font-size:11px;color:var(--ink-dim)}
 .ascend .btn{grid-row:1/3;grid-column:2;padding:8px 12px;font-size:13px}
 .devfab{position:fixed;left:12px;bottom:12px;z-index:60;background:#1b0d2e;color:#9effc8;border:1px solid #4dff9e;border-radius:10px;padding:6px 10px;font:700 12px monospace;cursor:pointer;box-shadow:0 0 12px rgba(77,255,158,.35)}
-body.in-battle .devfab{display:none}
+body.in-battle .devfab,.devfab[hidden],.devbar[hidden]{display:none!important}
 .devbar{position:fixed;left:50%;transform:translateX(-50%);top:176px;z-index:60;display:flex;gap:6px;align-items:center;background:rgba(20,8,40,.85);border:1px solid #4dff9e;border-radius:10px;padding:5px 8px;font:12px monospace;color:#9effc8}
 .devbar button{white-space:nowrap;background:#2a1450;color:#e8fff2;border:1px solid #4dff9e66;border-radius:7px;padding:4px 8px;font:600 12px "Bai Jamjuree",sans-serif;cursor:pointer}
 .devbar button.on{background:#4dff9e;color:#08200f}
@@ -1926,7 +1926,7 @@ const DEV_HASH="1d5d151b97bb9826e51f0814b4ba5c42b807db25c80d1c8e8201b23e13e676a4
 let devOn=!!lsGet("lk.dev",0), devPick={type:"star",cls:null,full:true}, titleTaps=0, titleAt=0;
 async function sha256hex(t){ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
 function setDev(on){ devOn=on; lsSet("lk.dev",on?1:0); $("devfab").hidden=!on; }
-async function askDevCode(){ const code=prompt("รหัสลับ"); if(!code) return; try{ if(await sha256hex(code.trim())===DEV_HASH){ setDev(true); sfx("win"); toast("เปิด Dev mode แล้ว"); openDev(); } else toast("รหัสไม่ถูกต้อง"); }catch(e){ toast("เบราว์เซอร์นี้ใช้ Dev mode ไม่ได้"); } }
+async function askDevCode(){ const code=prompt("รหัสลับ"); if(!code) return; try{ if(await sha256hex(code.trim())===DEV_HASH){ lsSet("lk.devcode",code.trim()); setDev(true); sfx("win"); toast("เปิด Dev mode แล้ว"); openDev(); } else toast("รหัสไม่ถูกต้อง"); }catch(e){ toast("เบราว์เซอร์นี้ใช้ Dev mode ไม่ได้"); } }
 function devProg(){ const L=devPick.full?20:0; return {level:1+L*5,lv:{hp:L,atk:L,def:L,spd:L,sk:L},stars:0,cls:devPick.cls,sticks:[11],bestDungeon:0,coins:0}; }
 function devStart(floor){ const tp=TYPE_BY[devPick.type]||TYPES[0], k={id:"dev",name:"DEV · "+tp.name,type:tp.id,candle:"gold",seed:Math.random()};
   dunRun={id:"dev",runId:"dev",floor,hp:null,kills:0,k,prog:devProg(),dev:true}; startDungeonFloor(); }
@@ -1934,11 +1934,17 @@ function openDev(){
   if(!devOn){ return; }
   showCard(card=>{
     card.append(el("div","kind","Dev mode 🛠")); card.append(el("h3",null,"ห้องทดลอง"));
-    card.append(el("p","meta","ทุกอย่างในนี้เล่นในเครื่องเท่านั้น ไม่บันทึกเหรียญ/สถิติขึ้นเซิร์ฟเวอร์ ระหว่างศึกมีแถบ DEV: อมตะ / SP เต็ม / ชนะทันที / แพ้"));
+    card.append(el("p","meta","ดันเจี้ยนในห้องนี้เล่นในเครื่องเท่านั้น ไม่บันทึกผล ระหว่างศึกมีแถบ DEV: อมตะ / SP เต็ม / ชนะทันที / แพ้ ส่วนปุ่มปั๊มเหรียญจะบันทึกลงกระทงจริง"));
     const mkSel=(label,items,key)=>{ card.append(el("b",null,label)); const row=el("div","dev-sel"); for(const [v,n] of items){ const b=el("button","btn"+(devPick[key]===v?" on":""),n); b.addEventListener("click",()=>{ devPick[key]=v; openDev(); }); row.append(b); } card.append(row); };
     mkSel("กระทง",TYPES.map(t=>[t.id,t.name]),"type");
     mkSel("คลาส",[[null,"ไม่มี"],...Object.entries(CLASS_INFO).map(([id,c])=>[id,c.n])],"cls");
     mkSel("ค่าพลัง",[[true,"ตันทุกค่า (Lv.101)"],[false,"เริ่มต้น (Lv.1)"]],"full");
+    const ids=myOnlineIds();
+    if(ids.length){ card.append(el("b",null,"ปั๊มเหรียญให้กระทงของฉัน (บันทึกจริง)")); const box=el("div","pick");
+      for(const id of ids){ const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; const row=el("div","myk"); const tx=el("div"); tx.append(el("b",null,k.name)); tx.append(el("small",null,P?`💰 ${P.coins} · Lv.${P.level}`:"")); row.append(tx);
+        const bt=el("div","myk-acts"); for(const n of [1000,10000,100000]){ const b=el("button","btn","+"+n.toLocaleString()); b.addEventListener("click",async()=>{ b.disabled=true; try{ const j=await post("?action=devcoins",{id,token:tokens[id],code:lsGet("lk.devcode",""),amount:n}); if(myProgs[id]) myProgs[id].prog=j.prog; else myProgs[id]={prog:j.prog}; sfx("bless"); toast(`+${j.added.toLocaleString()} เหรียญ → ${k.name}`); openDev(); }catch(e){ toast(e.message); b.disabled=false; } }); bt.append(b); }
+        row.append(bt); box.append(row); }
+      card.append(box); }
     card.append(el("b",null,"ลงดันเจี้ยนชั้น"));
     const g=el("div","dev-grid"); for(let f=1;f<=DUN_FLOORS;f++){ const b=el("button","btn"+(f%5===0?" dun":""),String(f)); b.addEventListener("click",()=>devStart(f)); g.append(b); } card.append(g);
     const acts=el("div","acts");
@@ -1948,7 +1954,8 @@ function openDev(){
   });
 }
 document.querySelector(".brand h1").addEventListener("click",()=>{ const n=performance.now(); titleTaps=n-titleAt<900?titleTaps+1:1; titleAt=n; if(titleTaps>=5){ titleTaps=0; if(devOn) openDev(); else askDevCode(); } });
-$("devfab").addEventListener("click",()=>{ if(!battle) openDev(); });
+
+$("devfab").addEventListener("click",async()=>{ if(battle) return; await refreshMyProgs(); openDev(); });
 $("devfab").hidden=!devOn;
 $("devbar").addEventListener("click",e=>{ const d=e.target.dataset&&e.target.dataset.d; if(!d||!battle) return; const B=battle;
   if(d==="god"){ B.god=!B.god; e.target.classList.toggle("on",B.god); toast(B.god?"อมตะ ON":"อมตะ OFF"); }

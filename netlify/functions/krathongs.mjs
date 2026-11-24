@@ -30,6 +30,7 @@ const MAX_LV = 20, MAX_STARS = 5, START_COINS = 60, HOURLY_SOFT_CAP = 2500, DUEL
 const upCost = (lv) => 25 + lv * 15;
 const spentOn = (p) => STATS.reduce((a, k) => { let t = 0; for (let l = 0; l < (p.lv?.[k] || 0); l++) t += upCost(l); return a + t; }, 0);
 const respecRefund = (p) => { const spent = spentOn(p); return (p.respecs || 0) === 0 ? spent : Math.floor(spent * 0.8); };
+const DEV_COINS_HASH = "21a2f472ea51078ca402b32658c7f2ed079fa81b6e1e22c9661ae1f7cc5b29cb";
 const sha = (t) => createHash("sha256").update(String(t)).digest("hex");
 const newToken = () => randomBytes(18).toString("base64url");
 const level = (p) => 1 + STATS.reduce((a, k) => a + (p.lv?.[k] || 0), 0);
@@ -158,6 +159,12 @@ export default async (req, context) => {
         p.coins -= cost; p.lv[st] = cur + 1;
         await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         return json({ prog: publicProg(p) });
+      }
+      if (action === "devcoins") {                     // owner's dev mode: needs the krathong's token and the secret code
+        if (sha("lk-dev-coins:" + String(b.code || "").trim()) !== DEV_COINS_HASH) return json({ error: "รหัสลับไม่ถูกต้อง" }, 403);
+        const amt = Math.max(0, Math.min(100000, Math.floor(Number(b.amount) || 0)));
+        p.coins += amt; await store.setJSON("prog/" + p.id, p);
+        return json({ prog: publicProg(p), added: amt });
       }
       if (action === "ascend") {
         if ((p.stars || 0) >= MAX_STARS) return json({ error: "ดาวเต็มแล้ว" }, 400);
