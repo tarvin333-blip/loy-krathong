@@ -179,6 +179,30 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
 .stick p{margin:2px 0 0;font-size:12px;color:var(--ink-dim)}
 .shake{display:inline-block;animation:shake .5s ease-in-out 3}
 @keyframes shake{25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+
+.myk{display:flex;flex-direction:column;gap:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);border-radius:12px;padding:10px}
+.myk b{display:block;font-size:14px}
+.myk small{display:block;font-size:11px;color:var(--ink-dim);margin-top:2px}
+.myk-acts{display:flex;gap:6px;flex-wrap:wrap}
+.myk-acts .btn{padding:7px 10px;font-size:13px}
+.coins{display:inline-block;margin:6px 0 2px;padding:4px 12px;border-radius:999px;background:rgba(255,200,97,.15);color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums}
+.uplist{display:grid;gap:6px;margin:8px 0}
+.uprow{display:flex;justify-content:space-between;align-items:center;gap:10px;background:rgba(255,255,255,.05);border-radius:10px;padding:8px 10px}
+.uprow b{display:block;font-size:14px}
+.uprow small{display:block;font-size:11px;color:var(--ink-dim)}
+.uprow .btn{padding:7px 12px;font-size:13px;flex:none}
+.vs{text-align:center;font-family:var(--f-display);font-size:30px;color:var(--lotus);margin:6px 0}
+.board{display:grid;gap:6px;margin-top:10px}
+.brow{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border-radius:10px;padding:8px 10px}
+.brow.mine{box-shadow:0 0 0 1px var(--gold) inset}
+.brow.new{box-shadow:0 0 0 1px var(--lotus) inset}
+.brow b{display:block;font-size:13px;overflow-wrap:anywhere}
+.brow small{display:block;font-size:11px;color:var(--ink-dim)}
+.brow>div{flex:1}
+.rank{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(255,200,97,.18);color:var(--gold);font-weight:700;font-size:12px;flex:none}
+.kills{flex:none;font-weight:700;font-variant-numeric:tabular-nums}
+#btnBattle{position:relative}
+#btnBattle.has-news::after{content:"";position:absolute;top:2px;right:4px;width:9px;height:9px;border-radius:50%;background:#ff5f6d;box-shadow:0 0 0 2px var(--night)}
 </style>
 </head>
 <body>
@@ -1083,6 +1107,7 @@ for(let i=0;i<6;i++){ ambient.push({id:"amb"+i,amb:true,type:AMB_TYPES[i],candle
 function sanitize(id,d){
   const k={id, name:clean(d.name,30)||"ไม่ประสงค์ออกนาม", partner:clean(d.partner,30), wish:clean(d.wish,160),
     type:TYPE_BY[d.type]?d.type:"banana", cat:CAT_BY[d.cat]?d.cat:"", candle:CANDLE_BY[d.candle]?d.candle:"white",
+    lv:Math.max(1,+d.lv|0), kills:Math.max(0,+d.kills|0),
     lane:Math.min(1,Math.max(0,+d.lane||.5)), seed:Math.min(1,Math.max(0,+d.seed||.5)), createdAt:+d.createdAt||Date.now()};
   if(d.img===true && /^[a-z0-9-]{1,40}$/.test(id)) k.photoUrl=API_IMG(id);
   else if(typeof d.photo==="string" && d.photo.startsWith("data:image/jpeg;base64,") && d.photo.length<90000) k.photoUrl=d.photo;
@@ -1197,7 +1222,7 @@ function frame(nowP){
     if(!k.amb && (k.lane>.2 || hi || mine.has(k.id))){
       const fs=Math.max(10,Math.min(14,p.s*.42));
       c.font=`600 ${fs}px "Bai Jamjuree",system-ui,sans-serif`;
-      const label=k.partner?`${k.name} ♥ ${k.partner}`:k.name;
+      const label=(k.partner?`${k.name} ♥ ${k.partner}`:k.name)+(k.lv>1?` · Lv.${k.lv}`:"")+(k.kills>0?` ⚔${k.kills}`:"");
       const tw=Math.min(c.measureText(label).width,180);
       const ly=p.y-p.s*1.6;
       c.fillStyle = hi ? "rgba(255,200,97,.95)" : mine.has(k.id) ? "rgba(255,200,97,.3)" : "rgba(8,10,35,.55)";
@@ -1451,62 +1476,188 @@ const bKeys=new Set();
 function bU(){ return unit(); }
 function laneOf(y){ const a=laneY(0), b=laneY(1); return Math.min(1,Math.max(0,(y-a)/Math.max(1,b-a))); }
 function fSize(f){ return bU()*(.42+laneOf(f.y)*.8); }
-function makeFighter(k,isPlayer,level){
-  const st=BSTATS[k.type]||BSTATS.banana, mul=isPlayer?1:(.85+level*.12);
-  const hp=Math.round(st.hp*1.6*mul);
-  return {k:{...k,seed:k.seed??Math.random()},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:st.atk*(isPlayer?1:(.9+level*.08)),def:st.def,spd:st.spd,
+/* ---- online progression: the server keeps each krathong's upgrades; the browser that floated it holds its key ---- */
+let tokens=lsGet("lk.tokens",{}); if(!tokens||typeof tokens!=="object") tokens={};
+function saveTokens(){ lsSet("lk.tokens",tokens); }
+let myProgs={};
+async function api(path,opts){ const r=await fetch(API+path,opts); const j=await r.json().catch(()=>({})); if(!r.ok){ const e=new Error(j.error||"เชื่อมต่อไม่สำเร็จ"); e.status=r.status; throw e; } return j; }
+function post(path,body){ return api(path,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body||{})}); }
+const STAT_INFO=[["hp","HP","+8% ต่อเลเวล"],["atk","ATK","+1.5 ต่อเลเวล"],["def","DEF","+1.5 ต่อเลเวล"],["spd","SPD","+3% ต่อเลเวล"],["sk","พลังสกิล","+10% ต่อเลเวล"]];
+const upCost=lv=>25+lv*15;
+function statsFor(type,prog){ const b=BSTATS[type]||BSTATS.banana, L=(prog&&prog.lv)||{};
+  return {hp:Math.round(b.hp*1.6*(1+.08*(L.hp||0))),atk:+(b.atk+1.5*(L.atk||0)).toFixed(1),def:+(b.def+1.5*(L.def||0)).toFixed(1),spd:+(b.spd*(1+.03*(L.spd||0))).toFixed(2),sk:+(1+.1*(L.sk||0)).toFixed(2)}; }
+function makeFighter(k,isPlayer,o){
+  o=o||{}; const st=BSTATS[k.type]||BSTATS.banana, S=statsFor(k.type,o.prog), hs=o.hpS||1, as=o.atkS||1;
+  const hp=Math.round(S.hp*hs);
+  return {k:{...k,seed:k.seed??Math.random()},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,
     x:0,y:0,vx:0,vy:0,alive:true,sinkT:0,buffs:{},hitT:0,aiT:0,skills:[],bump:new Map()};
 }
-function openBattleMenu(){
-  closeSheet(); closeCard(); const card=$("card"); card.textContent="";
-  card.append(el("div","kind","ศึกกระทง ⚔"));
-  card.append(el("h3",null,"เลือกกระทงลงศึก"));
-  card.append(el("p","meta","บังคับกระทงด้วยการลากนิ้วหรือขยับเมาส์บนน้ำ (หรือปุ่มลูกศร/WASD) พุ่งชนให้แรงเพื่อลด HP ศัตรู ใช้ SP ปล่อยสกิล กระทงที่ HP หมดจะล่ม ศึกนี้เล่นในเครื่องคุณเท่านั้น ไม่กระทบกระทงจริงของใคร"));
-  const list=el("div","pick");
-  const mineK=cachedReal.filter(k=>mine.has(k.id)).slice(-6).reverse();
-  const opts=mineK.length?mineK:[{id:"tmp",name:($("inName").value.trim()||"กระทงนิรนาม"),type:form.type,candle:form.candle,seed:.4}];
-  for(const k of opts){ const st=BSTATS[k.type]||BSTATS.banana, sg=SKILLS[st.sig];
-    const b=el("button"); const tx=el("div"); tx.append(el("b",null,k.name+" · "+(TYPE_BY[k.type]||TYPES[0]).name)); tx.append(el("small",null,`HP ${Math.round(st.hp*1.6)} · ATK ${st.atk} · DEF ${st.def} · SPD ${st.spd}`)); tx.append(el("small",null,"ติดตัว: "+st.pas)); tx.append(el("small",null,"สกิลประจำตัว: "+sg.n));
-    b.append(tx); b.addEventListener("click",()=>drawSticks(k,1)); list.append(b); }
-  if(!mineK.length) list.append(el("p","meta","ยังไม่มีกระทงที่ลอยจากเครื่องนี้ ใช้แบบที่เลือกไว้ในหน้าทำกระทงแทน"));
-  // also allow any type
-  const any=el("div","chips"); any.style.marginTop="10px";
-  for(const tp of TYPES){ const c=el("button","chip",tp.name); c.addEventListener("click",()=>drawSticks({id:"tmp-"+tp.id,name:($("inName").value.trim()||tp.name),type:tp.id,candle:form.candle,seed:Math.random()},1)); any.append(c); }
-  card.append(list); card.append(el("div","meta","หรือเลือกแบบกระทง:")); card.append(any);
-  const best=lsGet("lk.bestRound",0); if(best) card.append(el("div","meta","สถิติสูงสุด: ผ่านถึงด่าน "+best));
-  const acts=el("div","acts"); const c=el("button","btn","ปิด"); c.addEventListener("click",closeCard); acts.append(c); card.append(acts);
-  card.hidden=false; $("veil").hidden=false;
+function skillsFromSticks(st){ return (st||[]).map(i=>FORTUNE_SKILL[i]).filter(Boolean); }
+function myOnlineIds(){ return Object.keys(tokens).filter(id=>cachedReal.some(k=>k.id===id)); }
+function kOf(id){ return cachedReal.find(k=>k.id===id); }
+function backBtn(acts,label,fn){ const b=el("button","btn",label); b.addEventListener("click",fn); acts.append(b); return b; }
+function showCard(build){ closeSheet(); const card=$("card"); card.textContent=""; build(card); card.hidden=false; $("veil").hidden=false; }
+
+async function refreshMyProgs(){
+  if(!apiOK) return {};
+  for(const id of mine){ if(!tokens[id] && !String(id).startsWith("local-") && kOf(id)){ try{ const j=await post("?claim="+encodeURIComponent(id)); tokens[id]=j.token; saveTokens(); }catch(e){} } }
+  const ids=myOnlineIds(); if(!ids.length){ myProgs={}; return myProgs; }
+  try{ myProgs=(await api("?inbox="+ids.map(encodeURIComponent).join(","))).inbox||{}; }catch(e){}
+  return myProgs;
 }
-function drawSticks(k,level){
-  const card=$("card"); card.textContent="";
-  const st=BSTATS[k.type]||BSTATS.banana;
-  card.append(el("div","kind","ด่านที่ "+level+" · เขย่าเซียมซีศึก"));
-  const h=el("h3",null,k.name); card.append(h);
-  const stats=el("div","stats"); [["HP",Math.round(st.hp*1.6)],["ATK",st.atk],["DEF",st.def],["SPD",st.spd]].forEach(([a,b])=>{ const d=el("div"); d.append(el("b",null,String(b))); d.append(a); stats.append(d); }); card.append(stats);
-  card.append(el("div","meta","ติดตัว: "+st.pas+" · สกิลประจำตัว: "+SKILLS[st.sig].n+" ("+SKILLS[st.sig].d+")"));
-  const cup=el("div",null,"🎋"); cup.className="shake"; cup.style.cssText="font-size:44px;text-align:center;margin:10px 0"; card.append(cup);
-  const box=el("div","sticks"); card.append(box);
-  const picks=[]; const pool=[...FORTUNES.keys()];
-  for(let i=0;i<3;i++){ const j=pool.splice(Math.random()*pool.length|0,1)[0]; picks.push(j); }
-  sfx("chime");
-  setTimeout(()=>{ cup.remove(); picks.forEach((fi,n)=>{ setTimeout(()=>{ const sk=SKILLS[FORTUNE_SKILL[fi]]; const d=el("div","stick"); const b=el("b",null,`ใบที่ ${fi+1} → ${sk.n}`); d.append(b); d.append(el("p",null,`“${FORTUNES[fi][1]}”`)); d.append(el("p",null,`${sk.d} · ใช้ SP ${sk.cost}`)); box.append(d); sfx("drop"); },n*350); }); },1500);
-  const acts=el("div","acts"); const go=el("button","btn primary","ลงศึก!"); go.addEventListener("click",()=>startBattle(k,picks.map(fi=>FORTUNE_SKILL[fi]),level)); acts.append(go);
-  const back=el("button","btn","ย้อนกลับ"); back.addEventListener("click",openBattleMenu); acts.append(back); card.append(acts);
-  card.hidden=false; $("veil").hidden=false;
+function newChallenges(){ const seen=lsGet("lk.seenCh",0); let n=0; for(const v of Object.values(myProgs)) for(const l of (v.logs||[])) if(l.at>seen) n++; return n; }
+function setBattleBadge(){ $("btnBattle").classList.toggle("has-news",newChallenges()>0); }
+
+async function openBattleMenu(){
+  showCard(card=>{ card.append(el("div","kind","ศึกกระทง ⚔")); card.append(el("h3",null,"กระทงของฉัน")); card.append(el("p","meta","กำลังโหลดค่าพลัง…")); });
+  await refreshMyProgs(); setBattleBadge();
+  showCard(card=>{
+    card.append(el("div","kind","ศึกกระทง ⚔"));
+    card.append(el("h3",null,"กระทงของฉัน"));
+    card.append(el("p","meta","ชนะได้เหรียญ เอาไปอัปเกรดกระทงตัวนั้นได้ถาวร คนอื่นมาท้าดวลกระทงของคุณได้ ระบบจะใช้ค่าพลังและสกิลที่คุณอัปไว้สู้แทน กระทงจะล่มแค่ในศึก กระทงจริงในแม่น้ำไม่หายไปไหน"));
+    const list=el("div","pick"); const ids=myOnlineIds();
+    if(!apiOK) list.append(el("p","meta","ตอนนี้เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ เล่นได้แค่โหมดฝึกซ้อม"));
+    else if(!ids.length) list.append(el("p","meta","ยังไม่มีกระทงของคุณในแม่น้ำ ลอยกระทงก่อน แล้วกระทงใบนั้นจะกลายเป็นนักชนของคุณ"));
+    for(const id of ids){ const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P) continue;
+      const row=el("div","myk"); const tx=el("div"); tx.style.minWidth="0";
+      tx.append(el("b",null,k.name+" · "+(TYPE_BY[k.type]||TYPES[0]).name));
+      tx.append(el("small",null,`Lv.${P.level} · 💰 ${P.coins} · ⚔ kill ${P.kills} · ชนะ ${P.wins} แพ้ ${P.losses} · ป้องกันได้ ${P.defWins}/${P.defWins+P.defLosses}`));
+      row.append(tx); const bt=el("div","myk-acts");
+      const a=el("button","btn","อัปเกรด"); a.addEventListener("click",()=>openUpgrade(id)); bt.append(a);
+      const b=el("button","btn","ด่านฝึก"); b.addEventListener("click",()=>prepareFight(id,"pve")); bt.append(b);
+      const c=el("button","btn primary","ท้าดวล"); c.addEventListener("click",()=>openDuelPicker(id)); bt.append(c);
+      row.append(bt); list.append(row); }
+    card.append(list);
+    const acts=el("div","acts");
+    const nb=newChallenges(); const ib=el("button","btn","ใครมาท้าฉัน"+(nb?` (${nb} ใหม่)`:"")); ib.addEventListener("click",openInbox); acts.append(ib);
+    const lb=el("button","btn","ทำเนียบนักชน"); lb.addEventListener("click",openBoard); acts.append(lb);
+    const pr=el("button","btn","ฝึกซ้อม (ไม่ได้เหรียญ)"); pr.addEventListener("click",openPractice); acts.append(pr);
+    backBtn(acts,"ปิด",closeCard); card.append(acts);
+  });
 }
-function startBattle(k,fortuneSkills,level){
-  closeCard();
+function openPractice(){
+  showCard(card=>{
+    card.append(el("div","kind","ฝึกซ้อม"));
+    card.append(el("h3",null,"เลือกแบบกระทงลองมือ"));
+    card.append(el("p","meta","โหมดนี้ไม่ได้เหรียญและไม่บันทึกสถิติ ไว้ลองสกิลของกระทงแต่ละแบบ"));
+    const list=el("div","pick");
+    for(const tp of TYPES){ const st=BSTATS[tp.id], S=statsFor(tp.id,null), sg=SKILLS[st.sig];
+      const b=el("button"); const tx=el("div"); tx.append(el("b",null,tp.name)); tx.append(el("small",null,`HP ${S.hp} · ATK ${S.atk} · DEF ${S.def} · SPD ${S.spd}`)); tx.append(el("small",null,"ติดตัว: "+st.pas+" · สกิล: "+sg.n)); b.append(tx);
+      b.addEventListener("click",()=>drawPracticeSticks({id:"tmp-"+tp.id,name:tp.name,type:tp.id,candle:form.candle,seed:Math.random()})); list.append(b); }
+    card.append(list); const acts=el("div","acts"); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
+  });
+}
+function statGrid(S){ const g=el("div","stats"); [["HP",S.hp],["ATK",S.atk],["DEF",S.def],["SPD",S.spd]].forEach(([a,b])=>{ const d=el("div"); d.append(el("b",null,String(b))); d.append(a); g.append(d); }); return g; }
+function skillList(ids){ const box=el("div","sticks"); for(const id of ids){ const sk=SKILLS[id]; const d=el("div","stick"); d.append(el("b",null,sk.n+(sk.sig?" (ประจำตัว)":""))); d.append(el("p",null,`${sk.d} · SP ${sk.cost}`)); box.append(d); } return box; }
+function openUpgrade(id){
+  const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P){ openBattleMenu(); return; }
+  showCard(card=>{
+    const S=statsFor(k.type,P), st=BSTATS[k.type]||BSTATS.banana;
+    card.append(el("div","kind",`อัปเกรด · Lv.${P.level}`));
+    card.append(el("h3",null,k.name));
+    card.append(el("div","coins","💰 "+P.coins+" เหรียญ"));
+    card.append(statGrid(S));
+    const tbl=el("div","uplist");
+    for(const [key,label,hint] of STAT_INFO){ const lv=P.lv[key]||0, cost=upCost(lv);
+      const r=el("div","uprow"); const t=el("div"); t.append(el("b",null,`${label} Lv.${lv}`)); t.append(el("small",null,hint)); r.append(t);
+      const b=el("button","btn"+(P.coins>=cost&&lv<20?" primary":""),lv>=20?"ตันแล้ว":`+ (${cost})`); b.disabled=P.coins<cost||lv>=20;
+      b.addEventListener("click",async()=>{ b.disabled=true; try{ const j=await post("?action=upgrade",{id,token:tokens[id],stat:key}); myProgs[id].prog=j.prog; sfx("bless"); openUpgrade(id); }catch(e){ toast(e.message); b.disabled=false; } });
+      r.append(b); tbl.append(r); }
+    card.append(tbl);
+    card.append(el("div","meta","ติดตัว: "+st.pas));
+    const sk=[st.sig,...skillsFromSticks(P.sticks)]; card.append(skillList(sk));
+    const acts=el("div","acts");
+    const rr=el("button","btn",P.sticks?"เขย่าเซียมซีใหม่ (40)":"เขย่าเซียมซีรับสกิล (ฟรี)"); rr.disabled=!!P.sticks&&P.coins<40;
+    rr.addEventListener("click",async()=>{ rr.disabled=true; try{ const j=await post("?action=sticks",{id,token:tokens[id]}); myProgs[id].prog=j.prog; sfx("chime"); openUpgrade(id); }catch(e){ toast(e.message); rr.disabled=false; } });
+    acts.append(rr); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
+  });
+}
+function openDuelPicker(id){
+  showCard(card=>{
+    card.append(el("div","kind","ท้าดวล"));
+    card.append(el("h3",null,"เลือกกระทงที่จะท้า"));
+    card.append(el("p","meta","ชนะได้ 40 เหรียญและ 1 kill ถ้าแพ้ เจ้าของกระทงฝั่งนั้นได้เหรียญและ kill แทน เขาจะเห็นว่าคุณมาท้า"));
+    const list=el("div","pick");
+    const foes=cachedReal.filter(k=>k.id!==id&&!mine.has(k.id)&&!String(k.id).startsWith("local-")).sort((a,b)=>(b.lv||1)-(a.lv||1)||(b.kills||0)-(a.kills||0)).slice(0,40);
+    if(!foes.length) list.append(el("p","meta","ยังไม่มีกระทงของคนอื่นในแม่น้ำให้ท้า ชวนเพื่อนมาลอยกระทงก่อนนะ"));
+    for(const k of foes){ const b=el("button"); const tx=el("div"); tx.append(el("b",null,k.name+" · "+(TYPE_BY[k.type]||TYPES[0]).name)); tx.append(el("small",null,`Lv.${k.lv||1} · ⚔ kill ${k.kills||0}`)); b.append(tx); b.addEventListener("click",()=>prepareFight(id,"duel",k)); list.append(b); }
+    card.append(list); const acts=el("div","acts"); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
+  });
+}
+async function prepareFight(id,mode,defK){
+  const k=kOf(id); let P=myProgs[id]&&myProgs[id].prog; if(!k||!P){ openBattleMenu(); return; }
+  if(!P.sticks){ try{ const j=await post("?action=sticks",{id,token:tokens[id]}); P=j.prog; myProgs[id].prog=P; }catch(e){ toast(e.message); return; } }
+  let defProg=null; if(mode==="duel"){ try{ defProg=(await api("?prog="+encodeURIComponent(defK.id))).prog; }catch(e){} }
+  const pve=lsGet("lk.pve",{}); const level=mode==="pve"?Math.max(1,pve[id]||1):1;
+  showCard(card=>{
+    const st=BSTATS[k.type]||BSTATS.banana, sk=[st.sig,...skillsFromSticks(P.sticks)];
+    card.append(el("div","kind",mode==="pve"?`ด่านฝึกที่ ${level}`:"ท้าดวล"));
+    card.append(el("h3",null,k.name+` (Lv.${P.level})`));
+    card.append(statGrid(statsFor(k.type,P))); card.append(skillList(sk));
+    if(mode==="duel"){ const S2=statsFor(defK.type,defProg); card.append(el("div","vs","VS"));
+      card.append(el("h3",null,defK.name+` (Lv.${defProg?defProg.level:1})`)); card.append(statGrid(S2));
+      card.append(el("p","meta",defProg?`ชนะ ${defProg.wins} · ⚔ kill ${defProg.kills} · ป้องกันได้ ${defProg.defWins} ครั้ง`:"ยังไม่เคยลงศึก")); }
+    const acts=el("div","acts"); const go=el("button","btn primary","ลงศึก!");
+    go.addEventListener("click",()=>startBattle(k,skillsFromSticks(P.sticks),{mode,level,id,prog:P,defK,defProg})); acts.append(go);
+    backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
+  });
+}
+function drawPracticeSticks(k){
+  showCard(card=>{
+    const st=BSTATS[k.type]||BSTATS.banana;
+    card.append(el("div","kind","ฝึกซ้อม · เขย่าเซียมซีศึก")); card.append(el("h3",null,k.name));
+    card.append(statGrid(statsFor(k.type,null)));
+    const picks=[]; const pool=[...FORTUNES.keys()]; for(let i=0;i<3;i++) picks.push(pool.splice(Math.random()*pool.length|0,1)[0]);
+    card.append(skillList([st.sig,...picks.map(i=>FORTUNE_SKILL[i])]));
+    const acts=el("div","acts"); const go=el("button","btn primary","ลงศึก!"); go.addEventListener("click",()=>startBattle(k,picks.map(i=>FORTUNE_SKILL[i]),{mode:"practice",level:1})); acts.append(go);
+    backBtn(acts,"ย้อนกลับ",openPractice); card.append(acts);
+  });
+}
+async function openBoard(){
+  showCard(card=>{ card.append(el("div","kind","ทำเนียบนักชน")); card.append(el("p","meta","กำลังโหลด…")); });
+  let board=[]; try{ board=(await api("?board")).board||[]; }catch(e){}
+  showCard(card=>{
+    card.append(el("div","kind","ทำเนียบนักชน ⚔")); card.append(el("h3",null,"กระทงที่ kill มากที่สุด"));
+    const list=el("div","board");
+    if(!board.length) list.append(el("p","meta","ยังไม่มีใครลงศึก เป็นคนแรกเลย"));
+    board.forEach((p,i)=>{ const r=el("div","brow"+(tokens[p.id]?" mine":"")); r.append(el("span","rank",String(i+1))); const t=el("div"); t.style.minWidth="0"; t.append(el("b",null,p.name)); t.append(el("small",null,`${(TYPE_BY[p.type]||TYPES[0]).name} · Lv.${p.level} · ชนะ ${p.wins}`)); r.append(t); r.append(el("span","kills","⚔ "+p.kills)); list.append(r); });
+    card.append(list); const acts=el("div","acts"); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
+  });
+}
+function openInbox(){
+  const all=[]; for(const [id,v] of Object.entries(myProgs)) for(const l of (v.logs||[])) all.push({...l,mine:id});
+  all.sort((a,b)=>b.at-a.at); const seen=lsGet("lk.seenCh",0);
+  showCard(card=>{
+    card.append(el("div","kind","ใครมาท้าฉัน")); card.append(el("h3",null,"ประวัติการถูกท้าดวล"));
+    const list=el("div","board");
+    if(!all.length) list.append(el("p","meta","ยังไม่มีใครมาท้า"));
+    for(const l of all.slice(0,30)){ const mk=kOf(l.mine); const r=el("div","brow"+(l.at>seen?" new":""));
+      const t=el("div"); t.style.minWidth="0"; t.append(el("b",null,`${l.attackerName} (Lv.${l.attackerLevel}) มาท้า ${mk?mk.name:"กระทงของคุณ"}`)); t.append(el("small",null,ago(l.at)+" · "+(l.defenderWon?"คุณป้องกันได้! +15 เหรียญ +1 kill":"คุณแพ้ กระทงล่มในศึก (กระทงจริงยังลอยอยู่)"))); r.append(t);
+      r.append(el("span","kills",l.defenderWon?"ชนะ":"แพ้")); list.append(r); }
+    card.append(list); const acts=el("div","acts"); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
+  });
+  lsSet("lk.seenCh",Date.now()); setBattleBadge();
+}
+function startBattle(k,fortuneSkills,opts){
+  closeCard(); opts=opts||{mode:"practice",level:1}; const level=opts.level||1;
   const st=BSTATS[k.type]||BSTATS.banana;
-  const P=makeFighter(k,true,level); P.skills=[st.sig,...fortuneSkills];
-  const n=Math.min(3,1+Math.floor((level-1)/2)+(level>=2?1:0));
-  const others=cachedReal.filter(x=>!mine.has(x.id)&&!x.amb).sort(()=>Math.random()-.5);
-  const foes=[]; const npc=[...NPCS].sort(()=>Math.random()-.5);
-  for(let i=0;i<n;i++){ const src=others[i]||npc[i]; const kk={id:"foe"+i,name:src.name,type:src.type,candle:src.candle||"white",seed:Math.random(),photoUrl:src.photoUrl};
-    const f=makeFighter(kk,false,level); const fs=BSTATS[kk.type]||BSTATS.banana; const all=Object.keys(SKILLS).filter(x=>!SKILLS[x].sig); f.skills=[fs.sig,all[Math.random()*all.length|0]]; foes.push(f); }
-  const y0=laneY(.55);
-  P.x=W*.2; P.y=y0;
+  const P=makeFighter(k,true,{prog:opts.prog}); P.skills=[st.sig,...fortuneSkills];
+  const foes=[];
+  if(opts.mode==="duel"){
+    const dk={id:"foe0",name:opts.defK.name,type:opts.defK.type,candle:opts.defK.candle||"white",seed:Math.random(),photoUrl:opts.defK.photoUrl};
+    const D=makeFighter(dk,false,{prog:opts.defProg}); const ds=BSTATS[dk.type]||BSTATS.banana;
+    const dsk=opts.defProg&&opts.defProg.sticks?skillsFromSticks(opts.defProg.sticks):(()=>{ const all=Object.keys(SKILLS).filter(x=>!SKILLS[x].sig); return [all[Math.random()*all.length|0]]; })();
+    D.skills=[ds.sig,...dsk]; foes.push(D);
+  } else {
+    const n=Math.min(3,1+Math.floor((level-1)/2)+(level>=2?1:0));
+    const others=cachedReal.filter(x=>!mine.has(x.id)&&!x.amb).sort(()=>Math.random()-.5);
+    const npc=[...NPCS].sort(()=>Math.random()-.5);
+    for(let i=0;i<n;i++){ const src=others[i]||npc[i]; const kk={id:"foe"+i,name:src.name,type:src.type,candle:src.candle||"white",seed:Math.random(),photoUrl:src.photoUrl};
+      const f=makeFighter(kk,false,{hpS:.85+level*.12,atkS:.9+level*.08}); const fs=BSTATS[kk.type]||BSTATS.banana; const all=Object.keys(SKILLS).filter(x=>!SKILLS[x].sig); f.skills=[fs.sig,all[Math.random()*all.length|0]]; foes.push(f); }
+  }
+  P.x=W*.2; P.y=laneY(.55);
   foes.forEach((f,i)=>{ f.x=W*(.62+i*.12); f.y=laneY([.35,.75,.55][i%3]); });
-  battle={P,foes,all:[P,...foes],level,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],minions:[],bolts:[],floaters:[],shake:0};
+  battle={P,foes,all:[P,...foes],level,mode:opts.mode,opts,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],minions:[],bolts:[],floaters:[],shake:0};
   document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false;
   buildSkillBar(); updateHud(); sfx("bless");
 }
@@ -1535,7 +1686,7 @@ function hurt(f,dmg,src,opts){
   if(f.hp<=0){ f.hp=0; f.alive=false; f.sinkT=0; sfx("sink"); ripples.push({x:f.x,y:f.y,r:fSize(f)*3,life:0,dur:2,c:"200,225,255"}); for(let i=0;i<20;i++) sparks.push({x:f.x+rnd(-10,10),y:f.y,vx:rnd(-20,20),vy:rnd(-60,-20),g:-20,life:0,dur:rnd(1,1.8),r:rnd(1.5,3),c:"200,230,255"}); }
   return dmg;
 }
-function skillMul(f){ return f.k.type==="star"?1.35:1; }
+function skillMul(f){ return (f.k.type==="star"?1.35:1)*(f.skm||1); }
 function castSkill(f,id){
   const sk=SKILLS[id]; if(!battle||battle.over||battle.count>0||!f.alive||f.sp<sk.cost) return;
   f.sp-=sk.cost; const u=bU(), m=skillMul(f), tgt=nearest(f), s=fSize(f);
@@ -1662,25 +1813,28 @@ function battleDraw(c,t,dt){
   if(B.count>0){ const n=Math.ceil(B.count), k=B.count-Math.floor(B.count); c.font=`800 ${60+k*40}px "Bai Jamjuree",sans-serif`; c.textAlign="center"; c.fillStyle=`rgba(255,215,120,${k})`; c.fillText(String(n),W/2,H*.45); }
   else if(B.t<4){ /* "ชน!" right after countdown */ const k=Math.max(0,1-(B.t-3)); if(k>0&&B.t>3){ c.font='800 64px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.fillStyle=`rgba(255,120,140,${k})`; c.fillText("ชน!",W/2,H*.45); } }
 }
-function showBattleResult(win){
-  const B=battle; const card=$("card"); card.textContent="";
-  if(win){
-    const best=lsGet("lk.bestRound",0); if(B.level>best) lsSet("lk.bestRound",B.level);
-    const f=FORTUNES[Math.random()*FORTUNES.length|0];
-    card.append(el("div","kind","ชนะ! ด่านที่ "+B.level));
-    card.append(el("h3",null,"“"+B.P.name+"” ลอยอยู่ลำสุดท้าย"));
-    card.append(el("p","siam-text","รางวัลผู้ชนะ: “"+f[1]+"”"));
-    const acts=el("div","acts"); const nx=el("button","btn primary","ด่านต่อไป"); nx.addEventListener("click",()=>{ const k=B.P.k; endBattle(); drawSticks(k,B.level+1); }); acts.append(nx);
-    const bk=el("button","btn","กลับไปลอยกระทง"); bk.addEventListener("click",()=>{ endBattle(); closeCard(); }); acts.append(bk); card.append(acts);
-    for(let i=0;i<4;i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*300);
-  } else {
-    card.append(el("div","kind","กระทงล่ม…"));
-    card.append(el("h3",null,"ไม่เป็นไรนะ แม่คงคาให้โอกาสเสมอ"));
-    card.append(el("p","meta","ผ่านมาถึงด่าน "+B.level+" ลองเลือกกระทงแบบอื่น หรือเขย่าเซียมซีใหม่ให้ได้สกิลที่เข้ากว่า"));
-    const acts=el("div","acts"); const again=el("button","btn primary","ลองด่านนี้ใหม่"); again.addEventListener("click",()=>{ const k=B.P.k; endBattle(); drawSticks(k,B.level); }); acts.append(again);
-    const bk=el("button","btn","กลับไปลอยกระทง"); bk.addEventListener("click",()=>{ endBattle(); closeCard(); }); acts.append(bk); card.append(acts);
+async function showBattleResult(win){
+  const B=battle, o=B.opts||{}, kills=B.foes.filter(f=>!f.alive).length;
+  let gain=null, err=null;
+  if((B.mode==="pve"||B.mode==="duel")&&o.id&&tokens[o.id]){
+    try{ const j=await post("?action=battle",{id:o.id,token:tokens[o.id],mode:B.mode,win,kills,level:B.level,defender:B.mode==="duel"?o.defK.id:null}); gain=j.gain; if(myProgs[o.id]) myProgs[o.id].prog=j.prog; }
+    catch(e){ err=e.message; }
+    if(win&&B.mode==="pve"){ const pve=lsGet("lk.pve",{}); pve[o.id]=Math.max(pve[o.id]||1,B.level+1); lsSet("lk.pve",pve); }
   }
-  card.hidden=false; $("veil").hidden=false;
+  const card=$("card"); card.textContent="";
+  card.append(el("div","kind",win?(B.mode==="duel"?"ชนะการดวล!":"ชนะ! ด่านที่ "+B.level):"กระทงล่มในศึก…"));
+  card.append(el("h3",null,win?"“"+B.P.name+"” ลอยอยู่ลำสุดท้าย":"ไม่เป็นไรนะ กระทงจริงของคุณยังลอยอยู่ในแม่น้ำ"));
+  if(gain!=null) card.append(el("div","coins",`+${gain} เหรียญ · kill +${kills}`));
+  if(err) card.append(el("p","meta","บันทึกผลไม่สำเร็จ: "+err));
+  if(B.mode==="practice") card.append(el("p","meta","โหมดฝึกซ้อมไม่ได้เหรียญ ลอยกระทงจริงแล้วลงศึกเพื่อสะสมเหรียญ"));
+  if(win){ const f=FORTUNES[Math.random()*FORTUNES.length|0]; card.append(el("p","siam-text","รางวัลผู้ชนะ: “"+f[1]+"”")); for(let i=0;i<4;i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*300); }
+  const acts=el("div","acts");
+  if(B.mode==="pve"){ const nx=el("button","btn primary",win?"ด่านต่อไป":"ลองด่านนี้ใหม่"); nx.addEventListener("click",()=>{ endBattle(); prepareFight(o.id,"pve"); }); acts.append(nx); }
+  if(B.mode==="duel"){ const nx=el("button","btn primary","ท้าคนอื่นต่อ"); nx.addEventListener("click",()=>{ endBattle(); openDuelPicker(o.id); }); acts.append(nx); }
+  if(B.mode==="practice"){ const nx=el("button","btn primary","ฝึกอีกรอบ"); nx.addEventListener("click",()=>{ endBattle(); openPractice(); }); acts.append(nx); }
+  if(o.id&&tokens[o.id]){ const up=el("button","btn","อัปเกรดกระทง"); up.addEventListener("click",()=>{ endBattle(); openUpgrade(o.id); }); acts.append(up); }
+  const bk=el("button","btn","กลับไปลอยกระทง"); bk.addEventListener("click",()=>{ endBattle(); closeCard(); }); acts.append(bk);
+  card.append(acts); card.hidden=false; $("veil").hidden=false;
 }
 cv.addEventListener("pointerdown",e=>{ if(!battle) return; battle.target={x:e.clientX,y:e.clientY}; battle.down=true; });
 cv.addEventListener("pointermove",e=>{ if(!battle) return; if(battle.down||e.pointerType==="mouse") battle.target={x:e.clientX,y:e.clientY}; });
@@ -1863,7 +2017,7 @@ $("btnGo").addEventListener("click", async ()=>{
     try{
       const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(photo?{...k,photo}:k)});
       const j=await r.json().catch(()=>({}));
-      if(r.ok && j.id){ id=j.id; savedShared=true; }
+      if(r.ok && j.id){ id=j.id; savedShared=true; if(j.token){ tokens[id]=j.token; saveTokens(); } }
       else if(r.status===429||r.status===400||r.status===413){ $("err").textContent=j.error||"ลองใหม่อีกครั้งนะ"; $("btnGo").disabled=false; $("btnGo").textContent="อธิษฐานแล้ว ลอยเลย"; return; }
     }catch(e){}
   }
@@ -2006,7 +2160,7 @@ async function loadRiver(first){
   }catch(e){ if(first||!apiOK){ dbState="off"; apiOK=false; } }
   setStatus(); refreshUI();
 }
-loadRiver(true);
+loadRiver(true).then(async()=>{ if(apiOK&&Object.keys(tokens).length){ await refreshMyProgs(); setBattleBadge(); const n=newChallenges(); if(n) setTimeout(()=>toast(`มีคนมาท้าดวลกระทงของคุณ ${n} ครั้ง! ดูที่ปุ่มศึกกระทง`),3500); } });
 setInterval(()=>{ if(!document.hidden) loadRiver(false); },15000);
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden) loadRiver(false); });
 
