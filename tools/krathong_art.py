@@ -1,0 +1,46 @@
+"""Generate krathong sprites with PixelLab (/create-image-pro-flash, transparent background).
+The key is injected by the session proxy. Usage: python3 tools/krathong_art.py <type> [<type> ...]
+Writes tools/art/<type>_<n>.png (raw takes) and prints generations used."""
+import base64, json, sys, time, urllib.request
+API = 'https://api.pixellab.ai/v2'
+def call(method, path, body=None):
+    req = urllib.request.Request(API + path, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                 headers={'Authorization': 'Bearer injected-by-proxy', 'Content-Type': 'application/json'})
+    try:
+        with urllib.request.urlopen(req, timeout=180) as r: return json.loads(r.read())
+    except urllib.error.HTTPError as e: return {'http_error': e.code, 'body': e.read().decode()[:1500]}
+def find_images(o, acc):
+    if isinstance(o, dict):
+        if isinstance(o.get('base64'), str) and len(o['base64']) > 100: acc.append(o['base64'])
+        for v in o.values(): find_images(v, acc)
+    elif isinstance(o, list):
+        for v in o: find_images(v, acc)
+    return acc
+def gens():
+    b = call('GET', '/balance'); return (b.get('subscription') or {}).get('generations') if isinstance(b, dict) else None
+BASE = ("a single Thai Loy Krathong floating festival offering, {d}, one lit candle standing in the center with a small bright flame "
+        "and two thin incense sticks, three-quarter view from slightly above, centered and whole, isolated object, "
+        "highly detailed pixel art with soft painterly shading and warm candlelight glow, no water, no background, no text")
+DESC = {
+ 'banana':  "classic krathong made of folded green banana leaves in layered pointed bai-si pleats around a round base, decorated with orange marigolds, white jasmine and pink rose petals",
+ 'lotus':   "krathong shaped like a fully blooming pink lotus flower with three layers of pointed petals and a golden lotus pod center, small green lotus leaf underneath",
+ 'bread':   "eco-friendly krathong made of golden baked bread shaped like a round flower with a scalloped bread-roll rim and sesame seeds, decorated with small orange marigolds",
+ 'coconut': "krathong made of a half coconut shell with brown fibrous husk, a rim of folded green banana leaves, filled with marigolds and white jasmine",
+ 'pride':   "rainbow krathong with a banana-leaf base and pleated petals in rainbow colors red orange yellow green blue purple, white jasmine flowers",
+ 'cat':     "cute cat-shaped krathong made of green banana leaves with two pointy cat ears and a happy cat face with whiskers on the front, pink flowers",
+ 'star':    "magical crystal krathong with translucent glowing cyan and violet star-shaped crystal petals on a deep indigo base studded with golden sequins, tiny sparkles",
+}
+if __name__ == '__main__':
+    before = gens()
+    for t in sys.argv[1:]:
+        body = {'description': BASE.format(d=DESC[t]), 'image_size': {'width': 192, 'height': 160}, 'no_background': True}
+        r = call('POST', '/create-image-pro-flash', body)
+        if 'http_error' in r: print(t, 'ERROR', r, flush=True); continue
+        job = r.get('background_job_id')
+        while job:
+            time.sleep(5); j = call('GET', f'/background-jobs/{job}')
+            if j.get('status') in ('completed', 'failed', 'error', 'cancelled'): r = j; break
+        imgs = find_images(r, [])
+        for i, b in enumerate(imgs): open(f'tools/art/{t}_{i}.png', 'wb').write(base64.b64decode(b))
+        print(t, 'images', len(imgs), 'status', r.get('status'), flush=True)
+    after = gens(); print('generations used', None if before is None or after is None else round(before - after, 2), 'left', after)
