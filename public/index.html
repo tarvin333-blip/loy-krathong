@@ -2215,9 +2215,9 @@ function showGacha(id,got){
 /* ================= ending: Phra Mae Khongkha rises from the river to bless the champion ================= */
 const ENDING_BG={src:"img/ending.webp",hor:.56}; // painted dawn river (falls back to the current river at golden dawn while loading)
 const GODDESS=new Image(); GODDESS.src="img/goddess.png";
-const WAIST=.80; let gMask=null; // sprite height fraction where she meets the water (the painted pond below is cut away)
+const WAIST=.855; let gMask=null; // sprite height fraction where she meets the water (the painted pond below is cut away)
 function goddessMasked(){ if(gMask) return gMask; if(!GODDESS.complete||!GODDESS.naturalWidth) return null; const w=GODDESS.naturalWidth, h=GODDESS.naturalHeight, cv=document.createElement("canvas"); cv.width=w; cv.height=h; const x=cv.getContext("2d"); x.drawImage(GODDESS,0,0);
-  x.globalCompositeOperation="destination-in"; const g=x.createLinearGradient(0,0,0,h); g.addColorStop(0,"#000"); g.addColorStop(WAIST-.07,"#000"); g.addColorStop(WAIST,"rgba(0,0,0,.35)"); g.addColorStop(WAIST+.035,"rgba(0,0,0,0)"); g.addColorStop(1,"rgba(0,0,0,0)"); x.fillStyle=g; x.fillRect(0,0,w,h); gMask=cv; return cv; }
+  x.globalCompositeOperation="destination-in"; const g=x.createLinearGradient(0,0,0,h); g.addColorStop(0,"#000"); g.addColorStop(WAIST-.025,"#000"); g.addColorStop(WAIST,"rgba(0,0,0,.45)"); g.addColorStop(WAIST+.02,"rgba(0,0,0,0)"); g.addColorStop(1,"rgba(0,0,0,0)"); x.fillStyle=g; x.fillRect(0,0,w,h); gMask=cv; return cv; }
 let ending=null, endImg=null;
 const END_LINES=["ความมืดแห่งความว่างเปล่าสลายไปแล้ว","พระแม่คงคาเสด็จขึ้นจากสายน้ำ มาอวยพรผู้กล้า","ขอให้ทุกคำอธิษฐานที่ลอยไปกับกระทง จงสมดังใจ","ขอให้ความทุกข์โศกลอยไปกับสายน้ำ เหลือไว้แต่ความสุข ความรัก และแสงสว่าง"];
 function playEnding(name,done){
