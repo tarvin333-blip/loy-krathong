@@ -975,7 +975,7 @@ function drawOtter(c,t,dt){
 }
 function unlockMagic(){
   magicUnlocked=true; lsSet("lk.magic",true); renderSceneChips();
-  scene=MAGIC_SCENE; lsSet("lk.scene",scene); buildScene(); lanterns.length=0;
+  scene=MAGIC_SCENE; lsSet("lk.scene",scene); buildScene(); lanterns.length=0; playMusic();
   for(let i=0;i<120;i++){ const a=Math.random()*TAU, sp=rnd(30,220); sparks.push({x:moon.x,y:moon.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,g:10,drag:1.3,life:0,dur:rnd(1.5,2.8),r:rnd(1,2.4),c:Math.random()<.5?"150,240,255":"215,170,255",twinkle:true}); }
   flash={a:1,x:moon.x,y:moon.y,c:"160,220,255"};
   toast("ปลดล็อกฉากลับ: ทะเลสาบเวทมนตร์ ✦"); sfx("bless"); hinted.delete(MAGIC_SCENE); setTimeout(sceneHint,2600);
@@ -1395,12 +1395,26 @@ function ensureAC(){ if(AC) return AC; try{ AC=new (window.AudioContext||window.
 function noiseBuf(sec,brown){ const n=AC.sampleRate*sec, b=AC.createBuffer(1,n,AC.sampleRate), d=b.getChannelData(0); let l=0; for(let i=0;i<n;i++){ const w=Math.random()*2-1; if(brown){ l=(l+.02*w)/1.02; d[i]=l*3.5; } else d[i]=w; } return b; }
 function startAmbient(){ if(!ensureAC()) return; AC.resume();
   const src=AC.createBufferSource(); src.buffer=noiseBuf(4,true); src.loop=true;
-  const f=AC.createBiquadFilter(); f.type="lowpass"; f.frequency.value=600; const gn=AC.createGain(); gn.gain.value=.25;
+  const f=AC.createBiquadFilter(); f.type="lowpass"; f.frequency.value=600; const gn=AC.createGain(); gn.gain.value=.14;
   const lfo=AC.createOscillator(); lfo.frequency.value=.12; const lgn=AC.createGain(); lgn.gain.value=200; lfo.connect(lgn); lgn.connect(f.frequency); lfo.start();
   src.connect(f); f.connect(gn); gn.connect(master); src.start(); ambNodes={src,lfo};
-  const loop=()=>{ if(!ambOn) return; sfx("chime",true); chimeTimer=setTimeout(loop,rnd(1800,4200)); }; loop();
+  playMusic();
 }
-function stopAmbient(){ if(ambNodes){ try{ ambNodes.src.stop(); ambNodes.lfo.stop(); }catch(e){} ambNodes=null; } clearTimeout(chimeTimer); }
+function stopAmbient(){ if(ambNodes){ try{ ambNodes.src.stop(); ambNodes.lfo.stop(); }catch(e){} ambNodes=null; } clearTimeout(chimeTimer); stopMusic(); }
+/* background music: one loop for the main scenes, one for the secret scene, cross-faded on scene change */
+const TRACKS={main:"audio/sainam-khuen-pen.mp3",magic:"audio/mon-chanthra.mp3"};
+const trackBuf={}; let musicSrc=null, musicGain=null, musicKey=null;
+async function loadTrack(k){ if(trackBuf[k]) return trackBuf[k]; const r=await fetch(TRACKS[k]); if(!r.ok) throw new Error("track"); const ab=await r.arrayBuffer(); trackBuf[k]=await new Promise((ok,no)=>AC.decodeAudioData(ab,ok,no)); return trackBuf[k]; }
+async function playMusic(){
+  if(!ambOn||!AC) return; const k=scene===MAGIC_SCENE?"magic":"main"; if(musicKey===k) return; musicKey=k;
+  let buf; try{ buf=await loadTrack(k); }catch(e){ musicKey=null; return; }
+  if(musicKey!==k||!ambOn) return;
+  const now=AC.currentTime, g=AC.createGain(); g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(.6,now+2.5); g.connect(master);
+  const src=AC.createBufferSource(); src.buffer=buf; src.loop=true; src.connect(g); src.start();
+  if(musicSrc){ const os=musicSrc, og=musicGain; og.gain.cancelScheduledValues(now); og.gain.setValueAtTime(og.gain.value,now); og.gain.linearRampToValueAtTime(0,now+2.5); setTimeout(()=>{ try{ os.stop(); }catch(e){} },2800); }
+  musicSrc=src; musicGain=g;
+}
+function stopMusic(){ if(musicSrc&&AC){ const os=musicSrc, og=musicGain, now=AC.currentTime; og.gain.cancelScheduledValues(now); og.gain.setValueAtTime(og.gain.value,now); og.gain.linearRampToValueAtTime(0,now+.8); setTimeout(()=>{ try{ os.stop(); }catch(e){} },1000); } musicSrc=null; musicKey=null; }
 const PENTA=[261.6,293.7,329.6,392,440,523.3,587.3,659.3,784,880];
 function tone(freq,when,dur,vol,type){ const o=AC.createOscillator(), g=AC.createGain(); o.type=type||"sine"; o.frequency.value=freq; g.gain.setValueAtTime(0,when); g.gain.linearRampToValueAtTime(vol,when+.01); g.gain.exponentialRampToValueAtTime(.0001,when+dur); o.connect(g); g.connect(master); o.start(when); o.stop(when+dur+.05); }
 function sfx(kind,soft){
@@ -1415,14 +1429,14 @@ function sfx(kind,soft){
   else if(kind==="horn"){ [110,138.6].forEach(f=>{ const o=AC.createOscillator(),g=AC.createGain(),lp=AC.createBiquadFilter(); o.type="sawtooth"; o.frequency.value=f; lp.type="lowpass"; lp.frequency.value=600; g.gain.setValueAtTime(0,n); g.gain.linearRampToValueAtTime(.08,n+.05); g.gain.setValueAtTime(.08,n+.5); g.gain.linearRampToValueAtTime(0,n+.7); o.connect(lp); lp.connect(g); g.connect(master); o.start(n); o.stop(n+.75); }); }
   else if(kind==="bless"){ [0,2,4,5,7,9].forEach((i,j)=>tone(PENTA[i],n+j*.08,1.2,.09,"triangle")); }
 }
-$("btnSound").addEventListener("click",()=>{ ambOn=!ambOn; $("btnSound").setAttribute("aria-pressed",String(ambOn)); if(ambOn){ startAmbient(); toast("เปิดเสียงน้ำและระฆังลม"); } else stopAmbient(); });
+$("btnSound").addEventListener("click",()=>{ ambOn=!ambOn; $("btnSound").setAttribute("aria-pressed",String(ambOn)); if(ambOn){ startAmbient(); toast("เปิดเพลงและเสียงน้ำแล้ว"); } else stopAmbient(); });
 $("btnFire").addEventListener("click",()=>{ unlockAudio(); const n=4+(Math.random()*3|0); for(let i=0;i<n;i++) setTimeout(()=>launch(rnd(.12,.88)*W),i*300); });
 $("btnLantern").addEventListener("click",()=>{ unlockAudio(); for(let i=0;i<7;i++) setTimeout(()=>addLantern(W/2+rnd(-W*.3,W*.3),HOR-rnd(0,30),false),i*170); sfx("chime"); toast("ปล่อยโคมลอย ปล่อยเรื่องทุกข์ใจขึ้นฟ้า"); });
 
 function renderSceneChips(){
   const row=$("sceneRow"); row.textContent="";
   const order = magicUnlocked ? SCENE_ORDER.concat(MAGIC_SCENE) : SCENE_ORDER;
-  order.forEach(i=>{ const b=document.createElement("button"); b.className="scene-chip"+(i===MAGIC_SCENE?" magic":""); b.dataset.i=i; b.textContent=(i===MAGIC_SCENE?"✦ ":"")+SCENES[i]; b.setAttribute("aria-pressed",String(i===scene)); b.addEventListener("click",()=>{ scene=i; lsSet("lk.scene",i); buildScene(); lanterns.length=0; swarm.length=0; userStars.length=0; sceneHint(); }); row.appendChild(b); });
+  order.forEach(i=>{ const b=document.createElement("button"); b.className="scene-chip"+(i===MAGIC_SCENE?" magic":""); b.dataset.i=i; b.textContent=(i===MAGIC_SCENE?"✦ ":"")+SCENES[i]; b.setAttribute("aria-pressed",String(i===scene)); b.addEventListener("click",()=>{ scene=i; lsSet("lk.scene",i); buildScene(); lanterns.length=0; swarm.length=0; userStars.length=0; sceneHint(); playMusic(); }); row.appendChild(b); });
 }
 renderSceneChips();
 
