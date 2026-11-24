@@ -323,10 +323,10 @@ const MAGIC_SCENE = 5;
 const YANT = "กขคฆงจฉชซญฎฏฐฑฒณดตถทธนบปผพภมยรลวศษสหฬอฮ";
 /* painted backdrop: horizon row, moon centre/radius and the x focus to keep on narrow screens, in image pixels */
 const BACKDROPS = {
-  0:{src:"img/grand-palace.webp", w:1672, h:941, hor:462, moon:[1357,140,56], fx:.36, petals:["#ff9fbf","#ffd36a","#ffffff","#ff8a3a","#ffb3cf"], flies:0},
+  0:{src:"img/grand-palace.webp", w:1672, h:941, hor:462, moon:[1357,140,56], fx:.36, petals:["#ff9fbf","#ffd36a","#ffffff","#ff8a3a","#ffb3cf"], flies:18},
   2:{src:"img/forest-lake.webp", w:1916, h:821, hor:452, moon:[1155,107,57], fx:.6, fxWide:.55, petals:["#d8f5a2","#ffffff","#b6e27a","#fff3c4"], flies:70},
   5:{src:"img/moon-castle.webp", w:2000, h:667, hor:455, moon:[545,255,148], fx:.3, fxWide:.5, petals:["#ffb3ea","#d9b6ff","#ffffff","#9ff3ff"], flies:60, magic:true},
-  3:{src:"img/milky-sea.webp", w:2000, h:667, hor:345, moon:[1001,278,26], fx:.5, petals:["#ffffff","#d9c6ff","#9fdcff","#ffd6f0"], flies:0},
+  3:{src:"img/milky-sea.webp", w:2000, h:667, hor:345, moon:[1001,278,26], fx:.5, petals:["#ffffff","#d9c6ff","#9fdcff","#ffd6f0"], flies:24},
   1:{src:"img/lake-pavilion.webp", w:1916, h:821, hor:398, moon:[463,142,70], fx:.62, fxWide:.45, lotus:true, petals:["#ffd36a","#ffe28a","#fff3c4","#f5b942"], flies:40}
 };
 for(const B of Object.values(BACKDROPS)){ B.img=new Image(); B.ok=false; }
@@ -698,6 +698,37 @@ function drawWaterRing(c,k,s,t){
   c.lineWidth=1; c.strokeStyle=`rgba(200,222,255,${.28*(1-ph)})`; c.beginPath(); c.ellipse(0,wl,rx*(1+ph*.9),ry*(1+ph*.9),0,0,TAU); c.stroke();
   c.restore();
 }
+/* ---- ambient particles: candle embers, water glints, bokeh, drifting light motes ---- */
+const embers=[], glints=[], bokeh=[], motes=[];
+const PMUL=reduced?.35:1;
+let bokehSprite=null;
+function makeBokeh(){ const c=document.createElement("canvas"); c.width=c.height=64; const x=c.getContext("2d"); const g=x.createRadialGradient(32,32,0,32,32,32); g.addColorStop(0,"rgba(255,255,255,1)"); g.addColorStop(.55,"rgba(255,255,255,.55)"); g.addColorStop(.85,"rgba(255,255,255,.15)"); g.addColorStop(1,"rgba(255,255,255,0)"); x.fillStyle=g; x.fillRect(0,0,64,64); return c; }
+const SCENE_BOKEH=[["255,200,110","255,150,190","150,190,255"],["255,215,140","200,255,190","160,210,255"],["210,255,150","255,190,120","180,170,255"],["200,170,255","150,220,255","255,170,230"],[],["210,170,255","150,240,255","255,180,230"]];
+function emitEmber(x,y,s){ if(embers.length>140*PMUL) return; embers.push({x:x+rnd(-s*.05,s*.05),y,vx:rnd(-6,6),vy:-rnd(18,40)*(.5+s/60),life:0,dur:rnd(1.2,2.6),r:rnd(.6,1.5)*(.6+s/50),p:Math.random()*7,hot:Math.random()<.5}); }
+function stepAmbient(c,t,dt){
+  // water glints, denser along the moon path
+  const want=Math.round(55*PMUL);
+  while(glints.length<want){ const nearMoon=Math.random()<.4; const y=HOR+6+Math.pow(Math.random(),1.4)*(H-HOR-10); const x=nearMoon?moon.x+rnd(-1,1)*moon.r*(1+(y-HOR)/(H-HOR)*2.5):Math.random()*W; glints.push({x,y,life:-Math.random()*1.5,dur:rnd(.5,1.2),r:rnd(1,2.6)*(.5+(y-HOR)/(H-HOR)),c:Math.random()<.6?"255,245,215":"190,225,255"}); }
+  // bokeh orbs
+  const pal=SCENE_BOKEH[scene]&&SCENE_BOKEH[scene].length?SCENE_BOKEH[scene]:SCENE_BOKEH[0];
+  if(!bokehSprite) bokehSprite=makeBokeh();
+  while(bokeh.length<Math.round(24*PMUL)){ const fg=Math.random()<.6; bokeh.push({x:Math.random()*W,y:fg?rnd(H*.5,H):rnd(H*.08,HOR),r:fg?rnd(16,52):rnd(6,20),vx:rnd(-6,6),vy:rnd(-6,-1),a:fg?rnd(.09,.2):rnd(.1,.22),c:pal[Math.random()*pal.length|0],p:Math.random()*7,life:0,dur:rnd(8,16)}); }
+  // light motes drifting just above the water
+  while(motes.length<Math.round(50*PMUL)) motes.push({x:Math.random()*W,y:HOR-rnd(-10,HOR*.25),vx:rnd(-4,8),vy:rnd(-3,3),p:Math.random()*7,r:rnd(.8,1.8)});
+  c.save(); c.globalCompositeOperation="lighter";
+  for(let i=bokeh.length-1;i>=0;i--){ const b=bokeh[i]; b.life+=dt; if(b.life>b.dur||b.x<-60||b.x>W+60){ bokeh.splice(i,1); continue; } b.x+=(b.vx+Math.sin(t*.3+b.p)*3)*dt; b.y+=b.vy*dt;
+    const fade=Math.min(1,b.life/2,(b.dur-b.life)/2); c.globalAlpha=b.a*fade; c.drawImage(tintBokeh(b.c),b.x-b.r,b.y-b.r,b.r*2,b.r*2); }
+  c.globalAlpha=1;
+  for(const m of motes){ m.x+=(m.vx+Math.sin(t*.6+m.p)*4)*dt; m.y+=(m.vy+Math.cos(t*.5+m.p)*2)*dt; if(m.x>W+10) m.x=-10; if(m.x<-10) m.x=W+10;
+    const a=.35+.35*Math.sin(t*2.2+m.p); c.fillStyle=`rgba(255,225,150,${a})`; c.beginPath(); c.arc(m.x,m.y,m.r,0,TAU); c.fill(); c.fillStyle=`rgba(255,215,140,${a*.12})`; c.beginPath(); c.arc(m.x,m.y,m.r*4,0,TAU); c.fill(); }
+  for(let i=glints.length-1;i>=0;i--){ const g=glints[i]; g.life+=dt; if(g.life>g.dur){ glints.splice(i,1); continue; } if(g.life<0) continue;
+    const k=Math.sin(Math.PI*g.life/g.dur), r=g.r*k; c.fillStyle=`rgba(${g.c},${.85*k})`; c.fillRect(g.x-r*2.2,g.y-.5,r*4.4,1); c.fillRect(g.x-.5,g.y-r*1.2,1,r*2.4); c.beginPath(); c.arc(g.x,g.y,r*.45,0,TAU); c.fill(); }
+  for(let i=embers.length-1;i>=0;i--){ const e=embers[i]; e.life+=dt; if(e.life>e.dur){ embers.splice(i,1); continue; } e.x+=(e.vx+Math.sin(t*3+e.p)*6)*dt; e.y+=e.vy*dt; e.vy*=1-dt*.3;
+    const a=(1-e.life/e.dur)*(.6+.4*Math.sin(t*14+e.p)); c.fillStyle=e.hot?`rgba(255,${200+40*a|0},140,${a})`:`rgba(255,150,60,${a})`; c.beginPath(); c.arc(e.x,e.y,e.r,0,TAU); c.fill(); c.fillStyle=`rgba(255,170,80,${a*.15})`; c.beginPath(); c.arc(e.x,e.y,e.r*3.5,0,TAU); c.fill(); }
+  c.restore();
+}
+const bokehTints=new Map();
+function tintBokeh(col){ let t=bokehTints.get(col); if(t) return t; t=document.createElement("canvas"); t.width=t.height=64; const x=t.getContext("2d"); x.drawImage(bokehSprite,0,0); x.globalCompositeOperation="source-in"; x.fillStyle=`rgb(${col})`; x.fillRect(0,0,64,64); bokehTints.set(col,t); return t; }
 function blitSprite(c,sp,s){ const f=s/sp.sb; c.drawImage(sp.cvs,-sp.ox*f,-sp.oy*f,sp.w*f,sp.h*f); }
 
 /* ================= scene ================= */
@@ -738,6 +769,7 @@ function makeSprites(){
 }
 function buildScene(){
   if(!cloudSprite) makeSprites();
+  bokeh.length=0; glints.length=0; motes.length=0;
   if(BACKDROPS[scene]){ buildPhotoScene(BACKDROPS[scene]); return; }
   if(scene===MAGIC_SCENE){ buildMagicScene(); return; }
   HOR = Math.round(H*(W<600?.42:.46));
@@ -1288,6 +1320,7 @@ function frame(nowP){
     krDynamic(c,k,p.s,t);
     c.restore();
     if(onWater) drawWaterRing(c,k,p.s,t);
+    if(!k.amb&&p.s>10&&Math.random()<dt*(2.2+p.s/20)*PMUL){ const fp=flamePos(k,p.s); emitEmber(p.x+fp.x,p.y+fp.y,p.s); }
     c.restore();
     if(p.drop>0 && p.drop<.06 && !k._splashed){ k._splashed=true; splash(p.x,p.y,p.s,mine.has(k.id)); }
     const hi = highlight===k.id && nowP<highlightUntil;
@@ -1305,6 +1338,7 @@ function frame(nowP){
     if(hi){ c.strokeStyle=`rgba(255,210,120,${.5+.5*Math.sin(t*6)})`; c.lineWidth=2; c.beginPath(); c.ellipse(p.x,p.y+p.s*.1,p.s*1.6,p.s*.55,0,0,TAU); c.stroke(); }
   }
   }
+  stepAmbient(c,t,dt);
   drawGimmicksFront(c,t,dt);
   // fish
   nextJump-=dt; if(nextJump<0){ nextJump=rnd(4,9); const l=Math.random(); const j={x:rnd(.1,.9)*W,y:laneY(l),s:unit()*(.4+l*.7),life:0,dir:Math.random()<.5?-1:1}; jumps.push(j); ripples.push({x:j.x,y:j.y,r:unit()*1.4,life:0,dur:1.4}); }
@@ -1872,6 +1906,7 @@ function drawFighter(c,f,t){
   if(!sk) krDynamic(c,f.k,s,t); else { const fp=flamePos(f.k,s); c.strokeStyle="rgba(200,200,220,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(fp.x,fp.y); for(let j=1;j<6;j++) c.lineTo(fp.x+Math.sin(t*2+j)*s*.15*j,fp.y-j*s*.25); c.stroke(); }
   c.restore();
   if(!sk) drawWaterRing(c,f.k,s,t);
+  if(!sk&&Math.random()<.03*PMUL){ const fp=flamePos(f.k,s); emitEmber(f.x+fp.x,f.y+fp.y,s); }
   c.restore();
   if(f.buffs.shield>0&&f.alive){ c.save(); c.globalCompositeOperation="lighter"; c.strokeStyle=`rgba(150,220,255,${.5+.3*Math.sin(t*8)})`; c.lineWidth=2; c.fillStyle="rgba(150,220,255,.08)"; c.beginPath(); c.ellipse(f.x,f.y-s*.4,s*1.5,s*1.3,0,0,TAU); c.fill(); c.stroke(); c.restore(); }
   if(f.buffs.charmed>0&&f.alive){ c.fillStyle="#ff8fc8"; c.font=`700 ${Math.max(12,s*.5)}px sans-serif`; c.textAlign="center"; c.fillText("♥",f.x+Math.sin(t*4)*s*.4,f.y-s*2.2); }
