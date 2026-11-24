@@ -10,6 +10,7 @@
 <link rel="preload" as="image" href="img/grand-palace.webp" type="image/webp">
 <link rel="preload" as="image" href="img/lake-pavilion.webp" type="image/webp">
 <link rel="preload" as="image" href="img/forest-lake.webp" type="image/webp">
+<link rel="preload" as="image" href="img/milky-sea.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&family=Bai+Jamjuree:wght@400;500;600;700&family=Charm:wght@400;700&display=swap">
 <style>
@@ -246,7 +247,8 @@ const YANT = "กขคฆงจฉชซญฎฏฐฑฒณดตถทธน
 const BACKDROPS = {
   0:{src:"img/grand-palace.webp", w:1672, h:941, hor:462, moon:[1357,140,56], fx:.36, petals:["#ff9fbf","#ffd36a","#ffffff","#ff8a3a","#ffb3cf"], flies:0},
   2:{src:"img/forest-lake.webp", w:1916, h:821, hor:452, moon:[1155,107,57], fx:.6, fxWide:.55, petals:["#d8f5a2","#ffffff","#b6e27a","#fff3c4"], flies:70},
-  5:{src:"img/magic-lake.webp", w:2000, h:667, hor:381, moon:[1730,68,72], fx:.72, fxWide:.55, petals:["#ffb3ea","#d9b6ff","#ffffff","#9ff3ff"], flies:60, magic:true},
+  5:{src:"img/moon-castle.webp", w:2000, h:667, hor:455, moon:[545,255,148], fx:.3, fxWide:.5, petals:["#ffb3ea","#d9b6ff","#ffffff","#9ff3ff"], flies:60, magic:true},
+  3:{src:"img/milky-sea.webp", w:2000, h:667, hor:345, moon:[1001,278,26], fx:.5, petals:["#ffffff","#d9c6ff","#9fdcff","#ffd6f0"], flies:0},
   1:{src:"img/lake-pavilion.webp", w:1916, h:821, hor:398, moon:[463,142,70], fx:.62, fxWide:.45, lotus:true, petals:["#ffd36a","#ffe28a","#fff3c4","#f5b942"], flies:40}
 };
 for(const B of Object.values(BACKDROPS)){ B.img=new Image(); B.ok=false; }
@@ -846,7 +848,7 @@ function drawNaga(c,t,k){
 /* ---- the wizard otter who lives in the secret scene ---- */
 const otter={blink:0,nextBlink:2,cast:0,say:"",sayT:0,x:0,y:0,s:0};
 const OTTER_LINES=["อับราคาดาบรา… ขอให้สมหวังทุกข้อ!","เวทมนตร์แห่งแม่คงคา จงคุ้มครองทุกคนที่ลอยกระทงคืนนี้!","นากน้อยขออวยพร ให้ปีหน้ามีแต่เรื่องดีๆ","เปลี่ยนความเหนื่อยเป็นแสงดาว… ฟิ้ว!","ลอยกระทงแล้ว อย่าลืมรักตัวเองด้วยนะ","ชู่ว… พญานาคกำลังจะผ่านมาแล้ว","ขอให้ใจเบาเหมือนโคมลอยนะ"];
-function otterPlace(){ const s=Math.max(38,Math.min(70,Math.min(W,H)*.095)); return {s,x:Math.max(s*1.4,W*.1),y:H-Math.max(215,H*.27)}; }
+function otterPlace(){ const s=Math.max(38,Math.min(70,Math.min(W,H)*.095)); const px=Math.max(s*1.4,W*.1); return {s,x:W-px,y:H-Math.max(215,H*.27)}; }
 function castOtter(){
   otter.cast=1.2; otter.say=OTTER_LINES[Math.random()*OTTER_LINES.length|0]; otter.sayT=4;
   const ox=otter.x-otter.s*.95, oy=otter.y-otter.s*1.75;
@@ -1217,7 +1219,7 @@ function burst(x,y,kind){
 }
 
 /* ================= per-scene gimmicks ================= */
-const HINTS={0:"เคล็ดลับ: แตะวัดเพื่อตีระฆังขอพร และรอเรือไฟล่องผ่านแล้วแตะทักทาย",1:"เคล็ดลับ: แตะดอกบัวให้บาน แตะศาลาเพื่อปล่อยโคม",2:"เคล็ดลับ: แตะแนวป่าเพื่อปลุกหิ่งห้อย",3:"เคล็ดลับ: แตะท้องฟ้าทีละจุด วาดกลุ่มดาวของคุณเอง",5:"เคล็ดลับ: แตะน้องนาก แตะปราสาท หรือแตะผิวน้ำเพื่อร่ายเวท"};
+const HINTS={0:"เคล็ดลับ: แตะวัดเพื่อตีระฆังขอพร และรอเรือไฟล่องผ่านแล้วแตะทักทาย",1:"เคล็ดลับ: แตะดอกบัวให้บาน แตะศาลาเพื่อปล่อยโคม",2:"เคล็ดลับ: แตะแนวป่าเพื่อปลุกหิ่งห้อย",3:"เคล็ดลับ: แตะท้องฟ้าทีละจุด วาดกลุ่มดาวของคุณเอง",5:"เคล็ดลับ: แตะกระต่ายจันทร์ แตะน้องนาก แตะปราสาท หรือแตะผิวน้ำเพื่อร่ายเวท"};
 const hinted=new Set();
 function sceneHint(){ if(hinted.has(scene)||!HINTS[scene]) return; hinted.add(scene); setTimeout(()=>toast(HINTS[scene]),900); }
 function toImg(x,y){ const B=BACKDROPS[scene]; if(!B||!bdFit) return null; return {x:(x-bdFit.ox)/bdFit.sc,y:(y-bdFit.oy)/bdFit.sc}; }
@@ -1315,13 +1317,21 @@ function drawGimmicksFront(c,t,dt){
       c.strokeStyle=`rgba(${col},${a*.5})`; c.beginPath(); for(let j=0;j<6;j++){ const q=j*TAU/6*2; j?c.lineTo(Math.cos(q)*r*.7,Math.sin(q)*r*.7):c.moveTo(Math.cos(q)*r*.7,Math.sin(q)*r*.7); } c.closePath(); c.stroke(); }
     c.restore(); }
 }
+function rabbitTap(x,y){
+  const im=toImg(x,y); if(!im || im.x<480 || im.x>590 || im.y<250 || im.y>355) return false;
+  const B=BACKDROPS[scene]; const cx=bdFit.ox+535*bdFit.sc, cy=bdFit.oy+300*bdFit.sc;
+  for(let i=0;i<30;i++){ const u=i/30*TAU, k=unit()*.08; sparks.push({x:cx,y:cy-unit()*.6,vx:16*Math.sin(u)**3*k*9,vy:-(13*Math.cos(u)-5*Math.cos(2*u)-2*Math.cos(3*u)-Math.cos(4*u))*k*9,g:10,drag:1.5,life:0,dur:1.8,r:1.8,c:i%2?"255,230,250":"220,200,255",twinkle:true}); }
+  for(let i=0;i<4;i++) setTimeout(()=>addLantern(cx+rnd(-40,40),cy-20,false),i*180);
+  sfx("bless"); toast("กระต่ายจันทร์อวยพร ขอให้ปีนี้สมหวังทุกเรื่อง ♡");
+  return true;
+}
 function sceneTap(x,y){
   const im=toImg(x,y);
   if(scene===0){ if(tapBoat(x,y)) return true; if(im && im.x>20 && im.x<930 && im.y>170 && im.y<455){ ringBell(x,y); return true; } }
   if(scene===1){ if(tapLotus(x,y)) return true; if(im && im.x>1120 && im.x<1335 && im.y>245 && im.y<395){ for(let i=0;i<5;i++) setTimeout(()=>addLantern(x+rnd(-30,30),y-10,false),i*160); sfx("chime"); toast("ศาลาปล่อยโคมให้แล้ว"); return true; } }
   if(scene===2 && y<HOR && y>HOR-HOR*.5){ wakeFireflies(x,y); return true; }
   if(scene===3 && y<HOR){ addUserStar(x,y); return true; }
-  if(scene===MAGIC_SCENE){ if(im && im.x>1330 && im.x<1680 && im.y>20 && im.y<380){ portal(x,y,false); return true; } if(y>HOR){ portal(x,y,true); ripples.push({x,y,r:unit()*2,life:0,dur:1.5,c:"170,150,255"}); return true; } }
+  if(scene===MAGIC_SCENE){ if(im && im.x>1280 && im.x<1660 && im.y>80 && im.y<400){ portal(x,y,false); return true; } if(y>HOR){ portal(x,y,true); ripples.push({x,y,r:unit()*2,life:0,dur:1.5,c:"170,150,255"}); return true; } }
   return false;
 }
 
@@ -1330,6 +1340,7 @@ cv.addEventListener("click", e=>{
   const x=e.clientX, y=e.clientY;
   unlockAudio();
   for(const m of meteors){ if(Math.hypot(x-m.x,y-m.y)<70){ toast("ทันพอดี! อธิษฐานกับดาวตกแล้ว ขอให้เป็นจริง"); for(let i=0;i<30;i++){ const a=Math.random()*TAU; sparks.push({x:m.x,y:m.y,vx:Math.cos(a)*rnd(20,80),vy:Math.sin(a)*rnd(20,80),g:10,life:0,dur:1.2,r:1.6,c:"255,250,220",twinkle:true}); } sfx("bless"); return; } }
+  if(scene===MAGIC_SCENE && rabbitTap(x,y)) return;
   if(Math.hypot(x-moon.x,y-moon.y)<moon.r*1.2){
     const nowT=performance.now(); moonTaps = nowT-moonTapAt<1500 ? moonTaps+1 : 1; moonTapAt=nowT;
     if(moonTaps>=7 && scene!==MAGIC_SCENE){ moonTaps=0; unlockMagic(); return; }
