@@ -14,6 +14,14 @@ SONGS = {
  'main': "Gentle fantasy orchestral theme for a Thai floating-lantern festival on a moonlit river, instrumental: a Thai khim hammered dulcimer and a ranat xylophone carry a warm pentatonic melody, a soft bamboo flute answers, harp arpeggios and lush string pads underneath, light small hand cymbals keep time, magical, romantic and peaceful, steady tempo for looping, ends on a soft resolved chord.",
  'magic': "Mystical fantasy theme for a secret enchanted moonlit lake with a crystal castle and a sacred serpent spirit, instrumental: shimmering celesta and glass bells play a slow pentatonic melody, a distant wordless choir pad swells and fades, deep cello and a low drone underneath like an ancient serpent breathing, airy harp glissandos, wondrous and mysterious but calm, steady tempo for looping, ends on a sustained ethereal chord.",
 }
+SONGS['battle'] = ("Energetic heroic fantasy JRPG battle theme, original composition, instrumental, fast 160 bpm: driving rock drums and punchy bass, "
+    "aggressive electric guitar riffs layered with soaring orchestral strings and staccato brass, a bright violin lead melody with a subtle Thai pentatonic flavor, "
+    "rhythmic synth arpeggios, dramatic build-ups and a triumphant catchy hook, seamless loop")
+SONGS['boss'] = ("Epic intense boss battle theme for a dark fantasy RPG, original composition, instrumental, 150 bpm: thundering taiko and rock drums, "
+    "heavy distorted electric guitars, a massive orchestra with dark brass stabs and frantic strings, an ominous wordless choir chanting powerful 'ah' and 'oh' syllables, "
+    "pipe organ swells, urgent tension, heroic climax, seamless loop")
+import sys
+if len(sys.argv) > 1: SONGS = {k: v for k, v in SONGS.items() if k in sys.argv[1:]}
 os.makedirs('public/audio', exist_ok=True)
 log = []
 pending = {}
@@ -40,5 +48,6 @@ for _ in range(60):
                 print(name, 'take', k + 1, 'ok', s.get('duration_ms'), 'ms ->', out, flush=True)
             elif s.get('status') in ('failed', 'error'):
                 print(name, 'take', k + 1, 'FAILED', json.dumps(s)[:300], flush=True); done.setdefault(name, []).append((k, None))
-json.dump(log, open('tools/music.json', 'w'), ensure_ascii=False, indent=1)
+old = json.load(open('tools/music.json')) if os.path.exists('tools/music.json') else []
+json.dump(old + log, open('tools/music.json', 'w'), ensure_ascii=False, indent=1)
 print('done', {n: [o for _, o in v] for n, v in done.items()})

@@ -2257,7 +2257,7 @@ function playEnding(name,done){
   const h=el("h2",null,"พรจากพระแม่คงคา"); tx.append(h); END_LINES.forEach(l=>tx.append(el("p",null,l))); tx.append(el("p",null,`🏆 ${name} · ผู้พิชิตบาดาลทั้ง 20 ชั้น`));
   sfx("bell"); playMusic();
 }
-$("endBtn").addEventListener("click",()=>{ const d=ending&&ending.done; ending=null; $("ending").hidden=true; document.body.classList.remove("in-ending"); sfx("win"); for(let i=0;i<10;i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*220); if(d) d(); });
+$("endBtn").addEventListener("click",()=>{ const d=ending&&ending.done; ending=null; setTimeout(playMusic,50); $("ending").hidden=true; document.body.classList.remove("in-ending"); sfx("win"); for(let i=0;i<10;i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*220); if(d) d(); });
 function showGangaUnlock(next){
   showCard(card=>{
     card.append(el("div","kind","✨ ปลดล็อกกระทงพิเศษ ✨")); const im=document.createElement("img"); im.src="img/kr/ganga.png"; im.className="unlock-art"; im.alt=""; card.append(im);
@@ -2508,11 +2508,11 @@ function startBattle(k,fortuneSkills,opts){
     if(tb.length) setTimeout(()=>{ if(battle) floater(P.x,P.y-fSize(P)*2.6,"✨ "+tb.map(b=>b.n).join(" · "),"160,230,255","skill"); },600); }
   battle={P,foes,allies,all:[P,...allies,...foes],level,mode:opts.mode,opts,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],shots:[],pools:[],teles:[],safe:null,minions:[],bolts:[],floaters:[],shake:0};
   document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false; $("devbar").hidden=!devOn; $("devbar").querySelectorAll("button").forEach(b=>b.classList.remove("on"));
-  buildSkillBar(); updateHud(); sfx("bless");
+  buildSkillBar(); updateHud(); sfx("bless"); setTimeout(playMusic,60);
   if(opts.mode==="dungeon"){ lanterns.length=0; rockets.length=0; playMusic(); if(foes.some(f=>f.titan)) battle.count=4.2;
     for(const f of foes) if(f.boss) setTimeout(()=>{ if(battle&&battle.foes.includes(f)){ playVfx(vfxOr("bossportal","formation"),f.x,f.y,f.titan?3.4:3,{dy:-.9,back:true,add:true}); battle.shake=10; } },400); }
 }
-function endBattle(){ const wasD=inDungeon(); vfxPlays.length=0; if(wasD) setTimeout(playMusic,50); setTimeout(runTicker,800); battle=null; document.body.classList.remove("in-battle"); $("devbar").hidden=true; $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
+function endBattle(){ vfxPlays.length=0; setTimeout(playMusic,50); setTimeout(runTicker,800); battle=null; document.body.classList.remove("in-battle"); $("devbar").hidden=true; $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
 function buildSkillBar(){
   const bar=$("bskills"); bar.textContent=""; bar.style.setProperty("--nsk",String(battle.P.skills.length));
   battle.P.skills.forEach((id,i)=>{ const sk=SKILLS[id]; const b=el("button","sk"+(sk.sig?" sig":"")); b.type="button";
@@ -2553,6 +2553,7 @@ function hurt(f,dmg,src,opts){
   f.hp-=dmg; f.hitT=.35; f.flashT=.18; if(opts&&opts.crit) playVfx("crit",f.x,f.y,2.6,{follow:f,dy:-.5,add:true}); floater(f.x+rnd(-10,10),f.y-fSize(f)*1.9,(opts&&opts.crit?"คริ! ":"")+Math.round(dmg),opts&&opts.crit?"255,215,90":(f.isPlayer?"255,120,130":"255,255,255"),opts&&opts.crit?"crit":"dmg");
   if(f.hp<=0&&f.revive&&!f.revived){ f.revived=true; f.hp=Math.round(f.max*f.revive); f.buffs.shield=2; floater(f.x,f.y-fSize(f)*2.4,"ฟื้นคืนชีพ!","255,220,120","skill"); playVfx("lotus",f.x,f.y,3.6,{follow:f,dy:-.7}); flash={a:.8,x:f.x,y:f.y,c:"255,220,140"}; battle.slow=.4; sfx("win"); return dmg; }
   if(f.hp<=0&&f.wardFor) playVfx(vfxOr("crystalbreak","impact"),f.x,f.y,3.2,{dy:-.6,add:true});
+  if(f.hp<=0&&f.boss) setTimeout(playMusic,1200);
   if(f.hp<=0&&f.boss&&battle.mode==="dungeon") setTimeout(()=>battle&&playVfx(vfxOr("lootdrop","crit"),f.x,f.y,3.6,{dy:-.8}),600);
   if(f.hp<=0){ f.hp=0; f.alive=false; f.sinkT=0; sfx("sink"); battle.slow=Math.max(battle.slow||0,.55); if(!f.isPlayer) battle.banner={text:"ล่ม!",col:"255,140,170",t:0}; playVfx("steam",f.x,f.y,2.6,{dy:-.8,alpha:.9}); ripples.push({x:f.x,y:f.y,r:fSize(f)*3,life:0,dur:2,c:"200,225,255"}); for(let i=0;i<20;i++) sparks.push({x:f.x+rnd(-10,10),y:f.y,vx:rnd(-20,20),vy:rnd(-60,-20),g:-20,life:0,dur:rnd(1,1.8),r:rnd(1.5,3),c:"200,230,255"}); }
   return dmg;
@@ -2961,8 +2962,10 @@ function startAmbient(){ if(!ensureAC()) return; AC.resume();
 }
 function stopAmbient(){ if(ambNodes){ try{ ambNodes.src.stop(); ambNodes.lfo.stop(); }catch(e){} ambNodes=null; } clearTimeout(chimeTimer); stopMusic(); }
 /* background music (made with PixelLab): two takes per track, one picked at random per visit, cross-faded loop */
-const TRACKS={main:["audio/main_1.mp3","audio/main_2.mp3"],magic:["audio/magic_1.mp3","audio/magic_2.mp3"]};
-const takeOf={main:Math.random()*2|0,magic:Math.random()*2|0};
+const TRACKS={main:["audio/main_1.mp3","audio/main_2.mp3"],magic:["audio/magic_1.mp3","audio/magic_2.mp3"],battle:["audio/battle_1.mp3","audio/battle_2.mp3"],boss:["audio/boss_1.mp3","audio/boss_2.mp3"]};
+const takeOf={main:Math.random()*2|0,magic:Math.random()*2|0,battle:Math.random()*2|0,boss:Math.random()*2|0};
+// which track fits the moment: bosses > any fight > the ending/secret scene > the river
+function musicFor(){ if(ending) return "magic"; if(battle){ return battle.foes.some(f=>f.boss&&f.alive)?"boss":"battle"; } return scene===MAGIC_SCENE?"magic":"main"; }
 const trackBuf={}; let musicKey=null, curLayer=null, loopTimer=0;
 async function loadTrack(k){ if(trackBuf[k]) return trackBuf[k]; const r=await fetch(TRACKS[k][takeOf[k]]); if(!r.ok) throw new Error("track"); const ab=await r.arrayBuffer(); trackBuf[k]=await new Promise((ok,no)=>AC.decodeAudioData(ab,ok,no)); return trackBuf[k]; }
 function fadeLayer(L,secs){ if(!L) return; const now=AC.currentTime; L.g.gain.cancelScheduledValues(now); L.g.gain.setValueAtTime(L.g.gain.value,now); L.g.gain.linearRampToValueAtTime(0,now+secs); setTimeout(()=>{ try{ L.src.stop(); }catch(e){} },secs*1000+200); }
@@ -2973,7 +2976,7 @@ function runLoop(k,buf,fade){
   clearTimeout(loopTimer); loopTimer=setTimeout(()=>{ if(musicKey===k&&ambOn) runLoop(k,buf,4); },Math.max(5,buf.duration-4)*1000);
 }
 async function playMusic(){
-  if(!ambOn||!AC) return; const k=(scene===MAGIC_SCENE||inDungeon())?"magic":"main"; if(musicKey===k) return; musicKey=k;
+  if(!ambOn||!AC) return; const k=musicFor(); if(musicKey===k) return; musicKey=k;
   let buf; try{ buf=await loadTrack(k); }catch(e){ musicKey=null; return; }
   if(musicKey!==k||!ambOn) return;
   runLoop(k,buf,2.5);
@@ -2997,7 +3000,11 @@ function sfx(kind,soft){
   else if(kind==="horn"){ [110,138.6].forEach(f=>{ const o=AC.createOscillator(),g=AC.createGain(),lp=AC.createBiquadFilter(); o.type="sawtooth"; o.frequency.value=f; lp.type="lowpass"; lp.frequency.value=600; g.gain.setValueAtTime(0,n); g.gain.linearRampToValueAtTime(.08,n+.05); g.gain.setValueAtTime(.08,n+.5); g.gain.linearRampToValueAtTime(0,n+.7); o.connect(lp); lp.connect(g); g.connect(master); o.start(n); o.stop(n+.75); }); }
   else if(kind==="bless"){ [0,2,4,5,7,9].forEach((i,j)=>tone(PENTA[i],n+j*.08,1.2,.09,"triangle")); }
 }
-$("btnSound").addEventListener("click",()=>{ ambOn=!ambOn; $("btnSound").setAttribute("aria-pressed",String(ambOn)); if(ambOn){ startAmbient(); toast("เปิดเพลงและเสียงน้ำแล้ว"); } else stopAmbient(); });
+$("btnSound").addEventListener("click",()=>{ ambOn=!ambOn; lsSet("lk.sound",ambOn?1:0); $("btnSound").setAttribute("aria-pressed",String(ambOn)); if(ambOn){ startAmbient(); toast("เปิดเพลงและเสียงน้ำแล้ว"); } else { stopAmbient(); toast("ปิดเพลงแล้ว"); } });
+// music is on by default; browsers only allow audio after the first tap/click/key, so start then (unless the visitor turned it off)
+{ const wantSound=lsGet("lk.sound",1)!==0; $("btnSound").setAttribute("aria-pressed",String(wantSound));
+  const first=e=>{ if(e.target&&e.target.closest&&e.target.closest("#btnSound")) return; removeEventListener("pointerdown",first,true); removeEventListener("keydown",first,true); if(lsGet("lk.sound",1)!==0&&!ambOn){ ambOn=true; startAmbient(); } };
+  if(wantSound){ addEventListener("pointerdown",first,true); addEventListener("keydown",first,true); } }
 $("btnFire").addEventListener("click",()=>{ unlockAudio(); const n=4+(Math.random()*3|0); for(let i=0;i<n;i++) setTimeout(()=>launch(rnd(.12,.88)*W),i*300); });
 $("btnLantern").addEventListener("click",()=>{ unlockAudio(); for(let i=0;i<7;i++) setTimeout(()=>addLantern(W/2+rnd(-W*.3,W*.3),HOR-rnd(0,30),false),i*170); sfx("chime"); toast("ปล่อยโคมลอย ปล่อยเรื่องทุกข์ใจขึ้นฟ้า"); });
 

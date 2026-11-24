@@ -26,5 +26,33 @@
   "duration_ms": 99200,
   "style": "Mystical fantasy theme for a secret enchanted moonlit lake with a crystal castle and a sacred serpent spirit, instrumental: shimmering celesta and glass bells play a slow pentatonic melody, a distant wordless choir pad swells and fades, deep cello and a low drone underneath like an ancient serpent breathing, airy harp glissandos, wondrous and mysterious but calm, steady tempo for looping, ends on a sustained ethereal chord.",
   "created_at": "2026-11-24T08:29:51.060298+00:00"
+ },
+ {
+  "id": "721a2dc6-0dea-4912-ac0d-d41864e81ae0",
+  "name": "loykrathong_battle",
+  "duration_ms": 98680,
+  "style": "Energetic heroic fantasy JRPG battle theme, original composition, instrumental, fast 160 bpm: driving rock drums and punchy bass, aggressive electric guitar riffs layered with soaring orchestral strings and staccato brass, a bright violin lead melody with a subtle Thai pentatonic flavor, rhythmic synth arpeggios, dramatic build-ups and a triumphant catchy hook, seamless loop.",
+  "created_at": "2026-11-24T18:30:35.311763+00:00"
+ },
+ {
+  "id": "8404c86b-900c-40ee-9328-33790813ade6",
+  "name": "loykrathong_battle (take 2)",
+  "duration_ms": 98640,
+  "style": "Energetic heroic fantasy JRPG battle theme, original composition, instrumental, fast 160 bpm: driving rock drums and punchy bass, aggressive electric guitar riffs layered with soaring orchestral strings and staccato brass, a bright violin lead melody with a subtle Thai pentatonic flavor, rhythmic synth arpeggios, dramatic build-ups and a triumphant catchy hook, seamless loop.",
+  "created_at": "2026-11-24T18:30:35.311763+00:00"
+ },
+ {
+  "id": "03e135cb-3f85-4147-84a4-c4c65877656e",
+  "name": "loykrathong_boss",
+  "duration_ms": 99200,
+  "style": "Epic intense boss battle theme for a dark fantasy RPG, original composition, instrumental, 150 bpm: thundering taiko and rock drums, heavy distorted electric guitars, a massive orchestra with dark brass stabs and frantic strings, an ominous wordless choir chanting powerful 'ah' and 'oh' syllables, pipe organ swells, urgent tension, heroic climax, seamless loop.",
+  "created_at": "2026-11-24T18:30:35.575402+00:00"
+ },
+ {
+  "id": "f8498cb7-823a-47c7-948f-0086ea7ba39f",
+  "name": "loykrathong_boss (take 2)",
+  "duration_ms": 99200,
+  "style": "Epic intense boss battle theme for a dark fantasy RPG, original composition, instrumental, 150 bpm: thundering taiko and rock drums, heavy distorted electric guitars, a massive orchestra with dark brass stabs and frantic strings, an ominous wordless choir chanting powerful 'ah' and 'oh' syllables, pipe organ swells, urgent tension, heroic climax, seamless loop.",
+  "created_at": "2026-11-24T18:30:35.575402+00:00"
  }
 ]
