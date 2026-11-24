@@ -796,9 +796,43 @@ function magicWater(c,t,dt){
   }
   c.restore();
   // the naga surfaces now and then
-  nextNaga-=dt; if(!naga && nextNaga<0){ const l=rnd(.3,.75); naga={dir:Math.random()<.5?1:-1,l,life:0,dur:11}; nextNaga=rnd(12,22); }
-  if(naga){ naga.life+=dt; const k=naga.life/naga.dur; if(k>=1){ naga=null; } else drawNaga(c,t,k); }
+  nextNaga-=dt; if(!naga && nextNaga<0){ const l=rnd(.3,.75); naga={dir:Math.random()<.5?1:-1,l,life:0,dur:nagaImg.ok?9:11,x:rnd(.32,.62)*W,blessed:false}; nextNaga=rnd(14,24); }
+  if(naga){ naga.life+=dt; const k=naga.life/naga.dur; if(k>=1){ naga=null; } else if(nagaImg.ok) drawNagaSprite(c,t,k); else drawNaga(c,t,k); }
   drawOtter(c,t,dt);
+}
+const nagaImg=new Image(); nagaImg.ok=false; nagaImg.onload=()=>{ nagaImg.ok=true; }; nagaImg.src="img/naga.webp";
+function nagaBox(){ if(!naga) return null; const y=laneY(naga.l)+4; let h=Math.min(H*.5, unit()*(5.5+naga.l*2.5)); let w=h*nagaImg.width/nagaImg.height; if(w>W*.85){ w=W*.85; h=w*nagaImg.height/nagaImg.width; } return {y,h,w,x:naga.x}; }
+function drawNagaSprite(c,t,k){
+  const bx=nagaBox(); if(!bx) return; const {y,h,w,x}=bx;
+  const rise=.13, sink=.87;
+  const e = k<rise ? 1-Math.pow(1-k/rise,3) : k>sink ? Math.pow(1-(k-sink)/(1-sink),2) : 1;
+  const off=(1-e)*h*1.02, bob=Math.sin(t*1.4)*h*.012, sway=Math.sin(t*.9)*.025;
+  const flip=naga.dir;
+  if(k<rise && Math.random()<.6){ ripples.push({x:x+rnd(-w*.4,w*.4),y,r:w*.18,life:0,dur:1.4,c:"130,240,220"}); sparks.push({x:x+rnd(-w*.35,w*.35),y,vx:rnd(-40,40),vy:rnd(-160,-60),g:260,life:0,dur:rnd(.6,1),r:rnd(1,2.2),c:"180,255,235"}); }
+  // aura
+  c.save(); c.globalCompositeOperation="lighter"; const ga=.35*e*(.8+.2*Math.sin(t*2));
+  c.fillStyle=rg(c,x,y-h*.45,0,h*.8,[[0,`rgba(255,210,110,${ga*.6})`],[.5,`rgba(90,230,180,${ga*.35})`],[1,"rgba(90,230,180,0)"]]); c.beginPath(); c.arc(x,y-h*.45,h*.8,0,TAU); c.fill(); c.restore();
+  // reflection (below the water line)
+  c.save(); c.beginPath(); c.rect(0,y,W,H-y); c.clip(); c.globalAlpha=.22*e; c.translate(x,y); c.scale(flip,-.45); c.rotate(sway); c.drawImage(nagaImg,-w/2,-h+off*0,w,h*e); c.restore();
+  // body emerging from the water
+  c.save(); c.beginPath(); c.rect(0,0,W,y+h*.02); c.clip(); c.translate(x,y+off+bob); c.scale(flip,1); c.rotate(sway); c.drawImage(nagaImg,-w/2,-h,w,h); 
+  // glowing eye (eye sits near 28% / 24% of the art)
+  const ex=-w/2+w*.281, ey=-h+h*.241; c.globalCompositeOperation="lighter"; const eg=.6+.4*Math.sin(t*5);
+  c.fillStyle=rg(c,ex,ey,0,h*.05,[[0,`rgba(255,240,150,${eg})`],[1,"rgba(255,180,60,0)"]]); c.beginPath(); c.arc(ex,ey,h*.05,0,TAU); c.fill();
+  c.restore();
+  // foam ring where it meets the water
+  c.save(); c.globalCompositeOperation="lighter"; c.fillStyle=rg(c,x,y,0,w*.5,[[0,`rgba(190,255,240,${.22*e})`],[1,"rgba(190,255,240,0)"]]); c.beginPath(); c.ellipse(x,y,w*.5,w*.07,0,0,TAU); c.fill(); c.restore();
+  if(e>.9 && Math.random()<.25){ const sx=x+flip*(-w/2+w*rnd(.15,.75)), sy=y-h*rnd(.4,.95); sparks.push({x:sx,y:sy,vx:rnd(-15,15),vy:rnd(-40,-10),g:-5,life:0,dur:rnd(.8,1.5),r:rnd(.8,1.8),c:Math.random()<.5?"255,215,120":"150,255,210",twinkle:true}); }
+}
+function tapNaga(x,y){
+  if(!naga||!nagaImg.ok) return false; const bx=nagaBox(); const k=naga.life/naga.dur; if(k<.13||k>.87) return false;
+  if(Math.abs(x-bx.x)>bx.w*.45 || y<bx.y-bx.h*.95 || y>bx.y+8) return false;
+  if(!naga.blessed){ naga.blessed=true; naga.dur=Math.min(naga.dur+3, naga.life/.87+3); }
+  for(let i=0;i<90;i++){ const a=Math.random()*TAU, sp=rnd(40,220); sparks.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-40,g:30,drag:1.3,life:0,dur:rnd(1.2,2.4),r:rnd(1,2.6),c:Math.random()<.5?"255,215,120":"120,255,200",twinkle:true}); }
+  for(let i=0;i<3;i++){ nagaBalls.push({x:bx.x+rnd(-bx.w*.3,bx.w*.3),y0:bx.y,y:bx.y,v:rnd(90,140),s:unit()*.3,top:HOR*rnd(.1,.4),life:0}); }
+  flash={a:.7,x,y,c:"150,255,200"}; sfx("bell"); sfx("bless");
+  toast("พญานาคประทานพร ขอให้ร่ำรวย ปลอดภัย โชคดีตลอดปี 🐉");
+  return true;
 }
 function drawNaga(c,t,k){
   const y=laneY(naga.l), s=unit()*(.75+naga.l*.95), L=s*20, dir=naga.dir;
@@ -1219,7 +1253,7 @@ function burst(x,y,kind){
 }
 
 /* ================= per-scene gimmicks ================= */
-const HINTS={0:"เคล็ดลับ: แตะวัดเพื่อตีระฆังขอพร และรอเรือไฟล่องผ่านแล้วแตะทักทาย",1:"เคล็ดลับ: แตะดอกบัวให้บาน แตะศาลาเพื่อปล่อยโคม",2:"เคล็ดลับ: แตะแนวป่าเพื่อปลุกหิ่งห้อย",3:"เคล็ดลับ: แตะท้องฟ้าทีละจุด วาดกลุ่มดาวของคุณเอง",5:"เคล็ดลับ: แตะกระต่ายจันทร์ แตะน้องนาก แตะปราสาท หรือแตะผิวน้ำเพื่อร่ายเวท"};
+const HINTS={0:"เคล็ดลับ: แตะวัดเพื่อตีระฆังขอพร และรอเรือไฟล่องผ่านแล้วแตะทักทาย",1:"เคล็ดลับ: แตะดอกบัวให้บาน แตะศาลาเพื่อปล่อยโคม",2:"เคล็ดลับ: แตะแนวป่าเพื่อปลุกหิ่งห้อย",3:"เคล็ดลับ: แตะท้องฟ้าทีละจุด วาดกลุ่มดาวของคุณเอง",5:"เคล็ดลับ: แตะพญานาคตอนโผล่เพื่อรับพร แตะกระต่ายจันทร์ แตะน้องนาก แตะปราสาท หรือแตะผิวน้ำเพื่อร่ายเวท"};
 const hinted=new Set();
 function sceneHint(){ if(hinted.has(scene)||!HINTS[scene]) return; hinted.add(scene); setTimeout(()=>toast(HINTS[scene]),900); }
 function toImg(x,y){ const B=BACKDROPS[scene]; if(!B||!bdFit) return null; return {x:(x-bdFit.ox)/bdFit.sc,y:(y-bdFit.oy)/bdFit.sc}; }
@@ -1340,6 +1374,7 @@ cv.addEventListener("click", e=>{
   const x=e.clientX, y=e.clientY;
   unlockAudio();
   for(const m of meteors){ if(Math.hypot(x-m.x,y-m.y)<70){ toast("ทันพอดี! อธิษฐานกับดาวตกแล้ว ขอให้เป็นจริง"); for(let i=0;i<30;i++){ const a=Math.random()*TAU; sparks.push({x:m.x,y:m.y,vx:Math.cos(a)*rnd(20,80),vy:Math.sin(a)*rnd(20,80),g:10,life:0,dur:1.2,r:1.6,c:"255,250,220",twinkle:true}); } sfx("bless"); return; } }
+  if(scene===MAGIC_SCENE && tapNaga(x,y)) return;
   if(scene===MAGIC_SCENE && rabbitTap(x,y)) return;
   if(Math.hypot(x-moon.x,y-moon.y)<moon.r*1.2){
     const nowT=performance.now(); moonTaps = nowT-moonTapAt<1500 ? moonTaps+1 : 1; moonTapAt=nowT;
