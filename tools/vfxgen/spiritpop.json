@@ -1,0 +1,235 @@
+{
+ "frames": [
+  {
+   "filename": "lk-spiritpop 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "sourceSize": {
+    "w": 57,
+    "h": 45
+   },
+   "pivot": {
+    "x": 0.543859649122807,
+    "y": 0.4444444444444444
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-spiritpop 1.png",
+   "frame": {
+    "x": 57,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "sourceSize": {
+    "w": 57,
+    "h": 45
+   },
+   "pivot": {
+    "x": 0.543859649122807,
+    "y": 0.4444444444444444
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-spiritpop 2.png",
+   "frame": {
+    "x": 114,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "sourceSize": {
+    "w": 57,
+    "h": 45
+   },
+   "pivot": {
+    "x": 0.543859649122807,
+    "y": 0.4444444444444444
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-spiritpop 3.png",
+   "frame": {
+    "x": 0,
+    "y": 45,
+    "w": 57,
+    "h": 45
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "sourceSize": {
+    "w": 57,
+    "h": 45
+   },
+   "pivot": {
+    "x": 0.543859649122807,
+    "y": 0.4444444444444444
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-spiritpop 4.png",
+   "frame": {
+    "x": 57,
+    "y": 45,
+    "w": 57,
+    "h": 45
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "sourceSize": {
+    "w": 57,
+    "h": 45
+   },
+   "pivot": {
+    "x": 0.543859649122807,
+    "y": 0.4444444444444444
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-spiritpop 5.png",
+   "frame": {
+    "x": 114,
+    "y": 45,
+    "w": 57,
+    "h": 45
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "sourceSize": {
+    "w": 57,
+    "h": 45
+   },
+   "pivot": {
+    "x": 0.543859649122807,
+    "y": 0.4444444444444444
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-spiritpop 6.png",
+   "frame": {
+    "x": 0,
+    "y": 90,
+    "w": 57,
+    "h": 45
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "sourceSize": {
+    "w": 57,
+    "h": 45
+   },
+   "pivot": {
+    "x": 0.543859649122807,
+    "y": 0.4444444444444444
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-spiritpop 7.png",
+   "frame": {
+    "x": 57,
+    "y": 90,
+    "w": 57,
+    "h": 45
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 57,
+    "h": 45
+   },
+   "sourceSize": {
+    "w": 57,
+    "h": 45
+   },
+   "pivot": {
+    "x": 0.543859649122807,
+    "y": 0.4444444444444444
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-spiritpop.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 171,
+   "h": 135
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 31,
+   "y": 20
+  },
+  "frameTags": [
+   {
+    "name": "lk-spiritpop",
+    "from": 0,
+    "to": 7,
+    "direction": "forward"
+   }
+  ]
+ }
+}

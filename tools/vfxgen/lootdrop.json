@@ -1,0 +1,391 @@
+{
+ "frames": [
+  {
+   "filename": "lk-lootdrop 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 1.png",
+   "frame": {
+    "x": 83,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 2.png",
+   "frame": {
+    "x": 166,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 3.png",
+   "frame": {
+    "x": 249,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 4.png",
+   "frame": {
+    "x": 0,
+    "y": 154,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 5.png",
+   "frame": {
+    "x": 83,
+    "y": 154,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 6.png",
+   "frame": {
+    "x": 166,
+    "y": 154,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 7.png",
+   "frame": {
+    "x": 249,
+    "y": 154,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 8.png",
+   "frame": {
+    "x": 0,
+    "y": 308,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 9.png",
+   "frame": {
+    "x": 83,
+    "y": 308,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 10.png",
+   "frame": {
+    "x": 166,
+    "y": 308,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 11.png",
+   "frame": {
+    "x": 249,
+    "y": 308,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 12.png",
+   "frame": {
+    "x": 0,
+    "y": 462,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  },
+  {
+   "filename": "lk-lootdrop 13.png",
+   "frame": {
+    "x": 83,
+    "y": 462,
+    "w": 83,
+    "h": 154
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 83,
+    "h": 154
+   },
+   "sourceSize": {
+    "w": 83,
+    "h": 154
+   },
+   "pivot": {
+    "x": 0.43373493975903615,
+    "y": 0.6883116883116883
+   },
+   "duration": 67
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-lootdrop.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 332,
+   "h": 616
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 36,
+   "y": 106
+  },
+  "frameTags": [
+   {
+    "name": "lk-lootdrop",
+    "from": 0,
+    "to": 13,
+    "direction": "forward"
+   }
+  ]
+ }
+}

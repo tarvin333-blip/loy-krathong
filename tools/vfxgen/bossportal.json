@@ -1,0 +1,599 @@
+{
+ "frames": [
+  {
+   "filename": "lk-bossportal 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 1.png",
+   "frame": {
+    "x": 288,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 2.png",
+   "frame": {
+    "x": 576,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 3.png",
+   "frame": {
+    "x": 864,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 4.png",
+   "frame": {
+    "x": 1152,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 5.png",
+   "frame": {
+    "x": 0,
+    "y": 412,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 6.png",
+   "frame": {
+    "x": 288,
+    "y": 412,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 7.png",
+   "frame": {
+    "x": 576,
+    "y": 412,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 8.png",
+   "frame": {
+    "x": 864,
+    "y": 412,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 9.png",
+   "frame": {
+    "x": 1152,
+    "y": 412,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 10.png",
+   "frame": {
+    "x": 0,
+    "y": 824,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 11.png",
+   "frame": {
+    "x": 288,
+    "y": 824,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 12.png",
+   "frame": {
+    "x": 576,
+    "y": 824,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 13.png",
+   "frame": {
+    "x": 864,
+    "y": 824,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 14.png",
+   "frame": {
+    "x": 1152,
+    "y": 824,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 15.png",
+   "frame": {
+    "x": 0,
+    "y": 1236,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 16.png",
+   "frame": {
+    "x": 288,
+    "y": 1236,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 17.png",
+   "frame": {
+    "x": 576,
+    "y": 1236,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 18.png",
+   "frame": {
+    "x": 864,
+    "y": 1236,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 19.png",
+   "frame": {
+    "x": 1152,
+    "y": 1236,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 20.png",
+   "frame": {
+    "x": 0,
+    "y": 1648,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-bossportal 21.png",
+   "frame": {
+    "x": 288,
+    "y": 1648,
+    "w": 288,
+    "h": 412
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 288,
+    "h": 412
+   },
+   "sourceSize": {
+    "w": 288,
+    "h": 412
+   },
+   "pivot": {
+    "x": 0.4965277777777778,
+    "y": 0.6456310679611651
+   },
+   "duration": 71
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-bossportal.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 1440,
+   "h": 2060
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 143,
+   "y": 266
+  },
+  "frameTags": [
+   {
+    "name": "lk-bossportal",
+    "from": 0,
+    "to": 21,
+    "direction": "forward"
+   }
+  ]
+ }
+}

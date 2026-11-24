@@ -1,0 +1,495 @@
+{
+ "frames": [
+  {
+   "filename": "lk-starimpact 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 1.png",
+   "frame": {
+    "x": 146,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 2.png",
+   "frame": {
+    "x": 292,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 3.png",
+   "frame": {
+    "x": 438,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 4.png",
+   "frame": {
+    "x": 584,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 5.png",
+   "frame": {
+    "x": 0,
+    "y": 184,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 6.png",
+   "frame": {
+    "x": 146,
+    "y": 184,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 7.png",
+   "frame": {
+    "x": 292,
+    "y": 184,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 8.png",
+   "frame": {
+    "x": 438,
+    "y": 184,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 9.png",
+   "frame": {
+    "x": 584,
+    "y": 184,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 10.png",
+   "frame": {
+    "x": 0,
+    "y": 368,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 11.png",
+   "frame": {
+    "x": 146,
+    "y": 368,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 12.png",
+   "frame": {
+    "x": 292,
+    "y": 368,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 13.png",
+   "frame": {
+    "x": 438,
+    "y": 368,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 14.png",
+   "frame": {
+    "x": 584,
+    "y": 368,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 15.png",
+   "frame": {
+    "x": 0,
+    "y": 552,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 16.png",
+   "frame": {
+    "x": 146,
+    "y": 552,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  },
+  {
+   "filename": "lk-starimpact 17.png",
+   "frame": {
+    "x": 292,
+    "y": 552,
+    "w": 146,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 146,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 146,
+    "h": 184
+   },
+   "pivot": {
+    "x": 0.4726027397260274,
+    "y": 0.6956521739130435
+   },
+   "duration": 56
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-starimpact.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 730,
+   "h": 736
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 69,
+   "y": 128
+  },
+  "frameTags": [
+   {
+    "name": "lk-starimpact",
+    "from": 0,
+    "to": 17,
+    "direction": "forward"
+   }
+  ]
+ }
+}

@@ -9,7 +9,7 @@ libmeta = json.load(open(f'{LIB}/vfx.json')); out = {}
 for n in USE_LIB:
     m = libmeta[n]; shutil.copy(f'{LIB}/{n}.png', f'public/img/vfx/{n}.png')
     out[n] = {'w': m['w'], 'h': m['h'], 'n': m['n'], 'fps': m['fps']}
-for n in ['lotus', 'fish', 'rainbow', 'meteor', 'impact', 'abyssflame', 'doomring', 'soulstorm', 'frost', 'voidhole', 'tentacle', 'hellaura', 'holyaura', 'gachaburst']:
+for n in ['lotus', 'fish', 'rainbow', 'meteor', 'impact', 'abyssflame', 'doomring', 'soulstorm', 'frost', 'voidhole', 'tentacle', 'hellaura', 'holyaura', 'gachaburst', 'webshot', 'necro', 'shadowclone', 'eclipse', 'starimpact', 'crystalbreak', 'spiritpop', 'bossportal', 'lootdrop']:
     m = json.load(open(f'tools/vfxgen/{n}.meta.json'))['meta']
     Image.open(f'tools/vfxgen/{n}.png').save(f'public/img/vfx/{n}.png', optimize=True)
     out[n] = {'w': m['canvas']['w'], 'h': m['canvas']['h'], 'n': m['frames'], 'fps': m['fps']}

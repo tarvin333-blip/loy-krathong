@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "ea3e35e7-38a4-4776-94ed-d33b03ffe7c9",
+  "canvas": {
+   "h": 79,
+   "w": 60
+  },
+  "frames": 12,
+  "fps": 12,
+  "loop": false,
+  "anchor": {
+   "x": 31,
+   "y": 30,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-crystalbreak.gif": "https://api.pixellab.ai/mcp/pixel-tools/f7411ead-9813-4232-a494-61a4df84fa56/lk-crystalbreak.gif",
+  "lk-crystalbreak.png": "https://api.pixellab.ai/mcp/pixel-tools/f7411ead-9813-4232-a494-61a4df84fa56/lk-crystalbreak.png",
+  "lk-crystalbreak.json": "https://api.pixellab.ai/mcp/pixel-tools/f7411ead-9813-4232-a494-61a4df84fa56/lk-crystalbreak.json"
+ }
+}

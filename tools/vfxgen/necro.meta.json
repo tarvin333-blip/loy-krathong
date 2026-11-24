@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "6fd628bb-e83d-42a1-be9a-4ce64e1c92c3",
+  "canvas": {
+   "h": 70,
+   "w": 172
+  },
+  "frames": 12,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 86,
+   "y": 35,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-necro.gif": "https://api.pixellab.ai/mcp/pixel-tools/49e03a54-ae46-4ec8-ac23-8666b4749ac1/lk-necro.gif",
+  "lk-necro.png": "https://api.pixellab.ai/mcp/pixel-tools/49e03a54-ae46-4ec8-ac23-8666b4749ac1/lk-necro.png",
+  "lk-necro.json": "https://api.pixellab.ai/mcp/pixel-tools/49e03a54-ae46-4ec8-ac23-8666b4749ac1/lk-necro.json"
+ }
+}

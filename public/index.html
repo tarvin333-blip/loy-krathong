@@ -1980,7 +1980,8 @@ function openDungeonIntro(id){
     card.append(el("p","meta","ตอนแรกมี 10 ชั้น (พิชิตชั้น 10 แล้วจะปลด “นรกชั้นใน” ชั้น 11–20) บางชั้นปีศาจมาเป็นฝูง เลือดไม่รีเซ็ตระหว่างชั้น (ฟื้น 30% ทุกชั้นที่ผ่าน) ผ่านแต่ละชั้นแล้วเลือกได้ว่าจะลงต่อหรือถอยกลับพร้อมเหรียญ ถ้าล่มกลางทาง ได้เหรียญเท่าชั้นที่ผ่านแล้ว"));
     const deep=(P.bestDungeon||0)>=10;
     card.append(floorBar(1,P.bestDungeon||0)); if(deep) card.append(floorBar(11,P.bestDungeon||0));
-    card.append(el("p","meta",`ดีที่สุด: ชั้น ${P.bestDungeon||0}/${deep?20:10} · ผ่านชั้น 10 ได้ตั๋วหีบสมบัติ 1 ใบ (ครั้งแรก 3 ใบ + 500 เหรียญ)`+(deep?" · ชั้น 15 ได้ตั๋ว 1 · ชั้น 20 ได้ตั๋ว 2 (ครั้งแรก 5 ใบ + 1,500 เหรียญ)":"")));
+    card.append(el("p","meta",`ดีที่สุด: ชั้น ${P.bestDungeon||0}/${deep?20:10} · ผ่านชั้น 10 ได้ตั๋วหีบสมบัติ 1 ใบ (ครั้งแรก 3 ใบ + 500 เหรียญ)`+(deep?" · ชั้น 15 ได้ตั๋ว 1 · ชั้น 20 ได้ตั๋ว 2 (ครั้งแรก 5 ใบ + 1,500 เหรียญ)":"")+" · บอสชั้น 5/10/15/20 มีโอกาสดรอปเครื่องรางตรงๆ (ชั้น 20 ได้ SSR ขึ้นไปแน่นอน)"));
+    if(deep) card.append(el("p","meta","⚠ นรกชั้นใน: ปีศาจแข็งแกร่งตามพลังกระทงของคุณ (เลเวล ดาว คลาส เครื่องราง) ฟาร์มอย่างเดียวไม่พอ ต้องหลบเป็น"));
     card.append(el("p","meta","เคล็ดลับ: วงแดงบนน้ำ = ว่ายออกให้ทัน · เส้นแดง = งูกำลังจะพุ่ง หลบออกจากเส้น · บ่อพิษม่วงอย่าแช่ · ลูกกะโหลกเขียวหลบได้ · ชนผีพรายแรงๆ ให้แตก บอสที่มีเกราะวิญญาณต้องชนผีให้หมดก่อน · ราชาปีศาจร่ายวงแหวน ให้รีบเข้าวงบัวทอง"));
     const acts=el("div","acts");
     const start=from=>async e=>{ acts.querySelectorAll("button").forEach(b=>b.disabled=true); let P2=P;
@@ -1994,8 +1995,11 @@ function openDungeonIntro(id){
 }
 function startDungeonFloor(){ const R=dunRun; pickDungeonBg(R.floor); startBattle(R.k,skillsFromSticks(R.prog.sticks),{mode:"dungeon",level:R.floor+2,floor:R.floor,id:R.id,prog:R.prog}); }
 function dungeonFoes(floor,prog){
-  const pl=Math.max(0,((prog&&prog.level)||1)-1)/5, L=Math.round(Math.min(40,floor*1.2+pl*.35)), mp={lv:{hp:L,atk:L,def:L,spd:Math.min(L,12),sk:L},stars:(prog&&prog.stars)||0};
-  const mk=(type,o,name)=>{ const f=makeFighter({id:"m"+Math.random(),name:name||MONSTERS[type],type,candle:"white",seed:Math.random()},false,{prog:mp,...o}); f.skills=[BSTATS[type].sig]; f.mon=true; return f; };
+  const pl=Math.max(0,((prog&&prog.level)||1)-1)/5, deep=floor>10;
+  // floors 1-10 grow slowly with the player; the inner hell (11-20) matches the krathong's own power, so grinding alone never trivialises it
+  const L=deep?Math.round(Math.min(55,pl+2+(floor-10)*.9)):Math.round(Math.min(40,floor*1.2+pl*.35)), mp={lv:{hp:L,atk:L,def:L,spd:Math.min(L,deep?16:12),sk:L},stars:(prog&&prog.stars)||0};
+  let gearF=1; if(deep){ for(const [r,Lv] of relicsOf(prog)) gearF+=({R:.03,SR:.05,SSR:.08,UR:.12})[RELICS[r].rar]*rs(Lv); if(prog&&prog.cls) gearF+=.12; }
+  const mk=(type,o,name)=>{ o={...o}; if(deep){ o.hpS=(o.hpS||1)*gearF; o.atkS=(o.atkS||1)*(1+(gearF-1)*.75); } const f=makeFighter({id:"m"+Math.random(),name:name||MONSTERS[type],type,candle:"white",seed:Math.random()},false,{prog:mp,...o}); f.skills=[BSTATS[type].sig]; f.mon=true; return f; };
   const plan=DUN_PLAN[floor], out=[];
   if(plan==="mini"){ const b=mk("m_boss",{big:1.5,hpS:2.6,atkS:1.15,boss:true},"👹 ขุนพลปีศาจ"); b.skills=["hellfire","curse","haunt"]; b.wardBoss=true; out.push(b,mk("m_ghost",{hpS:.8}),mk("m_ghost",{hpS:.8})); }
   else if(plan==="lichboss"){ const b=mk("m_lich",{big:1.8,hpS:2.8,atkS:1.15,boss:true},"💀 จอมเวทศพ"); b.skills=["raise","frost","curse"]; out.push(b); for(let i=0;i<2;i++){ const w=mk("m_spider",{hpS:.9}); w.wardFor=b; out.push(w); } }
@@ -2258,7 +2262,8 @@ function startBattle(k,fortuneSkills,opts){
   battle={P,foes,all:[P,...foes],level,mode:opts.mode,opts,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],shots:[],pools:[],teles:[],safe:null,minions:[],bolts:[],floaters:[],shake:0};
   document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false; $("devbar").hidden=!devOn; $("devbar").querySelectorAll("button").forEach(b=>b.classList.remove("on"));
   buildSkillBar(); updateHud(); sfx("bless");
-  if(opts.mode==="dungeon"){ lanterns.length=0; rockets.length=0; playMusic(); if(foes.some(f=>f.titan)) battle.count=4.2; }
+  if(opts.mode==="dungeon"){ lanterns.length=0; rockets.length=0; playMusic(); if(foes.some(f=>f.titan)) battle.count=4.2;
+    for(const f of foes) if(f.boss) setTimeout(()=>{ if(battle&&battle.foes.includes(f)){ playVfx(vfxOr("bossportal","formation"),f.x,f.y,f.titan?3.4:3,{dy:-.9,back:true,add:true}); battle.shake=10; } },400); }
 }
 function endBattle(){ const wasD=inDungeon(); vfxPlays.length=0; if(wasD) setTimeout(playMusic,50); setTimeout(runTicker,800); battle=null; document.body.classList.remove("in-battle"); $("devbar").hidden=true; $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
 function buildSkillBar(){
@@ -2300,14 +2305,17 @@ function hurt(f,dmg,src,opts){
   if(f.buffs.cursed>0) dmg*=1.4;
   f.hp-=dmg; f.hitT=.35; f.flashT=.18; if(opts&&opts.crit) playVfx("crit",f.x,f.y,2.6,{follow:f,dy:-.5,add:true}); floater(f.x+rnd(-10,10),f.y-fSize(f)*1.9,(opts&&opts.crit?"คริ! ":"")+Math.round(dmg),opts&&opts.crit?"255,215,90":(f.isPlayer?"255,120,130":"255,255,255"),opts&&opts.crit?"crit":"dmg");
   if(f.hp<=0&&f.revive&&!f.revived){ f.revived=true; f.hp=Math.round(f.max*f.revive); f.buffs.shield=2; floater(f.x,f.y-fSize(f)*2.4,"ฟื้นคืนชีพ!","255,220,120","skill"); playVfx("lotus",f.x,f.y,3.6,{follow:f,dy:-.7}); flash={a:.8,x:f.x,y:f.y,c:"255,220,140"}; battle.slow=.4; sfx("win"); return dmg; }
+  if(f.hp<=0&&f.wardFor) playVfx(vfxOr("crystalbreak","impact"),f.x,f.y,3.2,{dy:-.6,add:true});
+  if(f.hp<=0&&f.boss&&battle.mode==="dungeon") setTimeout(()=>battle&&playVfx(vfxOr("lootdrop","crit"),f.x,f.y,3.6,{dy:-.8}),600);
   if(f.hp<=0){ f.hp=0; f.alive=false; f.sinkT=0; sfx("sink"); battle.slow=Math.max(battle.slow||0,.55); if(!f.isPlayer) battle.banner={text:"ล่ม!",col:"255,140,170",t:0}; playVfx("steam",f.x,f.y,2.6,{dy:-.8,alpha:.9}); ripples.push({x:f.x,y:f.y,r:fSize(f)*3,life:0,dur:2,c:"200,225,255"}); for(let i=0;i<20;i++) sparks.push({x:f.x+rnd(-10,10),y:f.y,vx:rnd(-20,20),vy:rnd(-60,-20),g:-20,life:0,dur:rnd(1,1.8),r:rnd(1.5,3),c:"200,230,255"}); }
   return dmg;
 }
 /* ---- pixel VFX (PixelLab): sheets in img/vfx, frames left-to-right then top-to-bottom ---- */
-const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12},"frost":{"w":106,"h":78,"n":10,"fps":12},"voidhole":{"w":232,"h":212,"n":32,"fps":10},"tentacle":{"w":116,"h":255,"n":16,"fps":14},"hellaura":{"w":73,"h":115,"n":8,"fps":12},"holyaura":{"w":96,"h":112,"n":12,"fps":12},"gachaburst":{"w":150,"h":155,"n":7,"fps":16}};
+const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12},"frost":{"w":106,"h":78,"n":10,"fps":12},"voidhole":{"w":232,"h":212,"n":32,"fps":10},"tentacle":{"w":116,"h":255,"n":16,"fps":14},"hellaura":{"w":73,"h":115,"n":8,"fps":12},"holyaura":{"w":96,"h":112,"n":12,"fps":12},"gachaburst":{"w":150,"h":155,"n":7,"fps":16},"webshot":{"w":96,"h":96,"n":14,"fps":14},"necro":{"w":172,"h":70,"n":12,"fps":12},"shadowclone":{"w":69,"h":120,"n":16,"fps":12},"eclipse":{"w":128,"h":128,"n":16,"fps":12},"starimpact":{"w":146,"h":184,"n":18,"fps":18},"crystalbreak":{"w":60,"h":79,"n":12,"fps":12},"spiritpop":{"w":57,"h":45,"n":8,"fps":12},"bossportal":{"w":288,"h":412,"n":22,"fps":14},"lootdrop":{"w":83,"h":154,"n":14,"fps":15}};
 const VFX={}; for(const [n,m] of Object.entries(VFX_META)){ const im=new Image(); VFX[n]={...m,img:im,ok:false}; im.onload=()=>{ VFX[n].ok=true; VFX[n].cols=Math.max(1,Math.floor(im.width/m.w)); }; im.src="img/vfx/"+n+".png"; }
 const vfxPlays=[];
 // size = drawn height in multiples of the fighter size; opts: follow (fighter), flip, flat (squash y), add (glow blend), dy (offset in sizes), back (draw behind fighters)
+function vfxOr(n,fb){ return VFX[n]&&VFX[n].ok?n:fb; }
 function playVfx(name,x,y,size,opts){ const v=VFX[name]; if(!v||!v.ok||!battle) return; vfxPlays.push({name,x,y,size,t:0,...(opts||{})}); if(vfxPlays.length>40) vfxPlays.shift(); }
 function drawVfx(c,dt,back){
   for(let i=vfxPlays.length-1;i>=0;i--){ const p=vfxPlays[i]; if(!!p.back!==back) continue; const v=VFX[p.name];
@@ -2382,18 +2390,18 @@ function castSkill(f,id){
       tele(f,{x:f.x,y:f.y,r:Math.max(W,H),dur:2.6,col:"255,40,80",global:true,then:()=>{ const sf=battle.safe; battle.safe=null; f.casting=null; playVfx(VFX.doomring&&VFX.doomring.ok?"doomring":"formation",f.x,f.y,8,{flat:.55,add:true,back:true}); runeBursts.push({x:f.x,y:f.y,life:0,dur:1.4,r:Math.max(W,H)*.6,flat:true,glyph:true,col:"255,40,80"}); battle.shake=18;
         for(const o of foesOf(f)){ if(sf&&Math.hypot(o.x-sf.x,(o.y-sf.y)*1.8)<sf.r){ floater(o.x,o.y-fSize(o)*2,"รอด!","255,230,140","skill"); continue; } hurt(o,55*m,f); o.buffs.cursed=5; o.vx+=Math.sign(o.x-f.x||1)*u*12; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); } }}); break; }
     case "frost": if(tgt){ const x=tgt.x, y=tgt.y; tele(f,{x,y,r:u*2.3,dur:.9,col:"120,220,255",then:()=>{ playVfx("frost",x,y,3.4,{dy:-.5,add:true}); },hit:o=>{ hurt(o,20*m,f); o.buffs.slow=3; floater(o.x,o.y-fSize(o)*2.2,"เยือกแข็ง!","150,230,255"); }}); } break;
-    case "web": { const ts=tgt?[[tgt.x,tgt.y],[tgt.x+rnd(-1,1)*u*4,tgt.y+rnd(-1,1)*u*1.5]]:[]; ts.forEach(([x,y])=>tele(f,{x,y,r:u*2.2,dur:.7,col:"230,240,210",then:()=>battle.pools.push({x,y,r:u*2.2,life:0,dur:6,owner:f,m,web:true})})); break; }
-    case "raise": { const dead=battle.foes.filter(o=>!o.alive&&o.mon&&!o.boss&&o.sinkT<30); f.casting={t:2.2,dur:2.2,name:sk.n,interrupt:true}; playVfx("dread",f.x,f.y,3,{follow:f,dy:-1.4});
+    case "web": { const ts=tgt?[[tgt.x,tgt.y],[tgt.x+rnd(-1,1)*u*4,tgt.y+rnd(-1,1)*u*1.5]]:[]; ts.forEach(([x,y])=>tele(f,{x,y,r:u*2.2,dur:.7,col:"230,240,210",then:()=>{ battle.pools.push({x,y,r:u*2.2,life:0,dur:6,owner:f,m,web:true}); playVfx(vfxOr("webshot","crossclaw"),x,y,3,{dy:-.3}); }})); break; }
+    case "raise": { const dead=battle.foes.filter(o=>!o.alive&&o.mon&&!o.boss&&o.sinkT<30); f.casting={t:2.2,dur:2.2,name:sk.n,interrupt:true}; playVfx("dread",f.x,f.y,3,{follow:f,dy:-1.4}); playVfx(vfxOr("necro","formation"),f.x,f.y,2.2,{dy:.1,back:true});
       floater(f.x,f.y-krTop(f.k,s)-30,"ชนขัดจังหวะ!","255,230,140","skill");
       f.raiseT=setTimeout(()=>{ if(!battle||!f.alive||!f.casting) return; f.casting=null; const d=battle.foes.filter(o=>!o.alive&&o.mon&&!o.boss)[0];
-        if(d){ d.alive=true; d.hp=Math.round(d.max*.5); d.sinkT=0; d.buffs={}; playVfx("dread",d.x,d.y,3,{follow:d,dy:-1.2}); floater(d.x,d.y-fSize(d)*2.2,"ฟื้นจากความตาย!","190,110,255","skill"); }
+        if(d){ d.alive=true; d.hp=Math.round(d.max*.5); d.sinkT=0; d.buffs={}; playVfx(vfxOr("necro","dread"),d.x,d.y,1.8,{dy:.1,back:true}); playVfx("dread",d.x,d.y,3,{follow:d,dy:-1.2}); floater(d.x,d.y-fSize(d)*2.2,"ฟื้นจากความตาย!","190,110,255","skill"); }
         else { const g=makeFighter({id:"rz",name:MONSTERS.m_ghost,type:"m_ghost",candle:"white",seed:Math.random()},false,{prog:{lv:{hp:10,atk:10,def:10,spd:5,sk:10}}}); g.skills=["haunt"]; g.mon=true; g.x=f.x+u*2; g.y=f.y; battle.foes.push(g); battle.all.push(g); playVfx("steam",g.x,g.y,2.6,{dy:-.6}); } },2200); break; }
     case "tentacle": if(tgt){ const a=Math.atan2((tgt.y-f.y)*1.8,tgt.x-f.x); for(let i=1;i<=4;i++){ const d=u*2.6*i, x=f.x+Math.cos(a)*d, y=f.y+Math.sin(a)*d/1.8; tele(f,{x,y,r:u*1.6,dur:.85+i*.12,col:"220,90,220",then:()=>{ playVfx(VFX.tentacle&&VFX.tentacle.ok?"tentacle":"crossclaw",x,y,3.6,{dy:-1.1}); ripples.push({x,y,r:u*1.8,life:0,dur:1,c:"220,150,255"}); battle.shake=6; },hit:o=>{ hurt(o,26*m,f); o.vx+=Math.cos(a)*u*9; o.vy+=Math.sin(a)*u*9/1.8; }}); } } break;
     case "blackhole": if(tgt){ const x=Math.max(W*.15,Math.min(W*.85,tgt.x+rnd(-1,1)*u*2)), y=tgt.y; tele(f,{x,y,r:u*3,dur:1.1,col:"170,90,255",then:()=>{ battle.hazards.push({x,y,life:0,dur:5,owner:f,r:u*6.5,dps:16*m,hole:true}); for(let q=0;q<3;q++) setTimeout(()=>playVfx(VFX.voidhole&&VFX.voidhole.ok?"voidhole":"whirl",x,y,4.4,{flat:.7,back:true}),q*1600); battle.shake=10; }}); battle.banner={text:sk.n,col:"190,120,255",t:0}; } break;
-    case "eclipse": battle.dark=7; battle.banner={text:sk.n,col:"160,120,255",t:0}; flash={a:.9,x:f.x,y:f.y,c:"80,40,160"}; setTimeout(()=>{ if(battle&&f.alive){ f.sp=100; castSkill(f,"starfall"); } },1200); break;
-    case "mirror": if(tgt&&tgt.isPlayer){ const cl=makeFighter({...tgt.k,id:"mirror",name:"เงาของ "+tgt.name},false,{prog:battle.opts.prog,hpS:.45,atkS:.8}); cl.skills=tgt.skills.filter(x=>!SKILLS[x].cls).slice(0,2); cl.mon=true; cl.mirror=true; cl.x=W-tgt.x; cl.y=tgt.y; battle.foes.push(cl); battle.all.push(cl); playVfx("evade",cl.x,cl.y,3,{dy:-.5}); floater(cl.x,cl.y-fSize(cl)*2.4,"เงาสะท้อน!","200,160,255","skill"); battle.banner={text:sk.n,col:"200,160,255",t:0}; } break;
+    case "eclipse": battle.dark=7; battle.banner={text:sk.n,col:"160,120,255",t:0}; playVfx(vfxOr("eclipse","formation"),W/2,HOR*.55,6,{add:true}); flash={a:.9,x:f.x,y:f.y,c:"80,40,160"}; setTimeout(()=>{ if(battle&&f.alive){ f.sp=100; castSkill(f,"starfall"); } },1200); break;
+    case "mirror": if(tgt&&tgt.isPlayer){ const cl=makeFighter({...tgt.k,id:"mirror",name:"เงาของ "+tgt.name},false,{prog:battle.opts.prog,hpS:.45,atkS:.8}); cl.skills=tgt.skills.filter(x=>!SKILLS[x].cls).slice(0,2); cl.mon=true; cl.mirror=true; cl.x=W-tgt.x; cl.y=tgt.y; battle.foes.push(cl); battle.all.push(cl); playVfx(vfxOr("shadowclone","evade"),cl.x,cl.y,3.4,{dy:-.6}); floater(cl.x,cl.y-fSize(cl)*2.4,"เงาสะท้อน!","200,160,255","skill"); battle.banner={text:sk.n,col:"200,160,255",t:0}; } break;
     case "starfall": { const n=f.enraged?9:6, spots=[]; if(tgt) spots.push([tgt.x,tgt.y]); while(spots.length<n) spots.push([rnd(.08,.92)*W,laneY(Math.random())]);
-      spots.forEach(([x,y],i)=>tele(f,{x,y,r:u*1.9,dur:.95+i*.09,col:"200,160,255",then:()=>{ playVfx("meteor",x-u*.6,y,4,{dy:-1.3,add:true}); ripples.push({x,y,r:u*2,life:0,dur:1.2,c:"200,180,255"}); },hit:o=>hurt(o,24*m,f)})); break; }
+      spots.forEach(([x,y],i)=>tele(f,{x,y,r:u*1.9,dur:.95+i*.09,col:"200,160,255",then:()=>{ playVfx(vfxOr("starimpact","meteor"),x,y,3.8,{dy:-.9,add:true}); ripples.push({x,y,r:u*2,life:0,dur:1.2,c:"200,180,255"}); },hit:o=>hurt(o,24*m,f)})); break; }
     case "soulstorm": battle.banner={text:sk.n,col:"170,200,255",t:0}; playVfx(VFX.soulstorm&&VFX.soulstorm.ok?"soulstorm":"whirl",f.x,f.y,3.6,{follow:f,dy:-1.2,add:true});
       for(let i=0;i<5;i++) battle.minions.push({x:f.x+rnd(-60,60),y:f.y+rnd(-14,14),owner:f,life:0,dur:12,bite:0,p:Math.random()*7,ghost:true,ward:true});
       f.hp=Math.min(f.max,f.hp+f.max*.04); floater(f.x,f.y-s*2,"เกราะวิญญาณ! ชนผีให้แตก","170,200,255","skill"); break;
@@ -2483,7 +2491,7 @@ function battleStep(dt,t){
     for(const o of B.all){ if(!o.alive||o.isPlayer===h.owner.isPlayer) continue; const dx=h.x-o.x, dy=(h.y-o.y)*1.8, d=Math.hypot(dx,dy); if(h.hole&&d>u*1.6&&d<h.r){ o.vx+=dx/d*u*13*dt; o.vy+=dy/d*u*13*dt/1.8; continue; } if(d<(h.hole?u*1.6:h.r)){ o.vx+=dx/(d||1)*u*10*dt; o.vy+=dy/(d||1)*u*10*dt/1.8; o._vz=(o._vz||0)+dt; if(o._vz>.5){ o._vz=0; hurt(o,h.dps*.5,h.owner); } } } }
   for(let i=B.minions.length-1;i>=0;i--){ const m=B.minions[i]; m.life+=dt; if(m.life>m.dur||!m.owner.alive){ B.minions.splice(i,1); continue; }
     const tg=nearest(m.owner); if(!tg) continue; const dx=tg.x-m.x, dy=tg.y-m.y, d=Math.hypot(dx,dy)||1; const sp=u*(m.ghost?4.2:7); m.x+=dx/d*sp*dt+Math.sin(m.life*8+m.p)*.5; m.y+=dy/d*sp*dt*.6;
-    if(m.ghost){ const pl=B.all.find(o=>o.alive&&o.isPlayer!==m.owner.isPlayer&&Math.hypot(o.x-m.x,(o.y-fSize(o)*.5-m.y)*1.6)<fSize(o)*1.05&&Math.hypot(o.vx,o.vy*1.8)>u*2.6); if(pl){ B.minions.splice(i,1); playVfx("steam",m.x,m.y,1.8,{alpha:.8}); floater(m.x,m.y-20,"แตก!","200,220,255"); for(let q=0;q<14;q++){ const a=Math.random()*TAU; sparks.push({x:m.x,y:m.y,vx:Math.cos(a)*rnd(40,140),vy:Math.sin(a)*rnd(40,140),g:0,drag:2,life:0,dur:rnd(.4,.8),r:rnd(1,2),c:"200,220,255"}); } sfx("bonk"); continue; } }
+    if(m.ghost){ const pl=B.all.find(o=>o.alive&&o.isPlayer!==m.owner.isPlayer&&Math.hypot(o.x-m.x,(o.y-fSize(o)*.5-m.y)*1.6)<fSize(o)*1.05&&Math.hypot(o.vx,o.vy*1.8)>u*2.6); if(pl){ B.minions.splice(i,1); playVfx(vfxOr("spiritpop","steam"),m.x,m.y,2.2,{alpha:.9}); floater(m.x,m.y-20,"แตก!","200,220,255"); for(let q=0;q<14;q++){ const a=Math.random()*TAU; sparks.push({x:m.x,y:m.y,vx:Math.cos(a)*rnd(40,140),vy:Math.sin(a)*rnd(40,140),g:0,drag:2,life:0,dur:rnd(.4,.8),r:rnd(1,2),c:"200,220,255"}); } sfx("bonk"); continue; } }
     m.bite-=dt; if(d<fSize(tg)*1.1&&m.bite<=0){ m.bite=m.ghost?.9:.5; hurt(tg,(m.ghost?2.2:4)*skillMul(m.owner),m.owner); } }
   // end conditions
   if(!B.over){
@@ -2496,7 +2504,7 @@ function drawFighter(c,f,t){
   const s=fSize(f), sp=sprite(f.k,s), photo=f.k.photoUrl?getImg(f.k.photoUrl):null;
   const sk=f.alive?0:Math.min(1,f.sinkT/1.8); if(sk>=1) return;
   c.save(); c.translate(f.x,f.y+sk*s*1.2);
-  c.globalAlpha=1-sk*.9;
+  c.globalAlpha=1-sk*.9; if(f.mirror) c.filter="brightness(.55) saturate(1.6) hue-rotate(230deg)";
   if(!sk){ drawReflection(c,f.k,s,sp,t,0,.28); drawStarAura(c,f.k,s,t); drawRelicAura(c,f.k,s,t); drawContactShadow(c,f.k,s); }
   drawGlow(c,f.k,s,sk?.3:1);
   const tilt=Math.sin(t*.9+f.k.seed*7)*.05+Math.max(-.25,Math.min(.25,f.vx/(bU()*30)))+(f.hitT>0?Math.sin(f.hitT*45)*.18:0)+sk*1.2*(f.k.seed>.5?1:-1);
@@ -2615,10 +2623,11 @@ function dungeonSummary(j,cleared,clearedAll,sunk,from){
     card.append(floorBar(from,cleared));
     if(j&&j.gain!=null) card.append(el("div","coins",`+${j.gain} เหรียญ`));
     if(j&&j.note) card.append(el("p","meta",j.note));
+    if(j&&j.loot&&j.loot.length){ card.append(el("b",null,"🎁 บอสดรอปเครื่องราง!")); const box=el("div","gacha-reveal"); j.loot.forEach((g,i)=>{ const c=el("div","gcard"+(g.rar==="UR"?" ur":"")); c.style.setProperty("--rc",RAR_COL[g.rar]); c.style.animationDelay=(.3+i*.15)+"s"; c.append(relicIcon(g.id)); const b=el("b"); b.append(rarTag(g.rar)); c.append(b); c.append(el("b",null,RELICS[g.id].n)); c.append(el("small",null,g.refund?`เต็ม Lv.5 → +${g.refund} เหรียญ`:g.dup?`Lv.${g.lv} ⬆`:"ใหม่!")); box.append(c); }); card.append(box); sfx("win"); }
     if(j&&j.error) card.append(el("p","meta","บันทึกผลไม่สำเร็จ: "+j.error));
     const acts=el("div","acts"); const id=j&&j.prog&&j.prog.id;
     if(j&&j.dev){ const d=el("button","btn","กลับ Dev"); d.addEventListener("click",openDev); acts.append(d); }
-    if(id&&j.tickets){ const g=el("button","btn primary","🎁 เปิดหีบสมบัติ"); g.addEventListener("click",()=>openRelics(id)); acts.append(g); }
+    if(id&&(j.tickets||(j.loot&&j.loot.length))){ const g=el("button","btn primary",j.tickets?"🎁 เปิดหีบสมบัติ":"ไปคลังเครื่องราง"); g.addEventListener("click",()=>openRelics(id)); acts.append(g); }
     if(id){ const a=el("button","btn dun","ลงอีกรอบ"); a.addEventListener("click",()=>openDungeonIntro(id)); acts.append(a); const u=el("button","btn primary","อัปเกรดกระทง"); u.addEventListener("click",()=>openUpgrade(id)); acts.append(u); }
     backBtn(acts,"เมนูศึก",openBattleMenu); card.append(acts);
   });
@@ -2947,7 +2956,7 @@ let feed=[], feedSeenAt=Date.now()-120000; const tickQ=[]; let ticking=false;
 function openDrawer(tab){ const d=$("drawer"); if(tab){ drawerTab=tab; lsSet("lk.tab",tab); } d.hidden=false; $("btnList").setAttribute("aria-pressed","true"); renderList(); }
 $("btnList").addEventListener("click",()=>{ const d=$("drawer"); if(!d.hidden){ d.hidden=true; $("btnList").setAttribute("aria-pressed","false"); } else openDrawer(); });
 for(const t of document.querySelectorAll("#drawer .tab")) t.addEventListener("click",()=>openDrawer(t.dataset.tab));
-function feedText(f){ if(f.kind==="gacha") return `✨ ${f.a} (Lv.${f.aLv}) เปิดหีบได้ UR “${(RELICS[f.item]||{n:"?"}).n}”!`; if(f.kind==="dungeon") return f.floor>=20?`🌑 ${f.a} (Lv.${f.aLv}) พิชิตจักรพรรดิแห่งความว่างเปล่า!`:f.floor===10?`👑 ${f.a} (Lv.${f.aLv}) พิชิตราชาปีศาจแห่งบาดาล!`:`🏰 ${f.a} (Lv.${f.aLv}) บุกดันเจี้ยนถึงชั้น ${f.floor}`; return f.kind==="duel" ? `⚔ ${f.a} (Lv.${f.aLv}) ท้าดวล ${f.d} (Lv.${f.dLv}) — ${f.attackerWon?f.a:f.d} ชนะ!` : `🏆 ${f.a} (Lv.${f.aLv}) ผ่านด่านฝึกที่ ${f.stage}`; }
+function feedText(f){ if(f.kind==="gacha") return `✨ ${f.a} (Lv.${f.aLv}) ${f.drop?"ปราบบอสแล้วได้":"เปิดหีบได้"} UR “${(RELICS[f.item]||{n:"?"}).n}”!`; if(f.kind==="dungeon") return f.floor>=20?`🌑 ${f.a} (Lv.${f.aLv}) พิชิตจักรพรรดิแห่งความว่างเปล่า!`:f.floor===10?`👑 ${f.a} (Lv.${f.aLv}) พิชิตราชาปีศาจแห่งบาดาล!`:`🏰 ${f.a} (Lv.${f.aLv}) บุกดันเจี้ยนถึงชั้น ${f.floor}`; return f.kind==="duel" ? `⚔ ${f.a} (Lv.${f.aLv}) ท้าดวล ${f.d} (Lv.${f.dLv}) — ${f.attackerWon?f.a:f.d} ชนะ!` : `🏆 ${f.a} (Lv.${f.aLv}) ผ่านด่านฝึกที่ ${f.stage}`; }
 async function loadFeed(){
   if(!apiOK) return; try{ feed=(await api("?feed")).feed||[]; }catch(e){ return; }
   const fresh=feed.filter(f=>f.at>feedSeenAt).sort((a,b)=>a.at-b.at);

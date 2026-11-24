@@ -1,0 +1,339 @@
+{
+ "frames": [
+  {
+   "filename": "lk-necro 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 1.png",
+   "frame": {
+    "x": 172,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 2.png",
+   "frame": {
+    "x": 344,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 3.png",
+   "frame": {
+    "x": 516,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 4.png",
+   "frame": {
+    "x": 0,
+    "y": 70,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 5.png",
+   "frame": {
+    "x": 172,
+    "y": 70,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 6.png",
+   "frame": {
+    "x": 344,
+    "y": 70,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 7.png",
+   "frame": {
+    "x": 516,
+    "y": 70,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 8.png",
+   "frame": {
+    "x": 0,
+    "y": 140,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 9.png",
+   "frame": {
+    "x": 172,
+    "y": 140,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 10.png",
+   "frame": {
+    "x": 344,
+    "y": 140,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-necro 11.png",
+   "frame": {
+    "x": 516,
+    "y": 140,
+    "w": 172,
+    "h": 70
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 70
+   },
+   "sourceSize": {
+    "w": 172,
+    "h": 70
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-necro.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 688,
+   "h": 210
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 86,
+   "y": 35
+  },
+  "frameTags": [
+   {
+    "name": "lk-necro",
+    "from": 0,
+    "to": 11,
+    "direction": "forward"
+   }
+  ]
+ }
+}

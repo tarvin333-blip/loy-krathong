@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "48c09587-7e75-445e-bff1-350dc25ca641",
+  "canvas": {
+   "h": 128,
+   "w": 128
+  },
+  "frames": 16,
+  "fps": 12,
+  "loop": false,
+  "anchor": {
+   "x": 64,
+   "y": 64,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-eclipse.gif": "https://api.pixellab.ai/mcp/pixel-tools/a080b168-3c4b-4446-9395-3d7f0322ef0c/lk-eclipse.gif",
+  "lk-eclipse.png": "https://api.pixellab.ai/mcp/pixel-tools/a080b168-3c4b-4446-9395-3d7f0322ef0c/lk-eclipse.png",
+  "lk-eclipse.json": "https://api.pixellab.ai/mcp/pixel-tools/a080b168-3c4b-4446-9395-3d7f0322ef0c/lk-eclipse.json"
+ }
+}

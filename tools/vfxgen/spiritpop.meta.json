@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "cc82dd1f-57d7-468a-a9ab-9aa9252ec61b",
+  "canvas": {
+   "h": 45,
+   "w": 57
+  },
+  "frames": 8,
+  "fps": 12,
+  "loop": false,
+  "anchor": {
+   "x": 31,
+   "y": 20,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-spiritpop.gif": "https://api.pixellab.ai/mcp/pixel-tools/99e47242-30e9-4a26-897e-bb854ba12759/lk-spiritpop.gif",
+  "lk-spiritpop.png": "https://api.pixellab.ai/mcp/pixel-tools/99e47242-30e9-4a26-897e-bb854ba12759/lk-spiritpop.png",
+  "lk-spiritpop.json": "https://api.pixellab.ai/mcp/pixel-tools/99e47242-30e9-4a26-897e-bb854ba12759/lk-spiritpop.json"
+ }
+}

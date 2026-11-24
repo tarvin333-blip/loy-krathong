@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "4561db4f-7b0a-47f9-9212-e0d6783f4fe1",
+  "canvas": {
+   "h": 412,
+   "w": 288
+  },
+  "frames": 22,
+  "fps": 14,
+  "loop": false,
+  "anchor": {
+   "x": 143,
+   "y": 266,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-bossportal.gif": "https://api.pixellab.ai/mcp/pixel-tools/aabb1fb3-06ec-4e62-8e14-760a91030b41/lk-bossportal.gif",
+  "lk-bossportal.png": "https://api.pixellab.ai/mcp/pixel-tools/aabb1fb3-06ec-4e62-8e14-760a91030b41/lk-bossportal.png",
+  "lk-bossportal.json": "https://api.pixellab.ai/mcp/pixel-tools/aabb1fb3-06ec-4e62-8e14-760a91030b41/lk-bossportal.json"
+ }
+}
