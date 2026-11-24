@@ -316,7 +316,7 @@ body.in-battle .devfab,.devfab[hidden],.devbar[hidden]{display:none!important}
 .end-text h2{margin:0 0 6px;font-family:"Srisakdi",serif;font-size:clamp(26px,4.2vw,46px);color:#ffd77a;opacity:0;transition:opacity 1.6s}
 .end-text h2.show{opacity:1}
 .end-btn{pointer-events:auto;margin-top:16px;font-size:18px;padding:12px 30px}
-body.in-ending .top,body.in-ending .scenes,body.in-ending .cta-wrap,body.in-ending .status,body.in-ending .empty,body.in-ending .drawer,body.in-ending .ticker,body.in-ending .devfab{display:none!important}
+body.in-ending .top,body.in-ending .scenes,body.in-ending .cta-wrap,body.in-ending .status,body.in-ending .empty,body.in-ending .drawer,body.in-ending .ticker,body.in-ending .devfab,body.in-ending .toast{display:none!important}
 .cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
 .cls-box b{color:#bcd4ff}
 .tut-ic{font-size:44px;line-height:1;text-align:center;margin:6px 0 2px;filter:drop-shadow(0 0 14px rgba(255,200,97,.55))}
@@ -2222,7 +2222,7 @@ let ending=null, endImg=null;
 const END_LINES=["ความมืดแห่งความว่างเปล่าสลายไปแล้ว","พระแม่คงคาเสด็จขึ้นจากสายน้ำ มาอวยพรผู้กล้า","ขอให้ทุกคำอธิษฐานที่ลอยไปกับกระทง จงสมดังใจ","ขอให้ความทุกข์โศกลอยไปกับสายน้ำ เหลือไว้แต่ความสุข ความรัก และแสงสว่าง"];
 function playEnding(name,done){
   if(ENDING_BG&&!endImg){ endImg=new Image(); endImg.src=ENDING_BG.src; }
-  ending={t:0,name,done,petals:[],shown:0}; document.body.classList.add("in-ending"); closeCard();
+  ending={t:0,name,done,petals:[],shown:0,motes:[],drops:[],burst:[],lanterns:[],floaters:[],candles:Array.from({length:22},()=>({u:Math.random(),d:Math.random(),p:Math.random()*7})),dust:Array.from({length:40},()=>({u:Math.random(),v:Math.random(),p:Math.random()*7})),risen:false}; document.body.classList.add("in-ending"); closeCard();
   const box=$("ending"), tx=$("endText"); tx.textContent=""; box.hidden=false; $("endBtn").hidden=true;
   const h=el("h2",null,"พรจากพระแม่คงคา"); tx.append(h); END_LINES.forEach(l=>tx.append(el("p",null,l))); tx.append(el("p",null,`🏆 ${name} · ผู้พิชิตบาดาลทั้ง 20 ชั้น`));
   sfx("bell"); playMusic();
@@ -2243,6 +2243,16 @@ function drawEnding(c,t,dt){
   c.fillStyle=rg(c,hx,hy,0,gs*.75,[[0,`rgba(255,235,170,${.55*ease})`],[.5,`rgba(255,200,120,${.18*ease})`],[1,"rgba(255,180,90,0)"]]); c.beginPath(); c.arc(hx,hy,gs*.75,0,TAU); c.fill();
   c.strokeStyle=`rgba(255,230,160,${.55*ease*(.7+.3*Math.sin(t*2))})`; c.lineWidth=2; c.beginPath(); c.arc(hx,hy,hr*1.03,0,TAU); c.stroke();
   c.strokeStyle=`rgba(255,240,190,${.22*ease})`; c.lineWidth=6; c.beginPath(); c.arc(hx,hy,hr*1.03,0,TAU); c.stroke(); c.restore();
+  // far sky lanterns drifting up, candles twinkling on the water, dust floating in the god rays
+  if(E.lanterns.length<14&&Math.random()<dt*1.2) E.lanterns.push({x:rnd(.05,.95)*W,y:hor+rnd(-10,10),s:rnd(3,6),vy:rnd(10,22),p:Math.random()*7});
+  c.save(); c.globalCompositeOperation="lighter"; for(let i=E.lanterns.length-1;i>=0;i--){ const L=E.lanterns[i]; L.y-=L.vy*dt; L.x+=Math.sin(t*.6+L.p)*6*dt; L.s*=1-dt*.03; if(L.y<-20){ E.lanterns.splice(i,1); continue; }
+    const fl=.8+.2*Math.sin(t*9+L.p); c.fillStyle=rg(c,L.x,L.y,0,L.s*4,[[0,`rgba(255,190,90,${.5*fl})`],[1,"rgba(255,150,60,0)"]]); c.beginPath(); c.arc(L.x,L.y,L.s*4,0,TAU); c.fill(); c.fillStyle=`rgba(255,220,150,${.9*fl})`; c.fillRect(L.x-L.s*.5,L.y-L.s*.8,L.s,L.s*1.4); }
+  for(const q of E.candles){ const y=hor+6+Math.pow(q.d,1.4)*(H-hor-12), x=((q.u*W+t*(4+q.d*10))%(W+40))-20, f=.6+.4*Math.sin(t*7+q.p), r=1.2+q.d*2.2; if(Math.abs(x-gx)<gs*.25&&y<waterY+gs*.15) continue;
+    c.fillStyle=rg(c,x,y,0,r*5,[[0,`rgba(255,200,110,${.45*f})`],[1,"rgba(255,160,60,0)"]]); c.beginPath(); c.arc(x,y,r*5,0,TAU); c.fill(); c.fillStyle=`rgba(255,240,200,${f})`; c.beginPath(); c.arc(x,y-r*.4,r*.6,0,TAU); c.fill();
+    c.fillStyle=`rgba(255,200,110,${.18*f})`; c.fillRect(x-r*.6,y+r*.8,r*1.2,r*6); }
+  for(const q of E.dust){ const a=-Math.PI/2+(q.u-.5)*1.4, rr=(q.v*.9+.1)*Math.max(W,H)*.55, x=hx+Math.cos(a)*rr+Math.sin(t*.5+q.p)*14, y=hy+Math.sin(a)*rr*.9+((t*8+q.p*30)%40)-20, al=(.25+.25*Math.sin(t*2+q.p))*Math.min(1,k/3);
+    c.fillStyle=`rgba(255,245,210,${al})`; c.beginPath(); c.arc(x,y,1+q.v*1.4,0,TAU); c.fill(); }
+  c.restore();
   // goddess rising out of the river: the painted pond under her is cut away and her waist fades into the water
   const gImg=goddessMasked();
   if(gImg){ const wy=waterY;
@@ -2260,13 +2270,30 @@ function drawEnding(c,t,dt){
     c.save(); c.beginPath(); c.rect(0,wy-1,W,H); c.clip(); c.globalCompositeOperation="lighter"; c.translate(gx,wy); c.scale(1,.16);
     c.fillStyle=rg(c,0,0,0,gs*.42,[[0,`rgba(255,240,200,${.5*ease})`],[.45,`rgba(255,210,150,${.2*ease})`],[1,"rgba(255,200,140,0)"]]); c.beginPath(); c.arc(0,0,gs*.42,0,TAU); c.fill(); c.restore();
     ripples2(true); }
+  // water drips off her while she rises, splashing back into the river
+  if(rise>0&&rise<1&&Math.random()<dt*26){ E.drops.push({x:gx+rnd(-.18,.18)*gs,y:waterY-rnd(.05,.45)*gs*rise,vy:rnd(20,60)}); }
+  c.save(); c.globalCompositeOperation="lighter"; for(let i=E.drops.length-1;i>=0;i--){ const d=E.drops[i]; d.vy+=420*dt; d.y+=d.vy*dt; if(d.y>=waterY){ E.drops.splice(i,1); for(let q=0;q<4;q++) E.burst.push({x:d.x,y:waterY,vx:rnd(-40,40),vy:rnd(-90,-30),g:300,life:0,dur:rnd(.3,.6),r:rnd(.8,1.6),c:"230,245,255"}); continue; }
+    c.strokeStyle="rgba(230,245,255,.8)"; c.lineWidth=1.4; c.beginPath(); c.moveTo(d.x,d.y); c.lineTo(d.x,d.y-d.vy*.03); c.stroke(); } c.restore();
+  // the moment she has fully risen: a golden bloom of light
+  if(!E.risen&&rise>=1){ E.risen=true; sfx("win"); flash={a:.7,x:hx,y:hy,c:"255,225,150"}; for(let q=0;q<140;q++){ const a=Math.random()*TAU, sp=rnd(60,320); E.burst.push({x:hx,y:hy+gs*.2,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.8,g:20,drag:1.4,life:0,dur:rnd(1,2.4),r:rnd(1.2,3.2),c:Math.random()<.7?"255,220,140":"255,250,230",star:Math.random()<.3}); } }
+  // golden motes rising from the water like bokeh
+  if(E.motes.length<70&&Math.random()<dt*30*Math.min(1,k/2)){ const near=Math.random()<.55; E.motes.push({x:near?gx+rnd(-.45,.45)*gs:Math.random()*W,y:waterY+rnd(0,H-waterY),vy:rnd(16,38),r:rnd(.8,2.6),life:0,dur:rnd(2.5,4.5),p:Math.random()*7,c:Math.random()<.75?"255,215,140":"255,180,220"}); }
+  c.save(); c.globalCompositeOperation="lighter"; for(let i=E.motes.length-1;i>=0;i--){ const m=E.motes[i]; m.life+=dt; if(m.life>m.dur){ E.motes.splice(i,1); continue; } m.y-=m.vy*dt; m.x+=Math.sin(t*1.3+m.p)*10*dt; const a=Math.sin(Math.PI*m.life/m.dur);
+    c.fillStyle=rg(c,m.x,m.y,0,m.r*3,[[0,`rgba(${m.c},${.38*a})`],[.35,`rgba(${m.c},${.12*a})`],[1,`rgba(${m.c},0)`]]); c.beginPath(); c.arc(m.x,m.y,m.r*3,0,TAU); c.fill(); c.fillStyle=`rgba(255,250,235,${.8*a})`; c.beginPath(); c.arc(m.x,m.y,m.r*.45,0,TAU); c.fill(); } c.restore();
+  // bursts (splashes, light blooms, text-line sparkles)
+  c.save(); c.globalCompositeOperation="lighter"; for(let i=E.burst.length-1;i>=0;i--){ const b=E.burst[i]; b.life+=dt; if(b.life>b.dur){ E.burst.splice(i,1); continue; } const dr=b.drag||0; b.vx*=1-dt*dr; b.vy=b.vy*(1-dt*dr)+(b.g||0)*dt; b.x+=b.vx*dt; b.y+=b.vy*dt; const a=1-b.life/b.dur;
+    if(b.star){ const z=b.r*2.6*a; c.fillStyle=`rgba(${b.c},${a})`; c.beginPath(); c.moveTo(b.x,b.y-z); c.lineTo(b.x+z*.22,b.y); c.lineTo(b.x,b.y+z); c.lineTo(b.x-z*.22,b.y); c.fill(); c.beginPath(); c.moveTo(b.x-z,b.y); c.lineTo(b.x,b.y+z*.22); c.lineTo(b.x+z,b.y); c.lineTo(b.x,b.y-z*.22); c.fill(); }
+    else { c.fillStyle=`rgba(${b.c},${a})`; c.beginPath(); c.arc(b.x,b.y,b.r*(.5+a*.5),0,TAU); c.fill(); } } c.restore();
   // golden lotus petals drifting down
   if(E.petals.length<70&&Math.random()<dt*28) E.petals.push({x:Math.random()*W,y:-10,vx:rnd(-12,12),vy:rnd(30,70),r:rnd(0,TAU),vr:rnd(-2,2),s:rnd(3,7),c:Math.random()<.6?"255,215,140":"255,170,200"});
-  c.save(); for(let i=E.petals.length-1;i>=0;i--){ const q=E.petals[i]; q.x+=(q.vx+Math.sin(t+i)*14)*dt; q.y+=q.vy*dt; q.r+=q.vr*dt; if(q.y>H+10){ E.petals.splice(i,1); continue; } c.save(); c.translate(q.x,q.y); c.rotate(q.r); c.fillStyle=`rgba(${q.c},.9)`; c.beginPath(); c.ellipse(0,0,q.s,q.s*.45,0,0,TAU); c.fill(); c.restore(); } c.restore();
+  c.save(); for(let i=E.petals.length-1;i>=0;i--){ const q=E.petals[i]; q.x+=(q.vx+Math.sin(t+i)*14)*dt; q.y+=q.vy*dt; q.r+=q.vr*dt; if(q.y>H+10){ E.petals.splice(i,1); continue; } if(q.land==null) q.land=waterY+Math.random()*(H-waterY)*.9; if(q.y>q.land){ E.petals.splice(i,1); if(E.floaters.length<40) E.floaters.push({x:q.x,y:q.land,r:q.r,s:q.s,c:q.c,life:0}); continue; }
+    c.save(); c.globalCompositeOperation="lighter"; c.fillStyle=rg(c,q.x,q.y,0,q.s*1.8,[[0,`rgba(${q.c},.18)`],[1,`rgba(${q.c},0)`]]); c.beginPath(); c.arc(q.x,q.y,q.s*1.8,0,TAU); c.fill(); c.restore(); c.save(); c.translate(q.x,q.y); c.rotate(q.r); c.fillStyle=`rgba(${q.c},.9)`; c.beginPath(); c.ellipse(0,0,q.s,q.s*.45,0,0,TAU); c.fill(); c.restore(); } c.restore();
+  for(let i=E.floaters.length-1;i>=0;i--){ const f=E.floaters[i]; f.life+=dt; if(f.life>9){ E.floaters.splice(i,1); continue; } f.x+=8*dt; const a=Math.min(1,(9-f.life)/2);
+    c.save(); c.translate(f.x,f.y+Math.sin(t*1.5+f.r)*1.2); c.scale(1,.45); c.rotate(f.r); c.globalAlpha=.85*a; c.fillStyle=`rgb(${f.c})`; c.beginPath(); c.ellipse(0,0,f.s,f.s*.45,0,0,TAU); c.fill(); c.restore(); }
   // sparkles
-  c.save(); c.globalCompositeOperation="lighter"; for(let i=0;i<30;i++){ const a=t*.4+i*2.39, rr=gs*(.35+.25*Math.sin(t*.7+i)), x=gx+Math.cos(a)*rr, y=gy-gs*.5+Math.sin(a)*rr*.7, z=2+2*Math.sin(t*5+i); c.fillStyle=`rgba(255,240,200,${.8*ease})`; c.fillRect(x-z/2,y-z/2,z,z); } c.restore();
+  c.save(); c.globalCompositeOperation="lighter"; for(let i=0;i<30;i++){ const a=t*.4+i*2.39, rr=gs*(.35+.25*Math.sin(t*.7+i)), x=hx+Math.cos(a)*rr, y=hy+gs*.2+Math.sin(a)*rr*.7, z=(3+3*Math.sin(t*5+i))*(1+(i%3)*.4); c.fillStyle=`rgba(255,240,200,${.85*ease})`; c.beginPath(); c.moveTo(x,y-z); c.lineTo(x+z*.2,y); c.lineTo(x,y+z); c.lineTo(x-z*.2,y); c.fill(); c.beginPath(); c.moveTo(x-z,y); c.lineTo(x,y+z*.2); c.lineTo(x+z,y); c.lineTo(x,y-z*.2); c.fill(); } c.restore();
   // text reveal
-  const tx=$("endText"); const nodes=tx.children; const due=Math.floor((k-3.2)/1.8); while(E.shown<nodes.length&&E.shown<=due){ nodes[E.shown].classList.add("show"); E.shown++; if(E.shown===1) sfx("chime"); }
+  const tx=$("endText"); const nodes=tx.children; const due=Math.floor((k-3.2)/1.8); while(E.shown<nodes.length&&E.shown<=due){ nodes[E.shown].classList.add("show"); E.shown++; sfx("chime"); const ty=H-($("endText").getBoundingClientRect().height)-H*.05+E.shown*22; for(let q=0;q<26;q++){ const a=-Math.PI*Math.random(), sp=rnd(40,160); E.burst.push({x:W/2+rnd(-.3,.3)*Math.min(W,700),y:ty,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,g:40,drag:1.6,life:0,dur:rnd(.7,1.4),r:rnd(1,2.4),c:"255,225,150",star:Math.random()<.4}); } }
   if(E.shown>=nodes.length&&k>3.2+nodes.length*1.8+.8) $("endBtn").hidden=false;
 }
 function openPractice(){
