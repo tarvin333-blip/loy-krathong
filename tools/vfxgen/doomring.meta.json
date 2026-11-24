@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "2f536566-7fac-401a-b07c-80927449fe7b",
+  "canvas": {
+   "h": 110,
+   "w": 278
+  },
+  "frames": 8,
+  "fps": 14,
+  "loop": false,
+  "anchor": {
+   "x": 139,
+   "y": 55,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-doomring.gif": "https://api.pixellab.ai/mcp/pixel-tools/40cd518d-5500-4e1e-b745-de9f98ae3a00/lk-doomring.gif",
+  "lk-doomring.png": "https://api.pixellab.ai/mcp/pixel-tools/40cd518d-5500-4e1e-b745-de9f98ae3a00/lk-doomring.png",
+  "lk-doomring.json": "https://api.pixellab.ai/mcp/pixel-tools/40cd518d-5500-4e1e-b745-de9f98ae3a00/lk-doomring.json"
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "7e5ed55f-1ef7-4e1e-af84-d02defe73c59",
+  "canvas": {
+   "h": 112,
+   "w": 96
+  },
+  "frames": 24,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 48,
+   "y": 90,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-soulstorm.gif": "https://api.pixellab.ai/mcp/pixel-tools/de3cb947-4605-4334-8cf7-e1dd92e49cf5/lk-soulstorm.gif",
+  "lk-soulstorm.png": "https://api.pixellab.ai/mcp/pixel-tools/de3cb947-4605-4334-8cf7-e1dd92e49cf5/lk-soulstorm.png",
+  "lk-soulstorm.json": "https://api.pixellab.ai/mcp/pixel-tools/de3cb947-4605-4334-8cf7-e1dd92e49cf5/lk-soulstorm.json"
+ }
+}

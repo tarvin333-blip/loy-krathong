@@ -245,6 +245,21 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
 .ascend b{color:var(--gold);font-size:14px}
 .ascend small{grid-column:1;font-size:11px;color:var(--ink-dim)}
 .ascend .btn{grid-row:1/3;grid-column:2;padding:8px 12px;font-size:13px}
+.cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
+.cls-box b{color:#bcd4ff}
+.tut-ic{font-size:44px;line-height:1;text-align:center;margin:6px 0 2px;filter:drop-shadow(0 0 14px rgba(255,200,97,.55))}
+.tut-tx{font-size:15px;line-height:1.6;color:var(--ink);margin:6px 0 10px}
+.tut-dots{display:flex;gap:6px;justify-content:center;margin:4px 0 10px}
+.tut-dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.22);cursor:pointer}
+.tut-dots i.on{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.myk small.goal{color:#ffd88a;font-weight:600}
+.btn.glow{animation:btnGlow 1.4s ease-in-out infinite}
+@keyframes btnGlow{50%{box-shadow:0 0 14px rgba(255,200,97,.8);border-color:var(--gold)}}
+.btn.dun{background:linear-gradient(180deg,#5a1020,#2a0614);border-color:#c0304a;color:#ffd0d6}
+.dun-floors{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:10px 0}
+.dun-floors i{height:10px;border-radius:3px;background:rgba(255,255,255,.12)}
+.dun-floors i.done{background:linear-gradient(90deg,#ff5a6a,#ff9a5a);box-shadow:0 0 6px rgba(255,90,100,.6)}
+.dun-floors i.boss{outline:1px solid #ffb04a}
 .pick button.on{border-color:var(--gold);background:rgba(255,200,97,.12)}
 </style>
 </head>
@@ -625,7 +640,8 @@ function drawAccessory(c,k,s,t,layer,hasPhoto){
 }
 function propDraw(c,n,cx,bottom,w,smooth){ const P=PROP[n]; const h=w*P.img.height/P.img.width; c.save(); c.imageSmoothingEnabled=!!smooth; c.drawImage(P.img,cx-w/2,bottom-h,w,h); c.restore(); return h; }
 /* PixelLab sprites (tools/krathong_art.py); fx/fy = candle flame centre as a fraction of the sprite */
-const KR_ART={banana:{fx:.47,fy:.15},lotus:{fx:.49,fy:.13},bread:{fx:.465,fy:.26},coconut:{fx:.5,fy:.13},pride:{fx:.48,fy:.3},cat:{fx:.44,fy:.15},star:{fx:.47,fy:.26}};
+const KR_ART={banana:{fx:.47,fy:.15},lotus:{fx:.49,fy:.13},bread:{fx:.465,fy:.26},coconut:{fx:.5,fy:.13},pride:{fx:.48,fy:.3},cat:{fx:.44,fy:.15},star:{fx:.47,fy:.26},
+  m_ghost:{fx:.45,fy:.19,glow:"120,170,255"},m_skull:{fx:.38,fy:.15,glow:"150,255,110"},m_swamp:{fx:.51,fy:.21,glow:"200,110,255"},m_serpent:{fx:.49,fy:.16,glow:"210,120,255"},m_hell:{fx:.5,fy:.29,glow:"255,90,50"},m_boss:{fx:.5,fy:.19,glow:"255,50,60"},m_titan:{fx:.5,fy:.33,glow:"255,40,50"}};
 for(const [t,a] of Object.entries(KR_ART)){ a.img=new Image(); a.ok=false; a.img.onload=()=>{ a.ok=true; spriteCache.clear(); }; a.img.src="img/kr/"+t+".png"; }
 const ART_W=2.3, ART_BASE=.45;
 function artOf(type){ const a=KR_ART[type]; return a&&a.ok?a:null; }
@@ -672,8 +688,9 @@ function flame(c,x,y,s,t,seed,big){
 
 function krDynamic(c,k,s,t){
   if(artOf(k.type)){ const f=flamePos(k,s), seed=k.seed||.3, fl=1+Math.sin(t*17+seed*40)*.12+Math.sin(t*7.3+seed*9)*.08;
-    const cd=CANDLE_BY[k.candle]||CANDLES[0];
+    const cd=CANDLE_BY[k.candle]||CANDLES[0], gc=(KR_ART[k.type]||{}).glow;
     c.save(); c.globalCompositeOperation="lighter";
+    if(gc){ c.fillStyle=rg(c,f.x,f.y,0,s*.6*fl,[[0,`rgba(255,255,255,.4)`],[.3,`rgba(${gc},.3)`],[1,`rgba(${gc},0)`]]); c.beginPath(); c.arc(f.x,f.y,s*.6*fl,0,TAU); c.fill(); c.restore(); return; }
     c.fillStyle=rg(c,f.x,f.y,0,s*.55*fl,[[0,"rgba(255,245,200,.55)"],[.35,"rgba(255,190,90,.22)"],[1,"rgba(255,140,40,0)"]]); c.beginPath(); c.arc(f.x,f.y,s*.55*fl,0,TAU); c.fill();
     c.fillStyle=`rgba(${parseInt(cd.c.slice(1,3),16)},${parseInt(cd.c.slice(3,5),16)},${parseInt(cd.c.slice(5,7),16)},.16)`; c.beginPath(); c.arc(f.x,f.y,s*.28*fl,0,TAU); c.fill();
     c.restore();
@@ -706,9 +723,10 @@ function krFull(c,k,s,t,photo){
 
 function drawGlow(c,k,s,amp){
   c.save(); c.globalCompositeOperation="lighter";
-  const a=amp||1;
+  const a=amp||1, gc=(KR_ART[k.type]||{}).glow;
   const fp=flamePos(k,s);
-  c.fillStyle=rg(c,fp.x,fp.y,0,2.8*s,[[0,`rgba(255,200,110,${.36*a})`],[.4,`rgba(255,160,60,${.11*a})`],[1,"rgba(255,140,40,0)"]]);
+  if(gc) c.fillStyle=rg(c,fp.x,fp.y,0,3*s,[[0,`rgba(${gc},${.42*a})`],[.4,`rgba(${gc},${.13*a})`],[1,`rgba(${gc},0)`]]);
+  else c.fillStyle=rg(c,fp.x,fp.y,0,2.8*s,[[0,`rgba(255,200,110,${.36*a})`],[.4,`rgba(255,160,60,${.11*a})`],[1,"rgba(255,140,40,0)"]]);
   c.beginPath(); c.arc(fp.x,fp.y,2.8*s,0,TAU); c.fill();
   if(k.type==="star"){ c.fillStyle=rg(c,0,0,0,2.2*s,[[0,"rgba(140,200,255,.32)"],[1,"rgba(120,80,255,0)"]]); c.beginPath(); c.arc(0,0,2.2*s,0,TAU); c.fill(); }
   c.restore();
@@ -1355,6 +1373,7 @@ function frame(nowP){
     c.fillStyle=rg(c,L.x+off,ry,0,L.s*2,[[0,`rgba(255,170,70,${a})`],[1,"rgba(255,140,40,0)"]]); c.beginPath(); c.ellipse(L.x+off,ry,L.s*1.4,L.s*2.2,0,0,TAU); c.fill(); }
   for(const p of sparks){ if(!p.fw||p.y>HOR) continue; const ry=HOR+(HOR-p.y)*.8; if(ry>H) continue; const a=(1-p.life/p.dur)*.28; c.fillStyle=`rgba(${p.c},${a})`; c.fillRect(p.x+Math.sin(ry*.09-t*1.7)*2,ry,p.r*1.3,2.4); }
   c.restore();
+  if(inDungeon()) drawDungeon(c,t,dt);
   // ripples
   for(let i=ripples.length-1;i>=0;i--){ const r=ripples[i]; r.life+=dt; const k=r.life/r.dur; if(k>=1){ ripples.splice(i,1); continue; } if(k<=0) continue;
     c.strokeStyle=`rgba(${r.c||"220,230,255"},${.55*(1-k)})`; c.lineWidth=1.2;
@@ -1404,10 +1423,10 @@ function frame(nowP){
     if(hi){ c.strokeStyle=`rgba(255,210,120,${.5+.5*Math.sin(t*6)})`; c.lineWidth=2; c.beginPath(); c.ellipse(p.x,p.y+p.s*.1,p.s*1.6,p.s*.55,0,0,TAU); c.stroke(); }
   }
   }
-  stepAmbient(c,t,dt);
-  drawGimmicksFront(c,t,dt);
+  const dun=inDungeon();
+  if(!dun){ stepAmbient(c,t,dt); drawGimmicksFront(c,t,dt); } else drawDungeonFront(c,t,dt);
   // fish
-  nextJump-=dt; if(nextJump<0){ nextJump=rnd(4,9); const l=Math.random(); const j={x:rnd(.1,.9)*W,y:laneY(l),s:unit()*(.4+l*.7),life:0,dir:Math.random()<.5?-1:1}; jumps.push(j); ripples.push({x:j.x,y:j.y,r:unit()*1.4,life:0,dur:1.4}); }
+  nextJump-=dt; if(dun) nextJump=Math.max(nextJump,1); if(nextJump<0){ nextJump=rnd(4,9); const l=Math.random(); const j={x:rnd(.1,.9)*W,y:laneY(l),s:unit()*(.4+l*.7),life:0,dir:Math.random()<.5?-1:1}; jumps.push(j); ripples.push({x:j.x,y:j.y,r:unit()*1.4,life:0,dur:1.4}); }
   for(let i=jumps.length-1;i>=0;i--){ const j=jumps[i]; j.life+=dt; const k=j.life/.9; if(k>=1){ ripples.push({x:j.x+j.dir*j.s*2,y:j.y,r:j.s*2,life:0,dur:1.3}); for(let q=0;q<8;q++){ const a=-Math.PI*Math.random(); sparks.push({x:j.x+j.dir*j.s*2,y:j.y,vx:Math.cos(a)*40,vy:Math.sin(a)*80,g:240,life:0,dur:.6,r:1.2,c:"200,225,255"}); } jumps.splice(i,1); continue; }
     const fx=j.x+j.dir*k*j.s*2, fy=j.y-Math.sin(k*Math.PI)*j.s*2.2; c.save(); c.translate(fx,fy); c.rotate(j.dir*(k-.5)*2.4); c.scale(j.dir,1);
     if(PROP.fish.ok){ propDraw(c,"fish",0,j.s*.55,j.s*1.4,false); c.restore(); continue; }
@@ -1416,9 +1435,9 @@ function frame(nowP){
   // fireflies
   c.save(); c.globalCompositeOperation="lighter";
   const ffc = scene===MAGIC_SCENE ? "140,235,255" : "210,255,120";
-  for(const f of flies){ f.x+=Math.cos(t*f.sp+f.p)*.3; f.y+=Math.sin(t*f.sp*1.3+f.p)*.2; const a=Math.max(0,Math.sin(t*2*f.sp+f.p)); c.fillStyle=`rgba(${ffc},${a*.9})`; c.beginPath(); c.arc(f.x,f.y,1.5,0,TAU); c.fill(); c.fillStyle=`rgba(${ffc},${a*.09})`; c.beginPath(); c.arc(f.x,f.y,4.5,0,TAU); c.fill(); }
+  if(!dun) for(const f of flies){ f.x+=Math.cos(t*f.sp+f.p)*.3; f.y+=Math.sin(t*f.sp*1.3+f.p)*.2; const a=Math.max(0,Math.sin(t*2*f.sp+f.p)); c.fillStyle=`rgba(${ffc},${a*.9})`; c.beginPath(); c.arc(f.x,f.y,1.5,0,TAU); c.fill(); c.fillStyle=`rgba(${ffc},${a*.09})`; c.beginPath(); c.arc(f.x,f.y,4.5,0,TAU); c.fill(); }
   c.restore();
-  if(!reduced){
+  if(!reduced&&!dun){
     nextLantern-=dt; if(nextLantern<0){ nextLantern = scene===2 ? rnd(.5,1.4) : rnd(5,10); addLantern(rnd(.05,.95)*W, HOR-rnd(0,20), true); }
     nextFire-=dt; if(nextFire<0){ nextFire = scene===0 ? rnd(9,16) : rnd(18,30); launch(rnd(.15,.85)*W); }
   }
@@ -1626,8 +1645,17 @@ const BSTATS={
   coconut:{hp:165,atk:12,def:18,spd:.75,pas:"กะลาแกร่ง: รับแรงชนน้อยลง 30%",sig:"shell"},
   pride:{hp:105,atk:15,def:10,spd:1.2,pas:"รุ้งพลังใจ: SP มาไวขึ้น 50%",sig:"rainbow"},
   cat:{hp:95,atk:16,def:9,spd:1.25,pas:"แมวเหมียว: ชนติดคริ 25% (x1.8)",sig:"claw"},
-  star:{hp:92,atk:13,def:8,spd:1.05,pas:"พลังดวงดาว: สกิลแรงขึ้น 35%",sig:"meteor"}
+  star:{hp:92,atk:13,def:8,spd:1.05,pas:"พลังดวงดาว: สกิลแรงขึ้น 35%",sig:"meteor"},
+  // villains of the dungeon (never offered to players)
+  m_ghost:{hp:100,atk:13,def:9,spd:1.1,sig:"haunt"},
+  m_skull:{hp:120,atk:14,def:12,spd:.9,sig:"curse"},
+  m_swamp:{hp:130,atk:11,def:11,spd:.85,sig:"poison"},
+  m_serpent:{hp:105,atk:16,def:9,spd:1.25,sig:"shadow"},
+  m_hell:{hp:125,atk:15,def:13,spd:.95,sig:"hellfire"},
+  m_boss:{hp:160,atk:16,def:15,spd:.95,sig:"hellfire"},
+  m_titan:{hp:180,atk:17,def:16,spd:.8,sig:"abyss"}
 };
+const MONSTERS={m_ghost:"กระทงผีพราย",m_skull:"กระทงกะโหลกสาป",m_swamp:"กระทงหนองพิษ",m_serpent:"กระทงอสรพิษเงา",m_hell:"กระทงเพลิงนรก",m_boss:"ขุนพลปีศาจ",m_titan:"ราชาปีศาจแห่งบาดาล"};
 const SKILLS={
   dash:{n:"พุ่งรักแรง",d:"พุ่งชนศัตรูใกล้สุด แรงชน x1.6",cost:30,c:"255,120,170"},
   gold:{n:"คลื่นเงินทอง",d:"คลื่นทองผลักศัตรูรอบตัว ดาเมจ 18",cost:45,c:"255,210,90"},
@@ -1649,7 +1677,15 @@ const SKILLS={
   tide:{n:"คลื่นยักษ์ถล่ม",d:"คลื่นยักษ์ซัดศัตรูทุกลำ ลำละ 28 กระเด็นไกล",cost:60,c:"120,200,255",sig:1,cls:1},
   wall:{n:"กำแพงบัวทอง",d:"เกราะ 3 วิ สะท้อนแรงชน และฟื้น HP 25",cost:55,c:"255,215,120",sig:1,cls:1},
   chain:{n:"สายฟ้าลูกโซ่",d:"สายฟ้าผ่าต่อกันทุกลำ ลำละ 24",cost:60,c:"200,180,255",sig:1,cls:1},
-  phantom:{n:"เงาพันร่าง",d:"พุ่งชนต่อเนื่อง 3 ครั้ง",cost:50,c:"255,160,240",sig:1,cls:1}
+  phantom:{n:"เงาพันร่าง",d:"พุ่งชนต่อเนื่อง 3 ครั้ง",cost:50,c:"255,160,240",sig:1,cls:1},
+  haunt:{n:"เรียกวิญญาณ",d:"ผีพราย 3 ตนไล่หลอก",cost:45,c:"150,190,255",sig:1,mon:1},
+  curse:{n:"คำสาปกะโหลก",d:"ศัตรูรับดาเมจเพิ่ม 40% 5 วิ",cost:40,c:"150,255,110",sig:1,mon:1},
+  poison:{n:"หมอกพิษหนองน้ำ",d:"พิษ 5/วิ 6 วิ",cost:40,c:"190,110,255",sig:1,mon:1},
+  shadow:{n:"จู่โจมเงา",d:"หายตัวแล้วโผล่ชนจากด้านหลัง",cost:35,c:"200,120,255",sig:1,mon:1},
+  hellfire:{n:"เสาเพลิงนรก",d:"เสาไฟผุดใต้ศัตรู ดาเมจ 30",cost:50,c:"255,90,60",sig:1,mon:1},
+  abyss:{n:"เพลิงบาดาลปะทุ",d:"ไฟนรกปะทุใต้ศัตรู ดาเมจ 40 กระเด็น",cost:45,c:"255,60,60",sig:1,mon:1},
+  doom:{n:"วงแหวนวันสิ้นโลก",d:"คลื่นปีศาจแผ่ทั้งสนาม ดาเมจ 26 และสาป",cost:60,c:"255,40,80",sig:1,mon:1},
+  soulstorm:{n:"พายุวิญญาณ",d:"เรียกวิญญาณ 5 ตน และฟื้น HP",cost:55,c:"160,200,255",sig:1,mon:1}
 };
 // each เซียมซี fortune grants one skill
 const CLASS_INFO={
@@ -1693,6 +1729,8 @@ function statsFor(type,prog){ const b=BSTATS[type]||BSTATS.banana, L=(prog&&prog
   let ramMul=1, spMul=1, critC=0;
   if(cl==="warrior"){ atk*=1.15; ramMul=1.15; } if(cl==="guardian"){ hp*=1.2; def*=1.2; } if(cl==="mystic"){ sk*=1.25; spMul=1.3; } if(cl==="racer"){ spd*=1.12; critC=.15; }
   return {hp:Math.round(hp),atk:+atk.toFixed(1),def:+def.toFixed(1),spd:+spd.toFixed(2),sk:+sk.toFixed(2),ramMul,spMul,critC}; }
+const CLASS_LV=20, CLASS_COST=200;
+function classOpen(P){ return !!P&&((P.level||1)>=CLASS_LV||(P.stars||0)>=1); }
 function classSkills(prog){ const c=prog&&prog.cls&&CLASS_INFO[prog.cls]; return c?[c.skill]:[]; }
 function starStr(n){ return n?"★".repeat(n):""; }
 function makeFighter(k,isPlayer,o){
@@ -1718,6 +1756,7 @@ function newChallenges(){ const seen=lsGet("lk.seenCh",0); let n=0; for(const v 
 function setBattleBadge(){ $("btnBattle").classList.toggle("has-news",newChallenges()>0); }
 
 async function openBattleMenu(){
+  if(!lsGet("lk.tut",0)){ openTutorial(0); return; }
   showCard(card=>{ card.append(el("div","kind","ศึกกระทง ⚔")); card.append(el("h3",null,"กระทงของฉัน")); card.append(el("p","meta","กำลังโหลดค่าพลัง…")); });
   await refreshMyProgs(); setBattleBadge();
   showCard(card=>{
@@ -1730,19 +1769,145 @@ async function openBattleMenu(){
     for(const id of ids){ const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P) continue;
       const row=el("div","myk"); const tx=el("div"); tx.style.minWidth="0";
       tx.append(el("b",null,k.name+" · "+(TYPE_BY[k.type]||TYPES[0]).name));
-      tx.append(el("small",null,`${P.stars?starStr(P.stars)+" ":""}${P.cls?CLASS_INFO[P.cls].n+" · ":""}Lv.${P.level} · ด่าน ${P.pve||1} · 💰 ${P.coins} · ⚔ kill ${P.kills} · ชนะ ${P.wins} แพ้ ${P.losses} · ป้องกันได้ ${P.defWins}/${P.defWins+P.defLosses}`));
+      tx.append(el("small",null,`${P.stars?starStr(P.stars)+" ":""}${P.cls?CLASS_INFO[P.cls].n+" · ":""}Lv.${P.level} · ด่าน ${P.pve||1} · ดันเจี้ยน ${P.bestDungeon||0}/10 · 💰 ${P.coins} · ⚔ kill ${P.kills} · ชนะ ${P.wins} แพ้ ${P.losses}`));
+      tx.append(el("small","goal","➜ "+nextGoal(P)));
       row.append(tx); const bt=el("div","myk-acts");
-      const a=el("button","btn","อัปเกรด"); a.addEventListener("click",()=>openUpgrade(id)); bt.append(a);
+      const a=el("button","btn"+((!P.sticks||(classOpen(P)&&!P.cls))?" glow":""),"อัปเกรด"); a.addEventListener("click",()=>openUpgrade(id)); bt.append(a);
       const b=el("button","btn","ด่านฝึก"); b.addEventListener("click",()=>prepareFight(id,"pve")); bt.append(b);
+      const dg=el("button","btn dun","ดันเจี้ยน"); dg.addEventListener("click",()=>openDungeonIntro(id)); bt.append(dg);
       const c=el("button","btn primary","ท้าดวล"); c.addEventListener("click",()=>openDuelPicker(id)); bt.append(c);
       row.append(bt); list.append(row); }
     card.append(list);
     const acts=el("div","acts");
+    const tu=el("button","btn","📖 วิธีเล่น"); tu.addEventListener("click",()=>openTutorial(0)); acts.append(tu);
     const nb=newChallenges(); const ib=el("button","btn","ใครมาท้าฉัน"+(nb?` (${nb} ใหม่)`:"")); ib.addEventListener("click",openInbox); acts.append(ib);
     const lb=el("button","btn","ทำเนียบนักชน"); lb.addEventListener("click",openBoard); acts.append(lb);
     const pr=el("button","btn","ฝึกซ้อม (ไม่ได้เหรียญ)"); pr.addEventListener("click",openPractice); acts.append(pr);
     backBtn(acts,"ปิด",closeCard); card.append(acts);
   });
+}
+const TUTORIAL=[
+  ["🏮","ลอยกระทงก่อน","กระทงที่คุณลอยในแม่น้ำ จะกลายเป็นนักชนของคุณเลย แต่ละแบบมีค่าพลังและสกิลประจำตัวไม่เหมือนกัน (ล่มในศึกได้ แต่กระทงจริงในแม่น้ำไม่หายนะ)"],
+  ["🕹","บังคับยังไง","ลากนิ้ว/เมาส์ให้กระทงว่ายตาม หรือใช้ปุ่มลูกศร/WASD พุ่งเข้าชนแรงๆ ยิ่งเร็วยิ่งเจ็บ SP จะเต็มเองเรื่อยๆ กดปุ่มสกิลด้านล่าง (หรือเลข 1–3) เพื่อใช้สกิล"],
+  ["⚔","ด่านฝึก → ได้เหรียญ","เริ่มที่ด่านฝึกก่อน ชนะแล้วได้เหรียญ ด่านลึกขึ้นเหรียญเยอะขึ้น ทุก 5 ด่านมีบอสมงกุฎ (เหรียญ x2)"],
+  ["💰","อัปเกรด","เอาเหรียญไปกด + อัปค่าพลัง HP / ATK / DEF / SPD / พลังสกิล อัป 1 ครั้ง = กระทง Lv. +1 อัปถาวร"],
+  ["🎋","เซียมซีสกิล","เขย่าเซียมซีครั้งแรกฟรี ได้สกิลเสริม 1 สกิล ไม่ชอบเขย่าใหม่ได้ (40 เหรียญ)"],
+  ["🛡","คลาส (ปลดที่ Lv."+CLASS_LV+")","อัปค่าพลังครบ "+(CLASS_LV-1)+" ครั้ง กระทงถึง Lv."+CLASS_LV+" ก็เลือกคลาสได้เลย ฟรีครั้งแรก มี นักรบ / ผู้พิทักษ์ / จอมเวท / นักซิ่ง ได้โบนัส + สกิลคลาส เปลี่ยนได้ทีหลัง ("+CLASS_COST+" เหรียญ)"],
+  ["🏰","ดันเจี้ยน","ลงไปปราบกระทงปีศาจ 10 ชั้น เลือดไม่รีเซ็ต (ฟื้น 30% ทุกชั้น) ผ่านแต่ละชั้นจะเลือกลงต่อหรือถอยกลับพร้อมเหรียญก็ได้ ชั้น 5 มีขุนพลปีศาจ ชั้น 10 คือราชาปีศาจยักษ์"],
+  ["🤺","ท้าดวล","ท้ากระทงของคนอื่นได้ ระบบจะใช้ค่าพลังที่เขาอัปไว้สู้แทน ใครมาท้าคุณ ดูได้ที่ “ใครมาท้าฉัน”"],
+  ["★","ยกระดับดาว (เป้าหมายระยะยาว)","อัปค่าพลังทุกตัวจนตัน แล้วกดยกระดับ จะได้ ★ ค่าพลัง +8% และเพดานเลเวลสูงขึ้น"]
+];
+function openTutorial(i,back){
+  i=Math.max(0,Math.min(TUTORIAL.length-1,i|0)); const [ic,ti,tx]=TUTORIAL[i]; lsSet("lk.tut",1);
+  showCard(card=>{
+    card.append(el("div","kind",`วิธีเล่นศึกกระทง · ${i+1}/${TUTORIAL.length}`));
+    const h=el("div","tut-ic",ic); card.append(h); card.append(el("h3",null,ti)); card.append(el("p","tut-tx",tx));
+    const dots=el("div","tut-dots"); TUTORIAL.forEach((_,j)=>{ const d=el("i",j===i?"on":null); d.addEventListener("click",()=>openTutorial(j,back)); dots.append(d); }); card.append(dots);
+    const acts=el("div","acts");
+    if(i>0) backBtn(acts,"ก่อนหน้า",()=>openTutorial(i-1,back));
+    if(i<TUTORIAL.length-1){ const nx=el("button","btn primary","ถัดไป"); nx.addEventListener("click",()=>openTutorial(i+1,back)); acts.append(nx); backBtn(acts,"ข้าม",back||openBattleMenu); }
+    else { const ok=el("button","btn primary","เข้าใจแล้ว ลุย!"); ok.addEventListener("click",back||openBattleMenu); acts.append(ok); }
+    card.append(acts);
+  });
+}
+function nextGoal(P){
+  if(!P.sticks) return "เป้าหมาย: เข้า “อัปเกรด” แล้วเขย่าเซียมซีรับสกิลฟรี";
+  if(!classOpen(P)) return `เป้าหมาย: อัปค่าพลังอีก ${CLASS_LV-P.level} ครั้ง เพื่อปลดล็อกคลาส`;
+  if(!P.cls) return "เป้าหมาย: ปลดล็อกคลาสแล้ว! เข้า “อัปเกรด” เลือกคลาสได้เลย (ฟรี)";
+  if(!(P.bestDungeon>0)) return "เป้าหมาย: ลองลงดันเจี้ยนปราบกระทงปีศาจ";
+  if(P.bestDungeon<10) return `เป้าหมาย: ดันเจี้ยนไปให้ถึงชั้น 10 (ดีสุดชั้น ${P.bestDungeon})`;
+  return "เป้าหมาย: อัปทุกค่าให้ตันแล้วยกระดับดาว ★";
+}
+/* ================= dungeon: 10 floors of villain krathongs ================= */
+const DUN_FLOORS=10;
+const DUN_PLAN=[null,["m_ghost"],["m_ghost","m_skull"],["m_swamp","m_ghost"],["m_serpent","m_skull","m_ghost"],"mini",["m_swamp","m_serpent"],["m_hell","m_skull","m_ghost"],["m_serpent","m_swamp","m_hell"],["m_hell","m_serpent","m_skull"],"titan"];
+const dunReward=f=>(15+12*f)*(f%5===0?2:1);
+function dunTotal(n){ let g=0; for(let f=1;f<=n;f++) g+=dunReward(f); return g; }
+let dunRun=null;
+function inDungeon(){ return !!(battle&&battle.mode==="dungeon"); }
+/* dungeon scene: a painted cave (until a backdrop image is set) with dark mirrored water, fog and rising embers */
+// painted backdrops per depth: {from: first floor, src}. Floors with no image use the painted cave below.
+const DUNGEON_BGS=[{from:1,src:"img/dungeon1.webp",hor:.52},{from:5,src:"img/dungeon2.webp",hor:.525,lava:true}];
+let dunCv=null, dunKey="", dunImg=null, dunImgSrc="", DUNGEON_BG=null, dunFog=[], dunEmbers=[];
+function pickDungeonBg(floor){ let b=null; for(const d of DUNGEON_BGS) if(floor>=d.from) b=d; DUNGEON_BG=b; if(b&&dunImgSrc!==b.src){ dunImgSrc=b.src; dunImg=new Image(); dunImg.onload=()=>{ dunKey=""; }; dunImg.src=b.src; } if(!b){ dunImg=null; dunImgSrc=""; } dunKey=""; }
+function buildDungeonBg(){
+  const key=W+"x"+H+"x"+DPR+"x"+HOR+(dunImg&&dunImg.complete?"i":""); if(dunCv&&dunKey===key) return; dunKey=key;
+  dunCv=document.createElement("canvas"); dunCv.width=Math.ceil(W*DPR); dunCv.height=Math.ceil(H*DPR); const x=dunCv.getContext("2d"); x.setTransform(DPR,0,0,DPR,0,0);
+  if(DUNGEON_BG&&dunImg&&dunImg.complete&&dunImg.naturalWidth){ const iw=dunImg.naturalWidth, ih=dunImg.naturalHeight, sc=Math.max(W/iw,H/ih), oy=Math.min(0,Math.max(H-ih*sc,HOR-(DUNGEON_BG.hor||.5)*ih*sc)); x.drawImage(dunImg,(W-iw*sc)/2,oy,iw*sc,ih*sc); return; }
+  let seed=7; const R=()=>{ seed=(seed*16807)%2147483647; return seed/2147483647; };
+  x.fillStyle=lg(x,0,0,0,HOR,[[0,"#05030b"],[.6,"#140818"],[1,"#2a0d1c"]]); x.fillRect(0,0,W,HOR+2);
+  // the infernal gate far away: red light pouring through a ruined arch
+  const gx=W*.5, gy=HOR, gw=Math.min(W*.22,260), gh=Math.min(HOR*.62,gw*1.5);
+  x.fillStyle=rg(x,gx,gy-gh*.4,0,gw*2.4,[[0,"rgba(255,70,50,.55)"],[.35,"rgba(160,20,40,.25)"],[1,"rgba(80,0,30,0)"]]); x.fillRect(0,0,W,HOR);
+  x.fillStyle="#0b0510"; x.beginPath(); x.moveTo(gx-gw*1.1,gy); x.lineTo(gx-gw*1.1,gy-gh*.7); x.quadraticCurveTo(gx-gw*1.1,gy-gh*1.25,gx,gy-gh*1.3); x.quadraticCurveTo(gx+gw*1.1,gy-gh*1.25,gx+gw*1.1,gy-gh*.7); x.lineTo(gx+gw*1.1,gy);
+  x.lineTo(gx+gw*.62,gy); x.lineTo(gx+gw*.62,gy-gh*.62); x.quadraticCurveTo(gx+gw*.6,gy-gh*.98,gx,gy-gh); x.quadraticCurveTo(gx-gw*.6,gy-gh*.98,gx-gw*.62,gy-gh*.62); x.lineTo(gx-gw*.62,gy); x.closePath(); x.fill();
+  x.fillStyle=lg(x,gx,gy-gh,gx,gy,[[0,"rgba(255,120,60,.25)"],[1,"rgba(255,60,40,.7)"]]); x.beginPath(); x.moveTo(gx-gw*.62,gy); x.lineTo(gx-gw*.62,gy-gh*.62); x.quadraticCurveTo(gx-gw*.6,gy-gh*.98,gx,gy-gh); x.quadraticCurveTo(gx+gw*.6,gy-gh*.98,gx+gw*.62,gy-gh*.62); x.lineTo(gx+gw*.62,gy); x.closePath(); x.fill();
+  // horns on the gate
+  x.fillStyle="#0b0510"; for(const sd of [-1,1]){ x.beginPath(); x.moveTo(gx+sd*gw*.9,gy-gh*1.1); x.quadraticCurveTo(gx+sd*gw*1.7,gy-gh*1.3,gx+sd*gw*1.5,gy-gh*1.75); x.quadraticCurveTo(gx+sd*gw*1.35,gy-gh*1.35,gx+sd*gw*.7,gy-gh*1.22); x.fill(); }
+  // far ridges
+  for(const [col,base,amp] of [["#100714",.78,.12],["#0a0410",.9,.1]]){ x.fillStyle=col; x.beginPath(); x.moveTo(0,HOR); for(let X=0;X<=W;X+=W/40){ const d=Math.abs(X-gx)/W; x.lineTo(X,HOR*(base-amp*R())-(d<.15?-HOR:0)*0); } x.lineTo(W,HOR); x.closePath(); x.globalAlpha=.85; x.fill(); x.globalAlpha=1; }
+  // side cave walls
+  for(const sd of [0,1]){ x.fillStyle="#06030a"; x.beginPath(); const ex=sd?W:0, dir=sd?-1:1; x.moveTo(ex,0); let X=ex+dir*W*.16; x.lineTo(X,0); for(let y=0;y<=HOR;y+=HOR/12){ X=ex+dir*W*(.1+.08*R()+.1*Math.pow(y/HOR,2)); x.lineTo(X,y); } x.lineTo(ex,HOR); x.closePath(); x.fill(); }
+  // stalactites
+  for(let i=0;i<26;i++){ const sx=R()*W, w=8+R()*34, h=20+R()*HOR*.32*(Math.abs(sx-gx)<gw*1.3?.4:1); x.fillStyle=lg(x,sx,0,sx,h,[[0,"#08040c"],[1,"#1c0f22"]]); x.beginPath(); x.moveTo(sx-w,0); x.quadraticCurveTo(sx-w*.3,h*.6,sx,h); x.quadraticCurveTo(sx+w*.3,h*.6,sx+w,0); x.closePath(); x.fill();
+    x.strokeStyle="rgba(255,90,80,.12)"; x.lineWidth=1; x.beginPath(); x.moveTo(sx+w*.6,0); x.quadraticCurveTo(sx+w*.25,h*.6,sx,h); x.stroke(); }
+  // glowing crystals on the walls
+  for(let i=0;i<14;i++){ const sd=R()<.5, cx=sd?W*(.02+R()*.16):W*(.82+R()*.16), cy=HOR*(.35+R()*.6), sz=8+R()*22, col=R()<.6?"190,110,255":"120,220,255";
+    x.save(); x.globalCompositeOperation="lighter"; x.fillStyle=rg(x,cx,cy,0,sz*3,[[0,`rgba(${col},.35)`],[1,`rgba(${col},0)`]]); x.fillRect(cx-sz*3,cy-sz*3,sz*6,sz*6); x.restore();
+    for(let k=0;k<3;k++){ const a=-Math.PI/2+(k-1)*.45+(R()-.5)*.3, l=sz*(.7+R()*.6); x.fillStyle=`rgba(${col},.85)`; x.beginPath(); x.moveTo(cx+Math.cos(a+1.57)*sz*.18,cy+Math.sin(a+1.57)*sz*.18); x.lineTo(cx+Math.cos(a)*l,cy+Math.sin(a)*l); x.lineTo(cx+Math.cos(a-1.57)*sz*.18,cy+Math.sin(a-1.57)*sz*.18); x.closePath(); x.fill(); } }
+  // water body (mirrored strips are added live)
+  x.fillStyle=lg(x,0,HOR,0,H,[[0,"#1a0716"],[1,"#040208"]]); x.fillRect(0,HOR,W,H-HOR);
+}
+function drawDungeon(c,t,dt){
+  buildDungeonBg(); c.drawImage(dunCv,0,0,W,H);
+  if(!(DUNGEON_BG&&dunImg&&dunImg.complete)){
+    const step=3; for(let y=HOR; y<H; y+=step){ const d=y-HOR, sy=HOR-d-step; if(sy<0) break; const amp=.6+d*.025; const off=Math.sin(y*.09-t*1.4)*amp+Math.sin(y*.033+t*.6)*amp*.8; c.drawImage(dunCv,0,sy*DPR,W*DPR,step*DPR,off,y,W,step+.5); }
+    c.fillStyle=lg(c,0,HOR,0,H,[[0,"rgba(30,6,24,.45)"],[.4,"rgba(18,4,18,.75)"],[1,"rgba(4,2,8,.95)"]]); c.fillRect(0,HOR,W,H-HOR);
+    // red shimmer path from the gate
+    for(let i=0;i<40;i++){ const yy=HOR+4+i*(H-HOR)/40, w=Math.min(W*.22,260)*(.4+i*.05)*(.5+.5*Math.sin(t*1.7+i*1.37)); c.fillStyle=`rgba(255,80,60,${.2*(1-i/48)})`; c.fillRect(W*.5-w/2+Math.sin(t+i)*6,yy,w,1.3+i*.04); }
+  } else {
+    for(let y=HOR; y<H; y+=3){ const d=y-HOR, amp=.5+d*.02; c.drawImage(dunCv,0,y*DPR,W*DPR,3*DPR,Math.sin(y*.11-t*1.4)*amp,y,W,3.5); }
+  }
+  // drifting fog
+  if(!dunFog.length) for(let i=0;i<7;i++) dunFog.push({x:Math.random(),y:Math.random(),s:.6+Math.random(),v:(Math.random()-.5)*.02,c:"150,60,140"});
+  const fogC=DUNGEON_BG&&DUNGEON_BG.lava?"255,70,30":DUNGEON_BG?"90,200,190":null;
+  c.save(); c.globalCompositeOperation="lighter"; for(const f of dunFog){ if(fogC) f.c=fogC; f.x=(f.x+f.v*dt+1.2)%1.2; const fx=(f.x-.1)*W, fy=HOR+(f.y-.5)*H*.25, r=W*.18*f.s; c.fillStyle=rg(c,fx,fy,0,r,[[0,`rgba(${f.c},.10)`],[1,`rgba(${f.c},0)`]]); c.beginPath(); c.ellipse(fx,fy,r,r*.4,0,0,TAU); c.fill(); } c.restore();
+}
+function drawDungeonFront(c,t,dt){
+  if(dunEmbers.length<60&&Math.random()<dt*30) dunEmbers.push({x:Math.random()*W,y:H+5,vx:rnd(-10,10),vy:-rnd(20,60),life:0,dur:rnd(4,8),r:rnd(.8,2.2),c:Math.random()<(DUNGEON_BG&&DUNGEON_BG.lava?.97:.4)?"255,110,60":"120,255,200"});
+  c.save(); c.globalCompositeOperation="lighter";
+  for(let i=dunEmbers.length-1;i>=0;i--){ const e=dunEmbers[i]; e.life+=dt; if(e.life>e.dur){ dunEmbers.splice(i,1); continue; } e.x+=(e.vx+Math.sin(t*1.3+i)*12)*dt; e.y+=e.vy*dt; const a=Math.sin(Math.PI*e.life/e.dur)*.8;
+    c.fillStyle=`rgba(${e.c},${a})`; c.beginPath(); c.arc(e.x,e.y,e.r,0,TAU); c.fill(); c.fillStyle=`rgba(${e.c},${a*.12})`; c.beginPath(); c.arc(e.x,e.y,e.r*4,0,TAU); c.fill(); }
+  c.restore();
+  // vignette
+  c.fillStyle=rg(c,W/2,H*.55,Math.min(W,H)*.3,Math.max(W,H)*.8,[[0,"rgba(0,0,0,0)"],[1,"rgba(4,0,8,.6)"]]); c.fillRect(0,0,W,H);
+}
+function openDungeonIntro(id){
+  const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P){ openBattleMenu(); return; }
+  showCard(card=>{
+    card.append(el("div","kind","ดันเจี้ยนบาดาล 🏰"));
+    card.append(el("h3",null,"ลงไปปราบกระทงปีศาจ"));
+    card.append(el("p","meta","มี 10 ชั้น บางชั้นปีศาจมาเป็นฝูง เลือดไม่รีเซ็ตระหว่างชั้น (ฟื้น 30% ทุกชั้นที่ผ่าน) ผ่านแต่ละชั้นแล้วเลือกได้ว่าจะลงต่อหรือถอยกลับพร้อมเหรียญ ถ้าล่มกลางทาง ได้เหรียญเท่าชั้นที่ผ่านแล้ว"));
+    const fl=el("div","dun-floors"); for(let f=1;f<=DUN_FLOORS;f++){ const i=el("i",(f<=(P.bestDungeon||0)?"done":"")+(f%5===0?" boss":"")); i.title="ชั้น "+f; fl.append(i); } card.append(fl);
+    card.append(el("p","meta",`ดีที่สุด: ชั้น ${P.bestDungeon||0}/10 · ผ่านครบ 10 ชั้น ได้ราว ${dunTotal(10)} เหรียญ`+(P.bestDungeon>=10?"":" + โบนัสครั้งแรก 500")));
+    card.append(skillList(["haunt","curse","poison","shadow","hellfire"]));
+    const acts=el("div","acts"); const go=el("button","btn primary","ลงดันเจี้ยน!");
+    go.addEventListener("click",async()=>{ go.disabled=true; let P2=P;
+      try{ if(!P2.sticks){ const j=await post("?action=sticks",{id,token:tokens[id]}); P2=j.prog; myProgs[id].prog=P2; }
+        const j=await post("?action=dungeon_start",{id,token:tokens[id]}); dunRun={id,runId:j.runId,floor:1,hp:null,kills:0,k,prog:P2};
+        startDungeonFloor(); }catch(e){ toast(e.message); go.disabled=false; } });
+    acts.append(go); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
+  });
+}
+function startDungeonFloor(){ const R=dunRun; pickDungeonBg(R.floor); startBattle(R.k,skillsFromSticks(R.prog.sticks),{mode:"dungeon",level:R.floor+2,floor:R.floor,id:R.id,prog:R.prog}); }
+function dungeonFoes(floor,prog){
+  const pl=Math.max(0,((prog&&prog.level)||1)-1)/5, L=Math.round(Math.min(40,floor*1.2+pl*.35)), mp={lv:{hp:L,atk:L,def:L,spd:Math.min(L,12),sk:L},stars:(prog&&prog.stars)||0};
+  const mk=(type,o,name)=>{ const f=makeFighter({id:"m"+Math.random(),name:name||MONSTERS[type],type,candle:"white",seed:Math.random()},false,{prog:mp,...o}); f.skills=[BSTATS[type].sig]; f.mon=true; return f; };
+  const plan=DUN_PLAN[floor], out=[];
+  if(plan==="mini"){ const b=mk("m_boss",{big:1.5,hpS:2.6,atkS:1.15,boss:true},"👹 ขุนพลปีศาจ"); b.skills=["hellfire","curse"]; out.push(b,mk("m_ghost",{hpS:.8}),mk("m_ghost",{hpS:.8})); }
+  else if(plan==="titan"){ const b=mk("m_titan",{big:3.1,hpS:4.2,atkS:1.3,boss:true},"👑 ราชาปีศาจแห่งบาดาล"); b.skills=["abyss","doom","soulstorm","hellfire"]; b.titan=true; out.push(b); }
+  else for(const tp of plan) out.push(mk(tp,{hpS:(.7+floor*.03)*(plan.length>2?.85:1),atkS:plan.length>2?.85:1}));
+  return out;
 }
 function openPractice(){
   showCard(card=>{
@@ -1771,17 +1936,20 @@ function openUpgrade(id){
     for(const [key,label,hint] of STAT_INFO){ const lv=P.lv[key]||0, cost=upCost(lv);
       const r=el("div","uprow"); const t=el("div"); t.append(el("b",null,`${label} Lv.${lv}/${cap}`)); t.append(el("small",null,hint)); r.append(t);
       const b=el("button","btn"+(P.coins>=cost&&lv<cap?" primary":""),lv>=cap?"ตันแล้ว":`+ (${cost})`); b.disabled=P.coins<cost||lv>=cap;
-      b.addEventListener("click",async()=>{ b.disabled=true; try{ const j=await post("?action=upgrade",{id,token:tokens[id],stat:key}); myProgs[id].prog=j.prog; sfx("bless"); openUpgrade(id); }catch(e){ toast(e.message); b.disabled=false; } });
+      b.addEventListener("click",async()=>{ b.disabled=true; try{ const was=classOpen(P); const j=await post("?action=upgrade",{id,token:tokens[id],stat:key}); myProgs[id].prog=j.prog; sfx("bless"); if(!was&&classOpen(j.prog)&&!j.prog.cls){ sfx("win"); toast("ถึง Lv."+CLASS_LV+" แล้ว ปลดล็อกคลาส!"); openClassPicker(id); } else openUpgrade(id); }catch(e){ toast(e.message); b.disabled=false; } });
       r.append(b); tbl.append(r); }
     card.append(tbl);
     // ascension: all stats at the cap -> next star raises every cap by 5 and all stats by 8%
     const maxed=STAT_INFO.every(([key])=>(P.lv[key]||0)>=cap);
-    if(stars<5){ const box=el("div","ascend"); const cost=2500*(stars+1);
-      box.append(el("b",null,`ยกระดับเป็น ${starStr(stars+1)}`)); box.append(el("small",null,maxed?`ค่าพลังทุกตัว +8% · เพดานเลเวลเป็น ${cap+5}`+(stars===0?" · ปลดล็อกคลาส":""):`อัปทุกค่าให้ถึงเลเวล ${cap} ก่อน แล้วจะยกระดับได้`));
+    let box=null; if(stars<5){ box=el("div","ascend"); const cost=2500*(stars+1);
+      box.append(el("b",null,`ยกระดับเป็น ${starStr(stars+1)}`)); box.append(el("small",null,maxed?`ค่าพลังทุกตัว +8% · เพดานเลเวลเป็น ${cap+5}`:`อัปทุกค่าให้ถึงเลเวล ${cap} ก่อน แล้วจะยกระดับได้ (ไม่รีบก็ได้ เป็นเป้าหมายระยะยาว)`));
       const ab=el("button","btn"+(maxed&&P.coins>=cost?" primary":""),`ยกระดับ (${cost})`); ab.disabled=!maxed||P.coins<cost;
-      ab.addEventListener("click",async()=>{ ab.disabled=true; try{ const j=await post("?action=ascend",{id,token:tokens[id]}); myProgs[id].prog=j.prog; sfx("win"); toast("ยกระดับเป็น "+starStr(j.prog.stars)+" แล้ว!"); if(!j.prog.cls) openClassPicker(id); else openUpgrade(id); }catch(e){ toast(e.message); ab.disabled=false; } });
-      box.append(ab); card.append(box); }
-    if(stars>=1){ const cb=el("div","ascend"); cb.append(el("b",null,P.cls?`คลาส: ${CLASS_INFO[P.cls].n}`:"ยังไม่ได้เลือกคลาส")); cb.append(el("small",null,P.cls?CLASS_INFO[P.cls].d:"ได้ ★1 แล้ว เลือกคลาสเพื่อรับโบนัสและสกิลคลาส")); const cbt=el("button","btn"+(P.cls?"":" primary"),P.cls?"เปลี่ยนคลาส (500)":"เลือกคลาส"); cbt.addEventListener("click",()=>openClassPicker(id)); cb.append(cbt); card.append(cb); }
+      ab.addEventListener("click",async()=>{ ab.disabled=true; try{ const j=await post("?action=ascend",{id,token:tokens[id]}); myProgs[id].prog=j.prog; sfx("win"); toast("ยกระดับเป็น "+starStr(j.prog.stars)+" แล้ว!"); openUpgrade(id); }catch(e){ toast(e.message); ab.disabled=false; } });
+      box.append(ab); }
+    { const cb=el("div","ascend cls-box"), can=classOpen(P); cb.append(el("b",null,P.cls?`คลาส: ${CLASS_INFO[P.cls].n}`:can?"ปลดล็อกคลาสแล้ว! เลือกได้เลย":`คลาส · ปลดล็อกที่ Lv.${CLASS_LV}`));
+      cb.append(el("small",null,P.cls?CLASS_INFO[P.cls].d:can?"เลือกครั้งแรกฟรี ได้โบนัสค่าพลังและสกิลคลาสเพิ่มอีก 1 สกิล":`กด + อัปค่าพลังอีก ${CLASS_LV-P.level} ครั้ง (ค่าไหนก็ได้) ก็เลือกคลาสได้`));
+      const cbt=el("button","btn"+(P.cls||!can?"":" primary"),P.cls?`เปลี่ยนคลาส (${CLASS_COST})`:"เลือกคลาส"); cbt.disabled=!can; cbt.addEventListener("click",()=>openClassPicker(id)); cb.append(cbt); card.insertBefore(cb,tbl); }
+    if(box) card.append(box);
     card.append(el("div","meta","ติดตัว: "+st.pas));
     const sk=[st.sig,...skillsFromSticks(P.sticks),...classSkills(P)]; card.append(skillList(sk));
     const acts=el("div","acts");
@@ -1795,8 +1963,9 @@ function openUpgrade(id){
 function openClassPicker(id){
   const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P){ openBattleMenu(); return; }
   showCard(card=>{
-    card.append(el("div","kind","เลือกคลาส"+(P.cls?" · เปลี่ยนคลาสใช้ 500 เหรียญ":" · เลือกครั้งแรกฟรี")));
+    card.append(el("div","kind","เลือกคลาส"+(P.cls?` · เปลี่ยนคลาสใช้ ${CLASS_COST} เหรียญ`:" · เลือกครั้งแรกฟรี")));
     card.append(el("h3",null,k.name+" "+starStr(P.stars)));
+    card.append(el("p","meta","แต่ละคลาสให้โบนัสค่าพลังและสกิลพิเศษ 1 สกิล เปลี่ยนทีหลังได้เสมอ"));
     const list=el("div","pick");
     for(const [cid,ci] of Object.entries(CLASS_INFO)){ const sk=SKILLS[ci.skill]; const b=el("button"); if(P.cls===cid) b.className="on"; const tx=el("div");
       tx.append(el("b",null,ci.n+(P.cls===cid?" (คลาสปัจจุบัน)":""))); tx.append(el("small",null,ci.d)); tx.append(el("small",null,`สกิลคลาส: ${sk.n} · ${sk.d} · SP ${sk.cost}`)); b.append(tx);
@@ -1881,6 +2050,8 @@ function startBattle(k,fortuneSkills,opts){
     const D=makeFighter(dk,false,{prog:opts.defProg,duel:true,hpS:1.15}); const ds=BSTATS[dk.type]||BSTATS.banana;
     const dsk=opts.defProg&&opts.defProg.sticks?skillsFromSticks(opts.defProg.sticks):(()=>{ const all=Object.keys(SKILLS).filter(x=>!SKILLS[x].sig); return [all[Math.random()*all.length|0]]; })();
     D.skills=[ds.sig,...dsk,...classSkills(opts.defProg)]; foes.push(D);
+  } else if(opts.mode==="dungeon"){
+    foes.push(...dungeonFoes(opts.floor,opts.prog));
   } else {
     if(level%5===0){
       const bt=["coconut","lotus","star","cat","pride"][(level/5-1)%5], bname=["ราชากระทงกะลาเหล็ก","ราชินีบัวหลวง","จักรพรรดิดวงดาว","เจ้าแมวราชันย์","ราชันสายรุ้ง"][(level/5-1)%5];
@@ -1898,11 +2069,14 @@ function startBattle(k,fortuneSkills,opts){
   }
   P.x=W*.2; P.y=laneY(.55);
   foes.forEach((f,i)=>{ f.x=W*(.62+i*.12); f.y=laneY([.35,.75,.55][i%3]); });
+  if(opts.mode==="dungeon"){ if(foes[0]&&foes[0].titan){ foes[0].x=W*.74; foes[0].y=laneY(.5); }
+    if(dunRun&&dunRun.hp!=null){ P.hp=Math.min(P.max,Math.round(dunRun.hp+P.max*.3)); } }
   battle={P,foes,all:[P,...foes],level,mode:opts.mode,opts,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],minions:[],bolts:[],floaters:[],shake:0};
   document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false;
   buildSkillBar(); updateHud(); sfx("bless");
+  if(opts.mode==="dungeon"){ lanterns.length=0; rockets.length=0; playMusic(); if(foes.some(f=>f.titan)) battle.count=4.2; }
 }
-function endBattle(){ vfxPlays.length=0; setTimeout(runTicker,800); battle=null; document.body.classList.remove("in-battle"); $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
+function endBattle(){ const wasD=inDungeon(); vfxPlays.length=0; if(wasD) setTimeout(playMusic,50); setTimeout(runTicker,800); battle=null; document.body.classList.remove("in-battle"); $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
 function buildSkillBar(){
   const bar=$("bskills"); bar.textContent=""; bar.style.setProperty("--nsk",String(battle.P.skills.length));
   battle.P.skills.forEach((id,i)=>{ const sk=SKILLS[id]; const b=el("button","sk"+(sk.sig?" sig":"")); b.type="button";
@@ -1912,7 +2086,7 @@ function buildSkillBar(){
 function updateHud(){
   if(!battle) return; const P=battle.P;
   const tn=(TYPE_BY[P.k.type]||TYPES[0]).name; $("bhName").textContent=P.name===tn?tn:P.name+" · "+tn;
-  $("bhMeta").textContent=`ด่าน ${battle.level} · ศัตรูเหลือ ${battle.foes.filter(f=>f.alive).length}`;
+  $("bhMeta").textContent=(battle.mode==="dungeon"?`ดันเจี้ยนชั้น ${battle.opts.floor}/${DUN_FLOORS}`:`ด่าน ${battle.level}`)+` · ศัตรูเหลือ ${battle.foes.filter(f=>f.alive).length}`;
   $("bhHp").style.width=Math.max(0,P.hp/P.max*100)+"%"; $("bhHpT").textContent=`HP ${Math.max(0,Math.ceil(P.hp))}/${P.max}`;
   $("bhSp").style.width=Math.min(100,P.sp)+"%"; $("bhSpT").textContent=`SP ${Math.floor(P.sp)}/100`;
   const btns=$("bskills").querySelectorAll(".sk"); P.skills.forEach((id,i)=>{ const b=btns[i]; if(!b) return; const ok=P.sp>=SKILLS[id].cost&&P.alive&&!battle.over&&battle.count<=0; b.disabled=!ok; b.classList.toggle("ready",ok); const fl=b.querySelector(".sk-fill"); if(fl) fl.style.width=Math.min(100,P.sp/SKILLS[id].cost*100)+"%"; });
@@ -1937,12 +2111,13 @@ function impactFx(cx,cy,pow,crit){
 function hurt(f,dmg,src,opts){
   if(!f.alive||dmg<=0) return 0;
   if(f.buffs.shield>0){ floater(f.x,f.y-fSize(f)*1.8,"กัน!","150,220,255"); if(f.buffs.reflect>0&&src&&src.alive) hurt(src,dmg*.6,null); return 0; }
+  if(f.buffs.cursed>0) dmg*=1.4;
   f.hp-=dmg; f.hitT=.35; f.flashT=.18; if(opts&&opts.crit) playVfx("crit",f.x,f.y,2.6,{follow:f,dy:-.5,add:true}); floater(f.x+rnd(-10,10),f.y-fSize(f)*1.9,(opts&&opts.crit?"คริ! ":"")+Math.round(dmg),opts&&opts.crit?"255,215,90":(f.isPlayer?"255,120,130":"255,255,255"),opts&&opts.crit?"crit":"dmg");
   if(f.hp<=0){ f.hp=0; f.alive=false; f.sinkT=0; sfx("sink"); battle.slow=Math.max(battle.slow||0,.55); if(!f.isPlayer) battle.banner={text:"ล่ม!",col:"255,140,170",t:0}; playVfx("steam",f.x,f.y,2.6,{dy:-.8,alpha:.9}); ripples.push({x:f.x,y:f.y,r:fSize(f)*3,life:0,dur:2,c:"200,225,255"}); for(let i=0;i<20;i++) sparks.push({x:f.x+rnd(-10,10),y:f.y,vx:rnd(-20,20),vy:rnd(-60,-20),g:-20,life:0,dur:rnd(1,1.8),r:rnd(1.5,3),c:"200,230,255"}); }
   return dmg;
 }
 /* ---- pixel VFX (PixelLab): sheets in img/vfx, frames left-to-right then top-to-bottom ---- */
-const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14}};
+const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12}};
 const VFX={}; for(const [n,m] of Object.entries(VFX_META)){ const im=new Image(); VFX[n]={...m,img:im,ok:false}; im.onload=()=>{ VFX[n].ok=true; VFX[n].cols=Math.max(1,Math.floor(im.width/m.w)); }; im.src="img/vfx/"+n+".png"; }
 const vfxPlays=[];
 // size = drawn height in multiples of the fighter size; opts: follow (fighter), flip, flat (squash y), add (glow blend), dy (offset in sizes), back (draw behind fighters)
@@ -2003,13 +2178,26 @@ function castSkill(f,id){
     case "wall": f.buffs.shield=3; f.buffs.reflect=3; f.hp=Math.min(f.max,f.hp+25*m); floater(f.x,f.y-s*2,"+"+Math.round(25*m),"120,255,160","heal"); break;
     case "chain": foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; hurt(o,24*m,f); battle.bolts.push({x:o.x,y:o.y-fSize(o),life:0}); playVfx("toxic",o.x,o.y,3.6,{follow:o,dy:-1.2,add:true}); sfx("bonk"); },i*140)); flash={a:.7,x:f.x,y:f.y,c:"200,180,255"}; break;
     case "phantom": for(let i=0;i<3;i++) setTimeout(()=>{ if(!battle||!f.alive) return; const t2=nearest(f); if(!t2) return; const dx=t2.x-f.x, dy=(t2.y-f.y)*1.8, d=Math.hypot(dx,dy)||1; f.vx=dx/d*u*12; f.vy=dy/d*u*12/1.8; f.buffs.dash=.5; playVfx("rainbow",f.x,f.y-fSize(f)*.3,2.2,{flip:dx>0,add:true}); },i*380); break;
+    case "haunt": for(let i=0;i<3;i++) battle.minions.push({x:f.x+rnd(-20,20),y:f.y,owner:f,life:0,dur:6,bite:0,p:Math.random()*7,ghost:true}); break;
+    case "curse": for(const o of foesOf(f)){ o.buffs.cursed=5; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); floater(o.x,o.y-fSize(o)*2.2,"ถูกสาป!","150,255,110"); } break;
+    case "poison": if(tgt){ tgt.buffs.poison=6; tgt._pm=m; playVfx("poisonfog",tgt.x,tgt.y,2.4,{follow:tgt,dy:-.5,alpha:.65}); floater(tgt.x,tgt.y-fSize(tgt)*2.2,"ติดพิษ!","190,110,255"); } break;
+    case "shadow": if(tgt){ playVfx("evade",f.x,f.y,2.6,{dy:-.5}); const side=tgt.x<W/2?1:-1; f.x=Math.max(s,Math.min(W-s,tgt.x+side*fSize(tgt)*3)); f.y=tgt.y; f.vx=-side*u*12; f.vy=0; f.buffs.dash=.7; playVfx("fury",f.x,f.y,2.6,{follow:f,dy:-.6}); } break;
+    case "hellfire": { const ts=f.boss?foesOf(f):(tgt?[tgt]:[]); ts.forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; playVfx("bloodpillar",o.x,o.y,4.2,{dy:-1.4,add:true}); setTimeout(()=>{ if(!battle||!o.alive) return; hurt(o,30*m,f); o.vy-=u*2; battle.shake=8; ripples.push({x:o.x,y:o.y,r:u*2,life:0,dur:1.2,c:"255,120,90"}); },380); },i*200)); break; }
+    case "abyss": if(tgt){ const o=tgt; playVfx(VFX.abyssflame&&VFX.abyssflame.ok?"abyssflame":"bloodpillar",o.x,o.y,5.2,{dy:-1.5,add:true}); battle.banner={text:sk.n,col:"255,80,80",t:0};
+        setTimeout(()=>{ if(!battle||!o.alive) return; hurt(o,40*m,f); o.vy-=u*4; o.vx+=(o.x<f.x?-1:1)*u*8; battle.shake=14; flash={a:.8,x:o.x,y:o.y,c:"255,60,40"}; for(let q=0;q<40;q++){ const a=-Math.PI*Math.random(); sparks.push({x:o.x,y:o.y,vx:Math.cos(a)*rnd(60,260),vy:Math.sin(a)*rnd(80,300),g:300,life:0,dur:rnd(.6,1.2),r:rnd(1.2,2.6),c:Math.random()<.5?"255,90,40":"40,0,0",trail:.05}); } },450); } break;
+    case "doom": battle.banner={text:sk.n,col:"255,60,90",t:0}; playVfx(VFX.doomring&&VFX.doomring.ok?"doomring":"formation",f.x,f.y,8,{flat:.55,add:true,back:true});
+      runeBursts.push({x:f.x,y:f.y,life:0,dur:1.4,r:Math.max(W,H)*.6,flat:true,glyph:true,col:"255,40,80"}); battle.shake=16;
+      setTimeout(()=>{ if(!battle) return; for(const o of foesOf(f)){ hurt(o,26*m,f); o.buffs.cursed=5; const dx=o.x-f.x||1; o.vx+=Math.sign(dx)*u*12; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); } },350); break;
+    case "soulstorm": battle.banner={text:sk.n,col:"170,200,255",t:0}; playVfx(VFX.soulstorm&&VFX.soulstorm.ok?"soulstorm":"whirl",f.x,f.y,5.5,{follow:f,dy:-1.2,add:true});
+      for(let i=0;i<5;i++) battle.minions.push({x:f.x+rnd(-40,40),y:f.y+rnd(-10,10),owner:f,life:0,dur:7,bite:0,p:Math.random()*7,ghost:true});
+      f.hp=Math.min(f.max,f.hp+f.max*.06); floater(f.x,f.y-s*2,"+"+Math.round(f.max*.06),"120,255,160","heal"); break;
     case "claw": if(tgt){ for(let i=0;i<3;i++) setTimeout(()=>{ if(!battle||!tgt.alive) return; hurt(tgt,12*m*1.6,f,{crit:true}); playVfx("crossclaw",tgt.x+rnd(-8,8),tgt.y,2.4,{follow:tgt,dy:-.7,flip:Math.random()<.5}); floater(tgt.x+rnd(-14,14),tgt.y-fSize(tgt)*1.4,"แฮ่!","255,200,140"); sfx("bonk"); },i*160); } break;
   }
   skillVfx(id,f,tgt); sfx("bless"); updateHud();
 }
 function battleStep(dt,t){
   const B=battle; if(B.slow>0){ B.slow=Math.max(0,B.slow-dt); dt*=.22; } B.t+=dt; const u=bU(); const top=laneY(0), bot=laneY(1);
-  if(B.count>0){ B.count-=dt; if(B.count<=0){ sfx("bell"); B.banner=B.foes.some(f=>f.boss)?{text:"บอส!",col:"255,120,140",t:0}:{text:"ชน!",col:"255,200,110",t:0}; } }
+  if(B.count>0){ B.count-=dt; if(B.count<=0){ sfx("bell"); B.banner=B.foes.some(f=>f.titan)?{text:"ราชาปีศาจ!",col:"255,60,70",t:0}:B.foes.some(f=>f.boss)?{text:"บอส!",col:"255,120,140",t:0}:{text:"ชน!",col:"255,200,110",t:0}; } }
   const live=B.count<=0&&!B.over;
   // player input
   const P=B.P;
@@ -2022,6 +2210,8 @@ function battleStep(dt,t){
       f.sp=Math.min(100,f.sp+dt*(f.isPlayer?9:f.duel?8:6)*(f.k.type==="pride"?1.5:1)*(f.buffs.calm>0?2:1)*(f.spMul||1));
       if(f.k.type==="lotus") f.hp=Math.min(f.max,f.hp+2*dt);
       if(f.buffs.calm>0) f.hp=Math.min(f.max,f.hp+6*dt);
+      if(f.titan&&!f.enraged&&f.hp<f.max*.5){ f.enraged=true; f.sp=100; f.atk*=1.2; f.spd*=1.15; B.banner={text:"ราชาปีศาจคลั่ง!",col:"255,50,60",t:0}; B.shake=18; flash={a:.9,x:f.x,y:f.y,c:"255,30,40"}; sfx("bell"); }
+      if(f.buffs.poison>0){ f._pt=(f._pt||0)+dt; if(f._pt>1){ f._pt=0; const pd=5*(f._pm||1); f.hp-=pd; floater(f.x+rnd(-8,8),f.y-fSize(f)*1.9,Math.round(pd),"190,110,255"); if(f.hp<=0){ f.hp=1; hurt(f,1); } } }
       if(f.k.type==="bread") for(const o of foesOf(f)){ if(Math.hypot(o.x-f.x,(o.y-f.y)*1.8)<u*2.2){ o._nib=(o._nib||0)+dt; if(o._nib>.6){ o._nib=0; hurt(o,3,f); } } }
     }
     let tx,ty;
@@ -2067,7 +2257,7 @@ function battleStep(dt,t){
     for(const o of B.all){ if(!o.alive||o.isPlayer===h.owner.isPlayer) continue; const dx=h.x-o.x, dy=(h.y-o.y)*1.8, d=Math.hypot(dx,dy); if(d<h.r){ o.vx+=dx/(d||1)*u*10*dt; o.vy+=dy/(d||1)*u*10*dt/1.8; o._vz=(o._vz||0)+dt; if(o._vz>.5){ o._vz=0; hurt(o,h.dps*.5,h.owner); } } } }
   for(let i=B.minions.length-1;i>=0;i--){ const m=B.minions[i]; m.life+=dt; if(m.life>m.dur||!m.owner.alive){ B.minions.splice(i,1); continue; }
     const tg=nearest(m.owner); if(!tg) continue; const dx=tg.x-m.x, dy=tg.y-m.y, d=Math.hypot(dx,dy)||1; const sp=u*7; m.x+=dx/d*sp*dt+Math.sin(m.life*8+m.p)*.5; m.y+=dy/d*sp*dt*.6;
-    m.bite-=dt; if(d<fSize(tg)*1.1&&m.bite<=0){ m.bite=.5; hurt(tg,4*skillMul(m.owner),m.owner); } }
+    m.bite-=dt; if(d<fSize(tg)*1.1&&m.bite<=0){ m.bite=m.ghost?.9:.5; hurt(tg,(m.ghost?2.2:4)*skillMul(m.owner),m.owner); } }
   // end conditions
   if(!B.over){
     if(!P.alive) { B.over={win:false,at:B.t}; B.banner={text:"ล่มแล้ว…",col:"170,190,255",t:0}; }
@@ -2096,14 +2286,21 @@ function drawFighter(c,f,t){
   if(!sk&&Math.random()<.03*PMUL){ const fp=flamePos(f.k,s); emitEmber(f.x+fp.x,f.y+fp.y,s); }
   c.restore();
   if(f.buffs.shield>0&&f.alive){ c.save(); c.globalCompositeOperation="lighter"; c.strokeStyle=`rgba(150,220,255,${.5+.3*Math.sin(t*8)})`; c.lineWidth=2; c.fillStyle="rgba(150,220,255,.08)"; c.beginPath(); c.ellipse(f.x,f.y-s*.4,s*1.5,s*1.3,0,0,TAU); c.fill(); c.stroke(); c.restore(); }
+  if(f.alive&&(f.buffs.poison>0||f.buffs.cursed>0)){ c.save(); c.globalCompositeOperation="lighter"; const col=f.buffs.cursed>0?"150,255,110":"190,110,255"; for(let i=0;i<3;i++){ const ph=(t*.8+i/3)%1; c.fillStyle=`rgba(${col},${.6*(1-ph)})`; c.beginPath(); c.arc(f.x+Math.sin(i*2.1+t*2)*s*.7,f.y-s*.3-ph*s*1.6,s*.09,0,TAU); c.fill(); } c.restore(); }
   if(f.buffs.charmed>0&&f.alive){ c.fillStyle="#ff8fc8"; c.font=`700 ${Math.max(12,s*.5)}px sans-serif`; c.textAlign="center"; c.fillText("♥",f.x+Math.sin(t*4)*s*.4,f.y-s*2.2); }
-  if(f.alive&&f.boss){ const ty=f.y-krTop(f.k,s)-26, cw=s*.5; c.save(); c.fillStyle="#ffd36a"; c.strokeStyle="#7a4a10"; c.lineWidth=1.5; c.beginPath(); c.moveTo(f.x-cw,ty); c.lineTo(f.x-cw,ty-cw*.7); c.lineTo(f.x-cw*.5,ty-cw*.3); c.lineTo(f.x,ty-cw); c.lineTo(f.x+cw*.5,ty-cw*.3); c.lineTo(f.x+cw,ty-cw*.7); c.lineTo(f.x+cw,ty); c.closePath(); c.fill(); c.stroke(); c.restore(); }
+  if(f.alive&&f.boss&&!f.titan){ const ty=f.y-krTop(f.k,s)-26, cw=s*.5; c.save(); c.fillStyle="#ffd36a"; c.strokeStyle="#7a4a10"; c.lineWidth=1.5; c.beginPath(); c.moveTo(f.x-cw,ty); c.lineTo(f.x-cw,ty-cw*.7); c.lineTo(f.x-cw*.5,ty-cw*.3); c.lineTo(f.x,ty-cw); c.lineTo(f.x+cw*.5,ty-cw*.3); c.lineTo(f.x+cw,ty-cw*.7); c.lineTo(f.x+cw,ty); c.closePath(); c.fill(); c.stroke(); c.restore(); }
   if(f.alive){ // name + hp bar
     const w=Math.max(46,s*2.2), y=f.y-krTop(f.k,s)-6; c.fillStyle="rgba(8,10,35,.7)"; c.fillRect(f.x-w/2-1,y-1,w+2,7);
     const r=f.hp/f.max; c.fillStyle=r>.5?"#7cf29a":r>.25?"#ffc371":"#ff5f6d"; c.fillRect(f.x-w/2,y,w*r,5);
     c.font=`600 ${Math.max(10,Math.min(13,s*.38))}px "Bai Jamjuree",sans-serif`; c.textAlign="center"; c.fillStyle=f.isPlayer?"#ffd36a":"#fff3dc"; c.fillText((f.isPlayer?"★ ":"")+f.name,f.x,y-4,160);
   }
 }
+function drawGhostWisp(c,m,t){ const s=bU()*.5, y=m.y-s*1.6+Math.sin(m.life*5+m.p)*s*.25, a=Math.min(1,(m.dur-m.life)/.6,m.life*3);
+  c.save(); c.translate(m.x,y); c.globalAlpha=a*.85; c.globalCompositeOperation="lighter";
+  c.fillStyle=rg(c,0,0,0,s*1.6,[[0,"rgba(170,200,255,.35)"],[1,"rgba(120,150,255,0)"]]); c.beginPath(); c.arc(0,0,s*1.6,0,TAU); c.fill();
+  c.globalCompositeOperation="source-over"; c.fillStyle="rgba(225,235,255,.92)"; c.beginPath(); c.arc(0,0,s*.55,Math.PI,0); c.lineTo(s*.55,s*.5);
+  for(let i=0;i<4;i++){ const x=s*.55-(i+1)*s*.275; c.quadraticCurveTo(x+s*.14,s*(.75+.15*Math.sin(m.life*9+i)),x,s*.5); } c.closePath(); c.fill();
+  c.fillStyle="#1a1e3a"; c.beginPath(); c.ellipse(-s*.18,-s*.05,s*.08,s*.12,0,0,TAU); c.ellipse(s*.18,-s*.05,s*.08,s*.12,0,0,TAU); c.fill(); c.restore(); }
 function battleDraw(c,t,dt){
   const B=battle;
   for(const h of B.hazards){ const a=1-h.life/h.dur; c.save(); c.translate(h.x,h.y); c.scale(1,.32); c.rotate(h.life*6); c.strokeStyle=`rgba(140,180,255,${.6*a})`; c.lineWidth=2; for(let k=0;k<4;k++){ c.beginPath(); c.arc(0,0,h.r*(.3+k*.22),k,k+4.2); c.stroke(); } c.restore(); }
@@ -2111,7 +2308,7 @@ function battleDraw(c,t,dt){
   const order=[...B.all].sort((a,b)=>a.y-b.y);
   for(const f of order) drawFighter(c,f,t);
   drawVfx(c,dt,false);
-  for(const m of B.minions){ c.save(); c.translate(m.x,m.y); const s=bU()*.35; c.rotate(Math.sin(m.life*10)*.3); c.fillStyle="#ffa14a"; c.beginPath(); c.ellipse(0,0,s,s*.4,0,0,TAU); c.fill(); c.beginPath(); c.moveTo(-s*.9,0); c.lineTo(-s*1.5,-s*.4); c.lineTo(-s*1.5,s*.4); c.fill(); c.restore(); }
+  for(const m of B.minions){ if(m.ghost){ drawGhostWisp(c,m,t); continue; } c.save(); c.translate(m.x,m.y); const s=bU()*.35; c.rotate(Math.sin(m.life*10)*.3); c.fillStyle="#ffa14a"; c.beginPath(); c.ellipse(0,0,s,s*.4,0,0,TAU); c.fill(); c.beginPath(); c.moveTo(-s*.9,0); c.lineTo(-s*1.5,-s*.4); c.lineTo(-s*1.5,s*.4); c.fill(); c.restore(); }
   for(let i=B.bolts.length-1;i>=0;i--){ const b=B.bolts[i]; b.life+=dt; if(b.life>.45){ B.bolts.splice(i,1); continue; } const a=1-b.life/.45; c.save(); c.globalCompositeOperation="lighter";
     if(b.meteor){ c.strokeStyle=`rgba(190,220,255,${a})`; c.lineWidth=4; c.beginPath(); c.moveTo(b.x-120,b.y-260*(1-b.life)); c.lineTo(b.x,b.y); c.stroke(); }
     else { c.strokeStyle=`rgba(255,255,200,${a})`; c.lineWidth=3; c.beginPath(); let x=b.x+rnd(-40,40), y=0; c.moveTo(x,y); while(y<b.y){ y+=rnd(20,45); x+=(b.x-x)*.3+rnd(-18,18); c.lineTo(x,Math.min(y,b.y)); } c.stroke(); }
@@ -2125,11 +2322,53 @@ function battleDraw(c,t,dt){
     if(f.kind==="skill"){ const g=c.createLinearGradient(0,-sz/2,0,sz/2); g.addColorStop(0,`rgba(255,255,255,${a})`); g.addColorStop(1,`rgba(${f.col},${a})`); c.fillStyle=g; } else c.fillStyle=`rgba(${f.col},${a})`;
     c.fillText(f.text,0,0); c.restore(); }
   if(B.banner){ B.banner.t+=dt; const k=B.banner.t; if(k>1.4) B.banner=null; else { const a=Math.min(1,(1.4-k)/.4), sc=k<.15?2.2-k/.15*1.2:1; c.save(); c.translate(W/2,H*.4); c.scale(sc,sc); c.font='800 72px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.textBaseline="middle"; c.shadowColor=`rgba(${B.banner.col},${a})`; c.shadowBlur=30; c.lineWidth=8; c.strokeStyle=`rgba(10,8,30,${a})`; c.strokeText(B.banner.text,0,0); c.fillStyle=`rgba(${B.banner.col},${a})`; c.fillText(B.banner.text,0,0); c.restore(); } }
+  const TT=B.foes.find(f=>f.titan&&f.alive);
+  if(TT&&B.count<=0){ const bw=Math.min(W*.7,620), bx=(W-bw)/2, by=H-Math.max(150,H*.2)+40, r=TT.hp/TT.max; c.save();
+    c.fillStyle="rgba(10,0,6,.75)"; c.fillRect(bx-3,by-3,bw+6,16); c.fillStyle=lg(c,bx,0,bx+bw,0,[[0,"#ff2a3a"],[1,"#ff8a3a"]]); c.fillRect(bx,by,bw*r,10);
+    c.strokeStyle="rgba(255,120,90,.7)"; c.lineWidth=1; c.strokeRect(bx-3,by-3,bw+6,16);
+    c.font='800 15px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.fillStyle="#ffd0c0"; c.shadowColor="#ff2030"; c.shadowBlur=10; c.fillText("👑 ราชาปีศาจแห่งบาดาล"+(TT.enraged?" · คลั่ง!":""),W/2,by-8); c.restore(); }
   if(B.P.alive&&B.P.hp/B.P.max<.3&&!B.over){ const pu=.5+.5*Math.sin(B.t*6); c.save(); c.fillStyle=rg(c,W/2,H/2,Math.min(W,H)*.35,Math.max(W,H)*.75,[[0,"rgba(255,40,70,0)"],[1,`rgba(255,40,70,${.18+.14*pu})`]]); c.fillRect(0,0,W,H); c.restore(); }
   if(B.count>0){ const n=Math.ceil(B.count), k=B.count-Math.floor(B.count); c.font=`800 ${60+k*40}px "Bai Jamjuree",sans-serif`; c.textAlign="center"; c.fillStyle=`rgba(255,215,120,${k})`; c.fillText(String(n),W/2,H*.45); }
 
 }
+async function finishDungeon(cleared){
+  const R=dunRun; dunRun=null; if(!R) return null;
+  try{ const j=await post("?action=dungeon_end",{id:R.id,token:tokens[R.id],runId:R.runId,floors:cleared,kills:R.kills}); if(myProgs[R.id]) myProgs[R.id].prog=j.prog; boardCache=null; setTimeout(loadFeed,1500); return j; }
+  catch(e){ return {error:e.message}; }
+}
+async function showDungeonResult(win){
+  const B=battle, R=dunRun, floor=B.opts.floor; if(!R){ endBattle(); return; }
+  R.kills+=B.foes.filter(f=>!f.alive).length; R.hp=Math.max(1,B.P.hp);
+  const card=$("card"); card.textContent="";
+  const fl=el("div","dun-floors"); for(let f=1;f<=DUN_FLOORS;f++) fl.append(el("i",(f<=(win?floor:floor-1)?"done":"")+(f%5===0?" boss":"")));
+  if(win&&floor<DUN_FLOORS){
+    card.append(el("div","kind",`ผ่านดันเจี้ยนชั้น ${floor}!`));
+    card.append(el("h3",null,floor===5?"ปราบขุนพลปีศาจได้แล้ว!":`“${B.P.name}” ยังลอยอยู่`)); card.append(fl);
+    card.append(el("div","coins",`ถ้าถอยตอนนี้ได้ 💰 ${dunTotal(floor)} · ลงต่ออีกชั้นได้เพิ่ม +${dunReward(floor+1)}`));
+    card.append(el("p","meta",`HP ${Math.ceil(B.P.hp)}/${B.P.max} → ชั้นถัดไปฟื้นอีก 30% `+(DUN_PLAN[floor+1]==="titan"?"· ⚠ ชั้นต่อไปคือราชาปีศาจยักษ์!":DUN_PLAN[floor+1]==="mini"?"· ⚠ ชั้นต่อไปมีขุนพลปีศาจ":`· ชั้นต่อไปมีปีศาจ ${DUN_PLAN[floor+1].length} ตน`)));
+    const acts=el("div","acts"); const nx=el("button","btn dun","ลงชั้น "+(floor+1)+" ⬇");
+    nx.addEventListener("click",()=>{ endBattle(); R.floor=floor+1; startDungeonFloor(); }); acts.append(nx);
+    const bk=el("button","btn primary","ถอยกลับพร้อมเหรียญ"); bk.addEventListener("click",async()=>{ bk.disabled=nx.disabled=true; const j=await finishDungeon(floor); endBattle(); dungeonSummary(j,floor,false); }); acts.append(bk);
+    card.append(acts); card.hidden=false; $("veil").hidden=false; return;
+  }
+  const cleared=win?floor:floor-1, j=await finishDungeon(cleared); endBattle(); dungeonSummary(j,cleared,win,!win);
+  if(win) for(let i=0;i<8;i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*250);
+}
+function dungeonSummary(j,cleared,clearedAll,sunk){
+  showCard(card=>{
+    card.append(el("div","kind",clearedAll?"พิชิตดันเจี้ยนบาดาล! 👑":sunk?`กระทงล่มที่ชั้น ${cleared+1} · ผ่านมา ${cleared} ชั้น`:`ถอยกลับจากดันเจี้ยน · ผ่าน ${cleared} ชั้น`));
+    card.append(el("h3",null,clearedAll?"ราชาปีศาจแห่งบาดาลพ่ายแพ้แล้ว!":"กระทงจริงของคุณยังลอยอยู่ในแม่น้ำนะ"));
+    const fl=el("div","dun-floors"); for(let f=1;f<=DUN_FLOORS;f++) fl.append(el("i",(f<=cleared?"done":"")+(f%5===0?" boss":""))); card.append(fl);
+    if(j&&j.gain!=null) card.append(el("div","coins",`+${j.gain} เหรียญ`));
+    if(j&&j.note) card.append(el("p","meta",j.note));
+    if(j&&j.error) card.append(el("p","meta","บันทึกผลไม่สำเร็จ: "+j.error));
+    const acts=el("div","acts"); const id=j&&j.prog&&j.prog.id;
+    if(id){ const a=el("button","btn dun","ลงอีกรอบ"); a.addEventListener("click",()=>openDungeonIntro(id)); acts.append(a); const u=el("button","btn primary","อัปเกรดกระทง"); u.addEventListener("click",()=>openUpgrade(id)); acts.append(u); }
+    backBtn(acts,"เมนูศึก",openBattleMenu); card.append(acts);
+  });
+}
 async function showBattleResult(win){
+  if(battle&&battle.mode==="dungeon") return showDungeonResult(win);
   const B=battle, o=B.opts||{}, kills=B.foes.filter(f=>!f.alive).length;
   let gain=null, err=null;
   if((B.mode==="pve"||B.mode==="duel")&&o.id&&tokens[o.id]){
@@ -2157,7 +2396,7 @@ cv.addEventListener("pointermove",e=>{ if(!battle) return; if(battle.down||e.poi
 addEventListener("pointerup",()=>{ if(battle) battle.down=false; });
 addEventListener("keydown",e=>{ if(!battle) return; const k=e.key.length===1?e.key.toLowerCase():e.key; if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","w","a","s","d"].includes(k)){ bKeys.add(k); e.preventDefault(); } if(/^[1-3]$/.test(k)){ const id=battle.P.skills[+k-1]; if(id) castSkill(battle.P,id); } });
 addEventListener("keyup",e=>{ const k=e.key.length===1?e.key.toLowerCase():e.key; bKeys.delete(k); });
-$("bhExit").addEventListener("click",()=>{ endBattle(); toast("ออกจากศึกแล้ว"); });
+$("bhExit").addEventListener("click",async()=>{ if(inDungeon()&&dunRun){ const fl=battle.opts.floor-1; dunRun.kills+=battle.foes.filter(f=>!f.alive).length; endBattle(); const j=await finishDungeon(fl); dungeonSummary(j,fl,false); return; } endBattle(); toast("ออกจากศึกแล้ว"); });
 $("btnBattle").addEventListener("click",()=>{ unlockAudio(); if(battle){ toast("กำลังอยู่ในศึก"); return; } openBattleMenu(); });
 
 /* ================= canvas interaction ================= */
@@ -2206,7 +2445,7 @@ function runLoop(k,buf,fade){
   clearTimeout(loopTimer); loopTimer=setTimeout(()=>{ if(musicKey===k&&ambOn) runLoop(k,buf,4); },Math.max(5,buf.duration-4)*1000);
 }
 async function playMusic(){
-  if(!ambOn||!AC) return; const k=scene===MAGIC_SCENE?"magic":"main"; if(musicKey===k) return; musicKey=k;
+  if(!ambOn||!AC) return; const k=(scene===MAGIC_SCENE||inDungeon())?"magic":"main"; if(musicKey===k) return; musicKey=k;
   let buf; try{ buf=await loadTrack(k); }catch(e){ musicKey=null; return; }
   if(musicKey!==k||!ambOn) return;
   runLoop(k,buf,2.5);
@@ -2452,7 +2691,7 @@ let feed=[], feedSeenAt=Date.now()-120000; const tickQ=[]; let ticking=false;
 function openDrawer(tab){ const d=$("drawer"); if(tab){ drawerTab=tab; lsSet("lk.tab",tab); } d.hidden=false; $("btnList").setAttribute("aria-pressed","true"); renderList(); }
 $("btnList").addEventListener("click",()=>{ const d=$("drawer"); if(!d.hidden){ d.hidden=true; $("btnList").setAttribute("aria-pressed","false"); } else openDrawer(); });
 for(const t of document.querySelectorAll("#drawer .tab")) t.addEventListener("click",()=>openDrawer(t.dataset.tab));
-function feedText(f){ return f.kind==="duel" ? `⚔ ${f.a} (Lv.${f.aLv}) ท้าดวล ${f.d} (Lv.${f.dLv}) — ${f.attackerWon?f.a:f.d} ชนะ!` : `🏆 ${f.a} (Lv.${f.aLv}) ผ่านด่านฝึกที่ ${f.stage}`; }
+function feedText(f){ if(f.kind==="dungeon") return f.floor>=10?`👑 ${f.a} (Lv.${f.aLv}) พิชิตราชาปีศาจแห่งบาดาล!`:`🏰 ${f.a} (Lv.${f.aLv}) บุกดันเจี้ยนถึงชั้น ${f.floor}`; return f.kind==="duel" ? `⚔ ${f.a} (Lv.${f.aLv}) ท้าดวล ${f.d} (Lv.${f.dLv}) — ${f.attackerWon?f.a:f.d} ชนะ!` : `🏆 ${f.a} (Lv.${f.aLv}) ผ่านด่านฝึกที่ ${f.stage}`; }
 async function loadFeed(){
   if(!apiOK) return; try{ feed=(await api("?feed")).feed||[]; }catch(e){ return; }
   const fresh=feed.filter(f=>f.at>feedSeenAt).sort((a,b)=>a.at-b.at);
@@ -2485,7 +2724,7 @@ function renderList(){
 }
 function drawBoardRows(body,board){
   if(!board.length){ body.append(el("div","meta","ยังไม่มีใครลงศึก เป็นคนแรกเลย")); return; }
-  board.forEach((p,i)=>{ const r=el("div","brow"+(tokens[p.id]?" mine":"")); r.append(el("span","rank",String(i+1))); const t=el("div"); t.style.minWidth="0"; t.append(el("b",null,p.name)); t.append(el("small",null,`${p.stars?starStr(p.stars)+" ":""}${(TYPE_BY[p.type]||TYPES[0]).name}${p.cls&&CLASS_INFO[p.cls]?" · "+CLASS_INFO[p.cls].n:""} · Lv.${p.level} · ด่านสูงสุด ${p.bestPve||0}`)); r.append(t); r.append(el("span","kills","⚔ "+p.kills)); body.append(r); });
+  board.forEach((p,i)=>{ const r=el("div","brow"+(tokens[p.id]?" mine":"")); r.append(el("span","rank",String(i+1))); const t=el("div"); t.style.minWidth="0"; t.append(el("b",null,p.name)); t.append(el("small",null,`${p.stars?starStr(p.stars)+" ":""}${(TYPE_BY[p.type]||TYPES[0]).name}${p.cls&&CLASS_INFO[p.cls]?" · "+CLASS_INFO[p.cls].n:""} · Lv.${p.level} · ด่านสูงสุด ${p.bestPve||0}${p.bestDungeon?" · ดันเจี้ยน "+p.bestDungeon:""}`)); r.append(t); r.append(el("span","kills","⚔ "+p.kills)); body.append(r); });
 }
 
 /* ================= server sync ================= */

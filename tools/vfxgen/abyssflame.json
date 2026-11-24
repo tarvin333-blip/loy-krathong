@@ -1,0 +1,443 @@
+{
+ "frames": [
+  {
+   "filename": "lk-abyssflame 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 1.png",
+   "frame": {
+    "x": 162,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 2.png",
+   "frame": {
+    "x": 324,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 3.png",
+   "frame": {
+    "x": 486,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 4.png",
+   "frame": {
+    "x": 0,
+    "y": 265,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 5.png",
+   "frame": {
+    "x": 162,
+    "y": 265,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 6.png",
+   "frame": {
+    "x": 324,
+    "y": 265,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 7.png",
+   "frame": {
+    "x": 486,
+    "y": 265,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 8.png",
+   "frame": {
+    "x": 0,
+    "y": 530,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 9.png",
+   "frame": {
+    "x": 162,
+    "y": 530,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 10.png",
+   "frame": {
+    "x": 324,
+    "y": 530,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 11.png",
+   "frame": {
+    "x": 486,
+    "y": 530,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 12.png",
+   "frame": {
+    "x": 0,
+    "y": 795,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 13.png",
+   "frame": {
+    "x": 162,
+    "y": 795,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 14.png",
+   "frame": {
+    "x": 324,
+    "y": 795,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-abyssflame 15.png",
+   "frame": {
+    "x": 486,
+    "y": 795,
+    "w": 162,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 162,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 162,
+    "h": 265
+   },
+   "pivot": {
+    "x": 0.4012345679012346,
+    "y": 0.6792452830188679
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-abyssflame.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 648,
+   "h": 1060
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 65,
+   "y": 180
+  },
+  "frameTags": [
+   {
+    "name": "lk-abyssflame",
+    "from": 0,
+    "to": 15,
+    "direction": "forward"
+   }
+  ]
+ }
+}

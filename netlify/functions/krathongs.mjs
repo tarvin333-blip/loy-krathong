@@ -11,7 +11,7 @@
 // GET    ?inbox=<id,id,...>          → ค่าพลังและประวัติการถูกท้าของกระทงหลายใบ
 // GET    ?feed                       → ศึกล่าสุดของทั้งแม่น้ำ (ข้อความสด)
 // POST   ?claim=<id>                 → รับกุญแจให้กระทงเก่าที่ยังไม่มีเจ้าของ
-// POST   ?action=upgrade|sticks|respec|ascend|class|battle  body {id, token, ...}
+// POST   ?action=upgrade|sticks|respec|ascend|class|battle|dungeon_start|dungeon_end  body {id, token, ...}
 import { getStore } from "@netlify/blobs";
 import { createHash, randomBytes } from "node:crypto";
 
@@ -26,7 +26,7 @@ const HIDE_AT_REPORTS = 3;
 const BANNED = ["http://", "https://", "www."];
 const ID_RE = /^[a-z0-9-]{1,40}$/;
 const STATS = ["hp", "atk", "def", "spd", "sk"];
-const MAX_LV = 20, MAX_STARS = 5, START_COINS = 60, HOURLY_SOFT_CAP = 2500, DUEL_REPEAT_MS = 15 * 60_000, CLASS_CHANGE_COST = 500, REROLL_COST = 40, BATTLE_COOLDOWN_MS = 12_000, N_FORTUNES = 16;
+const MAX_LV = 20, MAX_STARS = 5, START_COINS = 60, HOURLY_SOFT_CAP = 2500, DUEL_REPEAT_MS = 15 * 60_000, CLASS_CHANGE_COST = 200, CLASS_UNLOCK_LV = 20, REROLL_COST = 40, BATTLE_COOLDOWN_MS = 12_000, N_FORTUNES = 16;
 const upCost = (lv) => 25 + lv * 15;
 const spentOn = (p) => STATS.reduce((a, k) => { let t = 0; for (let l = 0; l < (p.lv?.[k] || 0); l++) t += upCost(l); return a + t; }, 0);
 const respecRefund = (p) => { const spent = spentOn(p); return (p.respecs || 0) === 0 ? spent : Math.floor(spent * 0.8); };
@@ -36,8 +36,10 @@ const level = (p) => 1 + STATS.reduce((a, k) => a + (p.lv?.[k] || 0), 0);
 const CLASSES = ["warrior", "guardian", "mystic", "racer"];
 const capOf = (p) => MAX_LV + 5 * (p.stars || 0);                // each star lifts every stat cap by 5
 const ascendCost = (p) => 2500 * ((p.stars || 0) + 1);
+const DUNGEON_FLOORS = 10, DUNGEON_MIN_SEC_PER_FLOOR = 9, DUNGEON_CLEAR_BONUS = 500;
+const floorReward = (f) => (15 + 12 * f) * (f % 5 === 0 ? 2 : 1);
 const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; out.push(pool[Math.floor(Math.random() * pool.length)]); return out; };
-const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
+const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
 function newProg(item, token) {
   return { id: item.id, key: item.key, name: item.name, type: item.type, tokenHash: sha(token), coins: START_COINS,
     lv: { hp: 0, atk: 0, def: 0, spd: 0, sk: 0 }, sticks: null, kills: 0, wins: 0, losses: 0, defWins: 0, defLosses: 0, lastBattle: 0 };
@@ -167,11 +169,32 @@ export default async (req, context) => {
       }
       if (action === "class") {
         const c = String(b.cls || ""); if (!CLASSES.includes(c)) return json({ error: "ไม่มีคลาสนี้" }, 400);
-        if (!(p.stars >= 1)) return json({ error: "ปลดล็อกคลาสเมื่อได้ ★1" }, 400);
+        if (level(p) < CLASS_UNLOCK_LV && !(p.stars >= 1)) return json({ error: `ปลดล็อกคลาสเมื่อกระทงถึง Lv.${CLASS_UNLOCK_LV}` }, 400);
         if (p.cls === c) return json({ prog: publicProg(p) });
         if (p.cls) { if (p.coins < CLASS_CHANGE_COST) return json({ error: "เหรียญไม่พอ" }, 400); p.coins -= CLASS_CHANGE_COST; }
         p.cls = c; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         return json({ prog: publicProg(p) });
+      }
+      if (action === "dungeon_start") {
+        p.run = { id: Math.random().toString(36).slice(2, 10), t0: Date.now() };
+        await store.setJSON("prog/" + p.id, p);
+        return json({ runId: p.run.id });
+      }
+      if (action === "dungeon_end") {
+        const run = p.run; if (!run || run.id !== b.runId) return json({ error: "ไม่พบรอบดันเจี้ยนนี้" }, 400);
+        const now = Date.now(), elapsed = (now - run.t0) / 1000;
+        // a floor can't be cleared faster than the countdown plus a short fight
+        const floors = Math.max(0, Math.min(DUNGEON_FLOORS, Math.floor(Number(b.floors) || 0), Math.floor(elapsed / DUNGEON_MIN_SEC_PER_FLOOR)));
+        let gain = 0; for (let f = 1; f <= floors; f++) gain += floorReward(f);
+        let note = "";
+        if (floors >= DUNGEON_FLOORS && !p.dungeonClear) { gain += DUNGEON_CLEAR_BONUS; p.dungeonClear = true; note = `ผ่านดันเจี้ยนครั้งแรก! โบนัส +${DUNGEON_CLEAR_BONUS}`; }
+        if (!p.hour || now - p.hour.t0 > 3600_000) p.hour = { t0: now, earned: 0 };
+        if (p.hour.earned >= HOURLY_SOFT_CAP) { gain = Math.ceil(gain * 0.2); note = "ฟาร์มหนักแล้วชั่วโมงนี้ เหรียญลดเหลือ 20% (รีเซ็ตทุกชั่วโมง)"; }
+        p.hour.earned += gain; p.coins += gain; p.kills = (p.kills || 0) + Math.max(0, Math.min(30, Math.floor(Number(b.kills) || 0)));
+        p.bestDungeon = Math.max(p.bestDungeon || 0, floors); p.run = null;
+        await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        if (floors >= 5) await store.setJSON("feed/" + String(now).padStart(15, "0") + "-" + Math.random().toString(36).slice(2, 7), { at: now, kind: "dungeon", a: p.name, aType: p.type, aLv: level(p), floor: floors });
+        return json({ gain, floors, note, prog: publicProg(p) });
       }
       if (action === "respec") {
         if (level(p) <= 1) return json({ error: "ยังไม่ได้อัปค่าพลัง" }, 400);

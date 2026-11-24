@@ -1,0 +1,235 @@
+{
+ "frames": [
+  {
+   "filename": "lk-doomring 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "sourceSize": {
+    "w": 278,
+    "h": 110
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-doomring 1.png",
+   "frame": {
+    "x": 278,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "sourceSize": {
+    "w": 278,
+    "h": 110
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-doomring 2.png",
+   "frame": {
+    "x": 556,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "sourceSize": {
+    "w": 278,
+    "h": 110
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-doomring 3.png",
+   "frame": {
+    "x": 0,
+    "y": 110,
+    "w": 278,
+    "h": 110
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "sourceSize": {
+    "w": 278,
+    "h": 110
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-doomring 4.png",
+   "frame": {
+    "x": 278,
+    "y": 110,
+    "w": 278,
+    "h": 110
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "sourceSize": {
+    "w": 278,
+    "h": 110
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-doomring 5.png",
+   "frame": {
+    "x": 556,
+    "y": 110,
+    "w": 278,
+    "h": 110
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "sourceSize": {
+    "w": 278,
+    "h": 110
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-doomring 6.png",
+   "frame": {
+    "x": 0,
+    "y": 220,
+    "w": 278,
+    "h": 110
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "sourceSize": {
+    "w": 278,
+    "h": 110
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-doomring 7.png",
+   "frame": {
+    "x": 278,
+    "y": 220,
+    "w": 278,
+    "h": 110
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 278,
+    "h": 110
+   },
+   "sourceSize": {
+    "w": 278,
+    "h": 110
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 71
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-doomring.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 834,
+   "h": 330
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 139,
+   "y": 55
+  },
+  "frameTags": [
+   {
+    "name": "lk-doomring",
+    "from": 0,
+    "to": 7,
+    "direction": "forward"
+   }
+  ]
+ }
+}

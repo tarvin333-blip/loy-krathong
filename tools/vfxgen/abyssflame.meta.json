@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "94fe2a6e-f381-4e9b-86ed-f93a5308c96f",
+  "canvas": {
+   "h": 265,
+   "w": 162
+  },
+  "frames": 16,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 65,
+   "y": 180,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-abyssflame.gif": "https://api.pixellab.ai/mcp/pixel-tools/0ff6ebf0-205e-419f-98f3-b9a2a3c3edfa/lk-abyssflame.gif",
+  "lk-abyssflame.png": "https://api.pixellab.ai/mcp/pixel-tools/0ff6ebf0-205e-419f-98f3-b9a2a3c3edfa/lk-abyssflame.png",
+  "lk-abyssflame.json": "https://api.pixellab.ai/mcp/pixel-tools/0ff6ebf0-205e-419f-98f3-b9a2a3c3edfa/lk-abyssflame.json"
+ }
+}
