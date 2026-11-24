@@ -245,6 +245,16 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
 .ascend b{color:var(--gold);font-size:14px}
 .ascend small{grid-column:1;font-size:11px;color:var(--ink-dim)}
 .ascend .btn{grid-row:1/3;grid-column:2;padding:8px 12px;font-size:13px}
+.devfab{position:fixed;left:12px;bottom:12px;z-index:60;background:#1b0d2e;color:#9effc8;border:1px solid #4dff9e;border-radius:10px;padding:6px 10px;font:700 12px monospace;cursor:pointer;box-shadow:0 0 12px rgba(77,255,158,.35)}
+body.in-battle .devfab{display:none}
+.devbar{position:fixed;left:50%;transform:translateX(-50%);top:176px;z-index:60;display:flex;gap:6px;align-items:center;background:rgba(20,8,40,.85);border:1px solid #4dff9e;border-radius:10px;padding:5px 8px;font:12px monospace;color:#9effc8}
+.devbar button{white-space:nowrap;background:#2a1450;color:#e8fff2;border:1px solid #4dff9e66;border-radius:7px;padding:4px 8px;font:600 12px "Bai Jamjuree",sans-serif;cursor:pointer}
+.devbar button.on{background:#4dff9e;color:#08200f}
+.dev-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+.dev-grid .btn{padding:8px 0}
+.dev-sel{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.dev-sel .btn{padding:6px 10px;font-size:13px}
+.dev-sel .btn.on{background:#4dff9e;color:#08200f;border-color:#4dff9e}
 .cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
 .cls-box b{color:#bcd4ff}
 .tut-ic{font-size:44px;line-height:1;text-align:center;margin:6px 0 2px;filter:drop-shadow(0 0 14px rgba(255,200,97,.55))}
@@ -338,6 +348,8 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
   <div class="bar sp"><i id="bhSp"></i><span id="bhSpT"></span></div>
 </div>
 <div class="bskills" id="bskills" hidden></div>
+<div class="devbar" id="devbar" hidden><b>DEV</b><button type="button" data-d="god">อมตะ</button><button type="button" data-d="sp">SP เต็ม</button><button type="button" data-d="win">ชนะทันที</button><button type="button" data-d="lose">แพ้</button></div>
+<button type="button" class="devfab" id="devfab" hidden>DEV</button>
 
 <script>
 (() => {
@@ -1909,6 +1921,40 @@ function dungeonFoes(floor,prog){
   else for(const tp of plan) out.push(mk(tp,{hpS:(.7+floor*.03)*(plan.length>2?.85:1),atkS:plan.length>2?.85:1}));
   return out;
 }
+/* ================= dev mode: secret code, sandbox only (never saves coins) ================= */
+const DEV_HASH="1d5d151b97bb9826e51f0814b4ba5c42b807db25c80d1c8e8201b23e13e676a4";
+let devOn=!!lsGet("lk.dev",0), devPick={type:"star",cls:null,full:true}, titleTaps=0, titleAt=0;
+async function sha256hex(t){ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
+function setDev(on){ devOn=on; lsSet("lk.dev",on?1:0); $("devfab").hidden=!on; }
+async function askDevCode(){ const code=prompt("รหัสลับ"); if(!code) return; try{ if(await sha256hex(code.trim())===DEV_HASH){ setDev(true); sfx("win"); toast("เปิด Dev mode แล้ว"); openDev(); } else toast("รหัสไม่ถูกต้อง"); }catch(e){ toast("เบราว์เซอร์นี้ใช้ Dev mode ไม่ได้"); } }
+function devProg(){ const L=devPick.full?20:0; return {level:1+L*5,lv:{hp:L,atk:L,def:L,spd:L,sk:L},stars:0,cls:devPick.cls,sticks:[11],bestDungeon:0,coins:0}; }
+function devStart(floor){ const tp=TYPE_BY[devPick.type]||TYPES[0], k={id:"dev",name:"DEV · "+tp.name,type:tp.id,candle:"gold",seed:Math.random()};
+  dunRun={id:"dev",runId:"dev",floor,hp:null,kills:0,k,prog:devProg(),dev:true}; startDungeonFloor(); }
+function openDev(){
+  if(!devOn){ return; }
+  showCard(card=>{
+    card.append(el("div","kind","Dev mode 🛠")); card.append(el("h3",null,"ห้องทดลอง"));
+    card.append(el("p","meta","ทุกอย่างในนี้เล่นในเครื่องเท่านั้น ไม่บันทึกเหรียญ/สถิติขึ้นเซิร์ฟเวอร์ ระหว่างศึกมีแถบ DEV: อมตะ / SP เต็ม / ชนะทันที / แพ้"));
+    const mkSel=(label,items,key)=>{ card.append(el("b",null,label)); const row=el("div","dev-sel"); for(const [v,n] of items){ const b=el("button","btn"+(devPick[key]===v?" on":""),n); b.addEventListener("click",()=>{ devPick[key]=v; openDev(); }); row.append(b); } card.append(row); };
+    mkSel("กระทง",TYPES.map(t=>[t.id,t.name]),"type");
+    mkSel("คลาส",[[null,"ไม่มี"],...Object.entries(CLASS_INFO).map(([id,c])=>[id,c.n])],"cls");
+    mkSel("ค่าพลัง",[[true,"ตันทุกค่า (Lv.101)"],[false,"เริ่มต้น (Lv.1)"]],"full");
+    card.append(el("b",null,"ลงดันเจี้ยนชั้น"));
+    const g=el("div","dev-grid"); for(let f=1;f<=DUN_FLOORS;f++){ const b=el("button","btn"+(f%5===0?" dun":""),String(f)); b.addEventListener("click",()=>devStart(f)); g.append(b); } card.append(g);
+    const acts=el("div","acts");
+    const tu=el("button","btn","ดูวิธีเล่นใหม่"); tu.addEventListener("click",()=>openTutorial(0,openDev)); acts.append(tu);
+    const off=el("button","btn danger","ปิด Dev mode"); off.addEventListener("click",()=>{ setDev(false); closeCard(); toast("ปิด Dev mode แล้ว"); }); acts.append(off);
+    backBtn(acts,"ปิด",closeCard); card.append(acts);
+  });
+}
+document.querySelector(".brand h1").addEventListener("click",()=>{ const n=performance.now(); titleTaps=n-titleAt<900?titleTaps+1:1; titleAt=n; if(titleTaps>=5){ titleTaps=0; if(devOn) openDev(); else askDevCode(); } });
+$("devfab").addEventListener("click",()=>{ if(!battle) openDev(); });
+$("devfab").hidden=!devOn;
+$("devbar").addEventListener("click",e=>{ const d=e.target.dataset&&e.target.dataset.d; if(!d||!battle) return; const B=battle;
+  if(d==="god"){ B.god=!B.god; e.target.classList.toggle("on",B.god); toast(B.god?"อมตะ ON":"อมตะ OFF"); }
+  if(d==="sp"){ B.P.sp=100; }
+  if(d==="win"){ B.count=0; for(const f of B.foes) if(f.alive) hurt(f,f.hp+1e6,B.P); }
+  if(d==="lose"){ B.god=false; B.count=0; hurt(B.P,B.P.hp+1e6,null); } });
 function openPractice(){
   showCard(card=>{
     card.append(el("div","kind","ฝึกซ้อม"));
@@ -2072,11 +2118,11 @@ function startBattle(k,fortuneSkills,opts){
   if(opts.mode==="dungeon"){ if(foes[0]&&foes[0].titan){ foes[0].x=W*.74; foes[0].y=laneY(.5); }
     if(dunRun&&dunRun.hp!=null){ P.hp=Math.min(P.max,Math.round(dunRun.hp+P.max*.3)); } }
   battle={P,foes,all:[P,...foes],level,mode:opts.mode,opts,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],minions:[],bolts:[],floaters:[],shake:0};
-  document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false;
+  document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false; $("devbar").hidden=!devOn; $("devbar").querySelectorAll("button").forEach(b=>b.classList.remove("on"));
   buildSkillBar(); updateHud(); sfx("bless");
   if(opts.mode==="dungeon"){ lanterns.length=0; rockets.length=0; playMusic(); if(foes.some(f=>f.titan)) battle.count=4.2; }
 }
-function endBattle(){ const wasD=inDungeon(); vfxPlays.length=0; if(wasD) setTimeout(playMusic,50); setTimeout(runTicker,800); battle=null; document.body.classList.remove("in-battle"); $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
+function endBattle(){ const wasD=inDungeon(); vfxPlays.length=0; if(wasD) setTimeout(playMusic,50); setTimeout(runTicker,800); battle=null; document.body.classList.remove("in-battle"); $("devbar").hidden=true; $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
 function buildSkillBar(){
   const bar=$("bskills"); bar.textContent=""; bar.style.setProperty("--nsk",String(battle.P.skills.length));
   battle.P.skills.forEach((id,i)=>{ const sk=SKILLS[id]; const b=el("button","sk"+(sk.sig?" sig":"")); b.type="button";
@@ -2111,6 +2157,7 @@ function impactFx(cx,cy,pow,crit){
 function hurt(f,dmg,src,opts){
   if(!f.alive||dmg<=0) return 0;
   if(f.buffs.shield>0){ floater(f.x,f.y-fSize(f)*1.8,"กัน!","150,220,255"); if(f.buffs.reflect>0&&src&&src.alive) hurt(src,dmg*.6,null); return 0; }
+  if(f.isPlayer&&battle&&battle.god) return 0;
   if(f.buffs.cursed>0) dmg*=1.4;
   f.hp-=dmg; f.hitT=.35; f.flashT=.18; if(opts&&opts.crit) playVfx("crit",f.x,f.y,2.6,{follow:f,dy:-.5,add:true}); floater(f.x+rnd(-10,10),f.y-fSize(f)*1.9,(opts&&opts.crit?"คริ! ":"")+Math.round(dmg),opts&&opts.crit?"255,215,90":(f.isPlayer?"255,120,130":"255,255,255"),opts&&opts.crit?"crit":"dmg");
   if(f.hp<=0){ f.hp=0; f.alive=false; f.sinkT=0; sfx("sink"); battle.slow=Math.max(battle.slow||0,.55); if(!f.isPlayer) battle.banner={text:"ล่ม!",col:"255,140,170",t:0}; playVfx("steam",f.x,f.y,2.6,{dy:-.8,alpha:.9}); ripples.push({x:f.x,y:f.y,r:fSize(f)*3,life:0,dur:2,c:"200,225,255"}); for(let i=0;i<20;i++) sparks.push({x:f.x+rnd(-10,10),y:f.y,vx:rnd(-20,20),vy:rnd(-60,-20),g:-20,life:0,dur:rnd(1,1.8),r:rnd(1.5,3),c:"200,230,255"}); }
@@ -2333,6 +2380,7 @@ function battleDraw(c,t,dt){
 }
 async function finishDungeon(cleared){
   const R=dunRun; dunRun=null; if(!R) return null;
+  if(R.dev) return {gain:0,note:"Dev mode · ไม่บันทึกเหรียญและสถิติ",dev:true};
   try{ const j=await post("?action=dungeon_end",{id:R.id,token:tokens[R.id],runId:R.runId,floors:cleared,kills:R.kills}); if(myProgs[R.id]) myProgs[R.id].prog=j.prog; boardCache=null; setTimeout(loadFeed,1500); return j; }
   catch(e){ return {error:e.message}; }
 }
@@ -2363,6 +2411,7 @@ function dungeonSummary(j,cleared,clearedAll,sunk){
     if(j&&j.note) card.append(el("p","meta",j.note));
     if(j&&j.error) card.append(el("p","meta","บันทึกผลไม่สำเร็จ: "+j.error));
     const acts=el("div","acts"); const id=j&&j.prog&&j.prog.id;
+    if(j&&j.dev){ const d=el("button","btn","กลับ Dev"); d.addEventListener("click",openDev); acts.append(d); }
     if(id){ const a=el("button","btn dun","ลงอีกรอบ"); a.addEventListener("click",()=>openDungeonIntro(id)); acts.append(a); const u=el("button","btn primary","อัปเกรดกระทง"); u.addEventListener("click",()=>openUpgrade(id)); acts.append(u); }
     backBtn(acts,"เมนูศึก",openBattleMenu); card.append(acts);
   });
