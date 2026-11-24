@@ -319,8 +319,7 @@ body.in-battle .devfab,.devfab[hidden],.devbar[hidden]{display:none!important}
 body.in-ending .top,body.in-ending .scenes,body.in-ending .cta-wrap,body.in-ending .status,body.in-ending .empty,body.in-ending .drawer,body.in-ending .ticker,body.in-ending .devfab,body.in-ending .toast{display:none!important}
 .type.special{border-color:rgba(255,215,130,.6);background:linear-gradient(160deg,rgba(255,215,130,.16),rgba(120,240,230,.08))}
 .type.special b{color:#ffe2a0}
-.type.special.locked{filter:grayscale(.85) brightness(.7)}
-.type.special.locked small::before{content:"🔒 พิชิตชั้น 20 · "}
+.type.special.locked{border-style:dashed;background:rgba(255,215,130,.05)}
 .unlock-art{display:block;margin:6px auto 4px;width:160px;height:160px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 18px rgba(255,220,140,.8));animation:gpop .7s cubic-bezier(.2,1.6,.4,1) both}
 .cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
 .cls-box b{color:#bcd4ff}
@@ -2342,7 +2341,7 @@ function openPractice(){
     card.append(el("h3",null,"เลือกแบบกระทงลองมือ"));
     card.append(el("p","meta","โหมดนี้ไม่ได้เหรียญและไม่บันทึกสถิติ ไว้ลองสกิลของกระทงแต่ละแบบ"));
     const list=el("div","pick");
-    for(const tp of TYPES){ const st=BSTATS[tp.id], S=statsFor(tp.id,null), sg=SKILLS[st.sig];
+    for(const tp of TYPES.filter(x=>!x.special||gangaKey())){ const st=BSTATS[tp.id], S=statsFor(tp.id,null), sg=SKILLS[st.sig];
       const b=el("button"); const tx=el("div"); tx.append(el("b",null,tp.name)); tx.append(el("small",null,`HP ${S.hp} · ATK ${S.atk} · DEF ${S.def} · SPD ${S.spd}`)); tx.append(el("small",null,"ติดตัว: "+st.pas+" · สกิล: "+sg.n)); b.append(tx);
       b.addEventListener("click",()=>drawPracticeSticks({id:"tmp-"+tp.id,name:tp.name,type:tp.id,candle:form.candle,seed:Math.random()})); list.append(b); }
     card.append(list); const acts=el("div","acts"); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
@@ -3017,12 +3016,12 @@ const typeCanvases=[];
 function gangaKey(){ const id=lsGet("lk.gangaKey",null); return id&&tokens[id]?id:null; }
 TYPES.forEach(tp=>{ const b=document.createElement("button"); b.className="type"+(tp.special?" special":""); b.type="button"; b.dataset.id=tp.id;
   const cvs=document.createElement("canvas"); const bb=document.createElement("b"); bb.textContent=tp.name; const sm=document.createElement("small"); sm.textContent=tp.desc;
-  b.append(cvs,bb,sm); b.addEventListener("click",()=>{ if(tp.special&&!gangaKey()){ toast("🔒 ปลดล็อกเมื่อพิชิตดันเจี้ยนชั้น 20 แล้วรับพรจากพระแม่คงคา"); return; } form.type=tp.id; syncForm(); saveDraft(); }); $("types").appendChild(b); typeCanvases.push({cvs,id:tp.id}); });
+  b.append(cvs,bb,sm); b.addEventListener("click",()=>{ if(tp.special&&!gangaKey()){ toast("🔒 กระทงปริศนา… ว่ากันว่าจะได้รับเมื่อไปถึงปลายทางของดันเจี้ยนบาดาล"); return; } form.type=tp.id; syncForm(); saveDraft(); }); $("types").appendChild(b); typeCanvases.push({cvs,id:tp.id}); });
 CATS.forEach(ct=>{ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.dataset.id=ct.id; b.textContent=ct.name; b.addEventListener("click",()=>{ form.cat=ct.id; syncForm(); saveDraft(); }); $("cats").appendChild(b); });
 CANDLES.forEach(cd=>{ const b=document.createElement("button"); b.type="button"; b.className="sw"; b.dataset.id=cd.id; b.style.background=cd.c; b.style.color=cd.c; b.setAttribute("aria-label","เทียนสี"+cd.n); b.addEventListener("click",()=>{ form.candle=cd.id; syncForm(); saveDraft(); }); $("candles").appendChild(b); });
 function syncForm(){
   if(TYPE_BY[form.type]&&TYPE_BY[form.type].special&&!gangaKey()) form.type="banana";
-  for(const b of $("types").children){ b.setAttribute("aria-pressed",String(b.dataset.id===form.type)); if(b.classList.contains("special")) b.classList.toggle("locked",!gangaKey()); }
+  for(const b of $("types").children){ b.setAttribute("aria-pressed",String(b.dataset.id===form.type)); if(b.classList.contains("special")){ const lk=!gangaKey(), tp=TYPE_BY[b.dataset.id]; b.classList.toggle("locked",lk); b.querySelector("b").textContent=lk?"???":tp.name; b.querySelector("small").textContent=lk?"🔒 ปลดล็อกที่ปลายทางบาดาล":tp.desc; } }
   for(const b of $("cats").children) b.setAttribute("aria-pressed",String(b.dataset.id===form.cat));
   for(const b of $("candles").children) b.setAttribute("aria-pressed",String(b.dataset.id===form.candle));
   $("wishCount").textContent=$("inWish").value.length+"/160";
@@ -3087,7 +3086,9 @@ function previewLoop(){
   const nm=$("inName").value.trim(), pt=$("inPartner").value.trim();
   if(nm){ c.font='600 14px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.fillStyle="#fff3dc"; c.fillText(pt?`${nm} ♥ ${pt}`:nm, r.width/2, 22, r.width-20); }
   for(const tc of typeCanvases){ const rr=tc.cvs.getBoundingClientRect(); if(!rr.width) continue; if(tc.cvs.width!==Math.round(rr.width*d)){ tc.cvs.width=Math.round(rr.width*d); tc.cvs.height=Math.round(rr.height*d); }
-    const x=tc.cvs.getContext("2d"); x.setTransform(d,0,0,d,0,0); x.clearRect(0,0,rr.width,rr.height); x.save(); x.translate(rr.width/2,rr.height*.68+Math.sin(t*1.6+tc.id.length)*1.5); krFull(x,{type:tc.id,candle:form.candle,seed:tc.id.length/10},Math.min(22,rr.height*.3),t,null); x.restore(); }
+    const x=tc.cvs.getContext("2d"); x.setTransform(d,0,0,d,0,0); x.clearRect(0,0,rr.width,rr.height);
+    if(TYPE_BY[tc.id].special&&!gangaKey()){ const pu=.75+.25*Math.sin(t*2); x.save(); x.font=`800 ${Math.round(rr.height*.62)}px "Bai Jamjuree",sans-serif`; x.textAlign="center"; x.textBaseline="middle"; x.shadowColor=`rgba(255,215,130,${.7*pu})`; x.shadowBlur=14; x.fillStyle=`rgba(255,225,160,${.85*pu})`; x.fillText("?",rr.width/2,rr.height*.55+Math.sin(t*1.6)*1.5); x.restore(); continue; }
+    x.save(); x.translate(rr.width/2,rr.height*.68+Math.sin(t*1.6+tc.id.length)*1.5); krFull(x,{type:tc.id,candle:form.candle,seed:tc.id.length/10},Math.min(22,rr.height*.3),t,null); x.restore(); }
   if(sheetOpen) previewRAF=requestAnimationFrame(previewLoop);
 }
 
