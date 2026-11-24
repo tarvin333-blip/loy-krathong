@@ -251,6 +251,7 @@ body.in-battle .devfab,.devfab[hidden],.devbar[hidden]{display:none!important}
 .devbar:hover{opacity:1}
 .devbar b{text-align:center}
 .devbar button{white-space:nowrap;background:#2a1450;color:#e8fff2;border:1px solid #4dff9e66;border-radius:7px;padding:3px 6px;font:600 11px "Bai Jamjuree",sans-serif;cursor:pointer}
+.devbar select{background:#2a1450;color:#e8fff2;border:1px solid #4dff9e66;border-radius:7px;font:600 11px "Bai Jamjuree",sans-serif;max-width:110px}
 .devbar button.on{background:#4dff9e;color:#08200f}
 .dev-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
 .dev-grid .btn{padding:8px 0}
@@ -350,7 +351,7 @@ body.in-battle .devfab,.devfab[hidden],.devbar[hidden]{display:none!important}
   <div class="bar sp"><i id="bhSp"></i><span id="bhSpT"></span></div>
 </div>
 <div class="bskills" id="bskills" hidden></div>
-<div class="devbar" id="devbar" hidden><b>DEV</b><button type="button" data-d="god">อมตะ</button><button type="button" data-d="sp">SP เต็ม</button><button type="button" data-d="win">ชนะทันที</button><button type="button" data-d="lose">แพ้</button></div>
+<div class="devbar" id="devbar" hidden><b>DEV</b><button type="button" data-d="god">อมตะ</button><button type="button" data-d="sp">SP เต็ม</button><button type="button" data-d="win">ชนะทันที</button><button type="button" data-d="lose">แพ้</button><button type="button" data-d="calm">ศัตรูนิ่ง</button><select id="devSkill"></select><button type="button" data-d="cast">สั่งร่าย</button></div>
 <button type="button" class="devfab" id="devfab" hidden>DEV</button>
 
 <script>
@@ -1904,7 +1905,7 @@ function openDungeonIntro(id){
     card.append(el("p","meta","มี 10 ชั้น บางชั้นปีศาจมาเป็นฝูง เลือดไม่รีเซ็ตระหว่างชั้น (ฟื้น 30% ทุกชั้นที่ผ่าน) ผ่านแต่ละชั้นแล้วเลือกได้ว่าจะลงต่อหรือถอยกลับพร้อมเหรียญ ถ้าล่มกลางทาง ได้เหรียญเท่าชั้นที่ผ่านแล้ว"));
     const fl=el("div","dun-floors"); for(let f=1;f<=DUN_FLOORS;f++){ const i=el("i",(f<=(P.bestDungeon||0)?"done":"")+(f%5===0?" boss":"")); i.title="ชั้น "+f; fl.append(i); } card.append(fl);
     card.append(el("p","meta",`ดีที่สุด: ชั้น ${P.bestDungeon||0}/10 · ผ่านครบ 10 ชั้น ได้ราว ${dunTotal(10)} เหรียญ`+(P.bestDungeon>=10?"":" + โบนัสครั้งแรก 500")));
-    card.append(skillList(["haunt","curse","poison","shadow","hellfire"]));
+    card.append(el("p","meta","เคล็ดลับ: วงแดงบนน้ำ = ว่ายออกให้ทัน · เส้นแดง = งูกำลังจะพุ่ง หลบออกจากเส้น · บ่อพิษม่วงอย่าแช่ · ลูกกะโหลกเขียวหลบได้ · ชนผีพรายแรงๆ ให้แตก บอสที่มีเกราะวิญญาณต้องชนผีให้หมดก่อน · ราชาปีศาจร่ายวงแหวน ให้รีบเข้าวงบัวทอง"));
     const acts=el("div","acts"); const go=el("button","btn primary","ลงดันเจี้ยน!");
     go.addEventListener("click",async()=>{ go.disabled=true; let P2=P;
       try{ if(!P2.sticks){ const j=await post("?action=sticks",{id,token:tokens[id]}); P2=j.prog; myProgs[id].prog=P2; }
@@ -1918,7 +1919,7 @@ function dungeonFoes(floor,prog){
   const pl=Math.max(0,((prog&&prog.level)||1)-1)/5, L=Math.round(Math.min(40,floor*1.2+pl*.35)), mp={lv:{hp:L,atk:L,def:L,spd:Math.min(L,12),sk:L},stars:(prog&&prog.stars)||0};
   const mk=(type,o,name)=>{ const f=makeFighter({id:"m"+Math.random(),name:name||MONSTERS[type],type,candle:"white",seed:Math.random()},false,{prog:mp,...o}); f.skills=[BSTATS[type].sig]; f.mon=true; return f; };
   const plan=DUN_PLAN[floor], out=[];
-  if(plan==="mini"){ const b=mk("m_boss",{big:1.5,hpS:2.6,atkS:1.15,boss:true},"👹 ขุนพลปีศาจ"); b.skills=["hellfire","curse"]; out.push(b,mk("m_ghost",{hpS:.8}),mk("m_ghost",{hpS:.8})); }
+  if(plan==="mini"){ const b=mk("m_boss",{big:1.5,hpS:2.6,atkS:1.15,boss:true},"👹 ขุนพลปีศาจ"); b.skills=["hellfire","curse","haunt"]; b.wardBoss=true; out.push(b,mk("m_ghost",{hpS:.8}),mk("m_ghost",{hpS:.8})); }
   else if(plan==="titan"){ const b=mk("m_titan",{big:3.1,hpS:4.2,atkS:1.3,boss:true},"👑 ราชาปีศาจแห่งบาดาล"); b.skills=["abyss","doom","soulstorm","hellfire"]; b.titan=true; out.push(b); }
   else for(const tp of plan) out.push(mk(tp,{hpS:(.7+floor*.03)*(plan.length>2?.85:1),atkS:plan.length>2?.85:1}));
   return out;
@@ -1959,10 +1960,13 @@ document.querySelector(".brand h1").addEventListener("click",()=>{ const n=perfo
 
 $("devfab").addEventListener("click",async()=>{ if(battle) return; await refreshMyProgs(); openDev(); });
 $("devfab").hidden=!devOn;
+$("devSkill").innerHTML=Object.entries(SKILLS).filter(([,v])=>v.mon).map(([k,v])=>`<option value="${k}">${v.n}</option>`).join("");
 $("devbar").addEventListener("click",e=>{ const d=e.target.dataset&&e.target.dataset.d; if(!d||!battle) return; const B=battle;
   if(d==="god"){ B.god=!B.god; e.target.classList.toggle("on",B.god); toast(B.god?"อมตะ ON":"อมตะ OFF"); }
   if(d==="sp"){ B.P.sp=100; }
   if(d==="win"){ B.count=0; for(const f of B.foes) if(f.alive) hurt(f,f.hp+1e6,B.P); }
+  if(d==="calm"){ B.calm=!B.calm; e.target.classList.toggle("on",B.calm); }
+  if(d==="cast"){ const id=$("devSkill").value, f=B.foes.find(o=>o.alive&&(o.titan||o.boss))||B.foes.find(o=>o.alive); if(!f) return; B.count=0; f.windup=null; f.casting=null; f.sp=100; castSkill(f,id); }
   if(d==="lose"){ B.god=false; B.count=0; hurt(B.P,B.P.hp+1e6,null); } });
 function openPractice(){
   showCard(card=>{
@@ -2126,7 +2130,7 @@ function startBattle(k,fortuneSkills,opts){
   foes.forEach((f,i)=>{ f.x=W*(.62+i*.12); f.y=laneY([.35,.75,.55][i%3]); });
   if(opts.mode==="dungeon"){ if(foes[0]&&foes[0].titan){ foes[0].x=W*.74; foes[0].y=laneY(.5); }
     if(dunRun&&dunRun.hp!=null){ P.hp=Math.min(P.max,Math.round(dunRun.hp+P.max*.3)); } }
-  battle={P,foes,all:[P,...foes],level,mode:opts.mode,opts,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],minions:[],bolts:[],floaters:[],shake:0};
+  battle={P,foes,all:[P,...foes],level,mode:opts.mode,opts,t:0,count:3,over:null,target:{x:P.x,y:P.y},hazards:[],shots:[],pools:[],teles:[],safe:null,minions:[],bolts:[],floaters:[],shake:0};
   document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false; $("devbar").hidden=!devOn; $("devbar").querySelectorAll("button").forEach(b=>b.classList.remove("on"));
   buildSkillBar(); updateHud(); sfx("bless");
   if(opts.mode==="dungeon"){ lanterns.length=0; rockets.length=0; playMusic(); if(foes.some(f=>f.titan)) battle.count=4.2; }
@@ -2208,6 +2212,8 @@ function skillVfx(id,f,tgt){
     case "phantom": playVfx("evade",f.x,f.y,3,{follow:f,dy:-.5,add:true}); break;
   }
 }
+// a telegraphed attack: a warning circle fills up, then "then" runs and "hit" applies to every enemy of the owner still inside
+function tele(owner,o){ if(!battle) return; battle.teles.push({...o,owner,life:0}); }
 function skillMul(f){ return (f.k.type==="star"?1.35:1)*(f.skm||1); }
 function castSkill(f,id){
   const sk=SKILLS[id]; if(!battle||battle.over||battle.count>0||!f.alive||f.sp<sk.cost) return;
@@ -2234,19 +2240,23 @@ function castSkill(f,id){
     case "wall": f.buffs.shield=3; f.buffs.reflect=3; f.hp=Math.min(f.max,f.hp+25*m); floater(f.x,f.y-s*2,"+"+Math.round(25*m),"120,255,160","heal"); break;
     case "chain": foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; hurt(o,24*m,f); battle.bolts.push({x:o.x,y:o.y-fSize(o),life:0}); playVfx("toxic",o.x,o.y,3.6,{follow:o,dy:-1.2,add:true}); sfx("bonk"); },i*140)); flash={a:.7,x:f.x,y:f.y,c:"200,180,255"}; break;
     case "phantom": for(let i=0;i<3;i++) setTimeout(()=>{ if(!battle||!f.alive) return; const t2=nearest(f); if(!t2) return; const dx=t2.x-f.x, dy=(t2.y-f.y)*1.8, d=Math.hypot(dx,dy)||1; f.vx=dx/d*u*12; f.vy=dy/d*u*12/1.8; f.buffs.dash=.5; playVfx("rainbow",f.x,f.y-fSize(f)*.3,2.2,{flip:dx>0,add:true}); },i*380); break;
-    case "haunt": for(let i=0;i<3;i++) battle.minions.push({x:f.x+rnd(-20,20),y:f.y,owner:f,life:0,dur:6,bite:0,p:Math.random()*7,ghost:true}); break;
-    case "curse": for(const o of foesOf(f)){ o.buffs.cursed=5; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); floater(o.x,o.y-fSize(o)*2.2,"ถูกสาป!","150,255,110"); } break;
-    case "poison": if(tgt){ tgt.buffs.poison=6; tgt._pm=m; playVfx("poisonfog",tgt.x,tgt.y,2.4,{follow:tgt,dy:-.5,alpha:.65}); floater(tgt.x,tgt.y-fSize(tgt)*2.2,"ติดพิษ!","190,110,255"); } break;
-    case "shadow": if(tgt){ playVfx("evade",f.x,f.y,2.6,{dy:-.5}); const side=tgt.x<W/2?1:-1; f.x=Math.max(s,Math.min(W-s,tgt.x+side*fSize(tgt)*3)); f.y=tgt.y; f.vx=-side*u*12; f.vy=0; f.buffs.dash=.7; playVfx("fury",f.x,f.y,2.6,{follow:f,dy:-.6}); } break;
-    case "hellfire": { const ts=f.boss?foesOf(f):(tgt?[tgt]:[]); ts.forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; playVfx("bloodpillar",o.x,o.y,4.2,{dy:-1.4,add:true}); setTimeout(()=>{ if(!battle||!o.alive) return; hurt(o,30*m,f); o.vy-=u*2; battle.shake=8; ripples.push({x:o.x,y:o.y,r:u*2,life:0,dur:1.2,c:"255,120,90"}); },380); },i*200)); break; }
-    case "abyss": if(tgt){ const o=tgt; playVfx(VFX.abyssflame&&VFX.abyssflame.ok?"abyssflame":"bloodpillar",o.x,o.y,5.2,{dy:-1.5,add:true}); battle.banner={text:sk.n,col:"255,80,80",t:0};
-        setTimeout(()=>{ if(!battle||!o.alive) return; hurt(o,40*m,f); o.vy-=u*4; o.vx+=(o.x<f.x?-1:1)*u*8; battle.shake=14; flash={a:.8,x:o.x,y:o.y,c:"255,60,40"}; for(let q=0;q<40;q++){ const a=-Math.PI*Math.random(); sparks.push({x:o.x,y:o.y,vx:Math.cos(a)*rnd(60,260),vy:Math.sin(a)*rnd(80,300),g:300,life:0,dur:rnd(.6,1.2),r:rnd(1.2,2.6),c:Math.random()<.5?"255,90,40":"40,0,0",trail:.05}); } },450); } break;
-    case "doom": battle.banner={text:sk.n,col:"255,60,90",t:0}; playVfx(VFX.doomring&&VFX.doomring.ok?"doomring":"formation",f.x,f.y,8,{flat:.55,add:true,back:true});
-      runeBursts.push({x:f.x,y:f.y,life:0,dur:1.4,r:Math.max(W,H)*.6,flat:true,glyph:true,col:"255,40,80"}); battle.shake=16;
-      setTimeout(()=>{ if(!battle) return; for(const o of foesOf(f)){ hurt(o,26*m,f); o.buffs.cursed=5; const dx=o.x-f.x||1; o.vx+=Math.sign(dx)*u*12; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); } },350); break;
-    case "soulstorm": battle.banner={text:sk.n,col:"170,200,255",t:0}; playVfx(VFX.soulstorm&&VFX.soulstorm.ok?"soulstorm":"whirl",f.x,f.y,5.5,{follow:f,dy:-1.2,add:true});
-      for(let i=0;i<5;i++) battle.minions.push({x:f.x+rnd(-40,40),y:f.y+rnd(-10,10),owner:f,life:0,dur:7,bite:0,p:Math.random()*7,ghost:true});
-      f.hp=Math.min(f.max,f.hp+f.max*.06); floater(f.x,f.y-s*2,"+"+Math.round(f.max*.06),"120,255,160","heal"); break;
+    case "haunt": for(let i=0;i<3;i++) battle.minions.push({x:f.x+rnd(-20,20),y:f.y,owner:f,life:0,dur:8,bite:0,p:Math.random()*7,ghost:true}); break;
+    case "curse": if(tgt){ const n=f.boss?3:1; for(let i=0;i<n;i++){ const a=Math.atan2((tgt.y-f.y)*1.8,tgt.x-f.x)+(i-(n-1)/2)*.35; battle.shots.push({x:f.x,y:f.y-s*.6,vx:Math.cos(a)*u*4.2,vy:Math.sin(a)*u*4.2/1.8,owner:f,life:0,dur:4,m}); } } break;
+    case "poison": if(tgt){ const px=tgt.x, py=tgt.y; tele(f,{x:px,y:py,r:u*2.4,dur:.8,col:"190,110,255",label:"",then:()=>{ battle.pools.push({x:px,y:py,r:u*2.4,life:0,dur:7,owner:f,m}); playVfx("poisonfog",px,py,2.6,{dy:-.3,alpha:.7}); }}); } break;
+    case "shadow": if(tgt){ const ang=Math.atan2((tgt.y-f.y)*1.8,tgt.x-f.x); f.windup={t:.75,ang,len:Math.max(W,H)}; floater(f.x,f.y-krTop(f.k,s)-20,"!","255,80,120","crit"); playVfx("fury",f.x,f.y,2.4,{follow:f,dy:-.6}); } break;
+    case "hellfire": { const ts=tgt?[tgt]:[]; const n=f.boss?3:1; const spots=[]; if(tgt) spots.push([tgt.x,tgt.y]); while(spots.length<n) spots.push([rnd(.15,.85)*W,laneY(Math.random())]);
+      spots.forEach(([x,y],i)=>tele(f,{x,y,r:u*2.1,dur:1.05+i*.12,col:"255,70,40",then:()=>{ playVfx("bloodpillar",x,y,4.2,{dy:-1.4,add:true}); battle.shake=8; ripples.push({x,y,r:u*2,life:0,dur:1.2,c:"255,120,90"}); },hit:o=>{ hurt(o,30*m,f); o.vy-=u*2; }})); break; }
+    case "abyss": { const spots=[]; if(tgt) spots.push([tgt.x,tgt.y]); for(let i=0;i<(f.enraged?6:4);i++) spots.push([rnd(.1,.9)*W,laneY(Math.random())]); battle.banner={text:sk.n,col:"255,80,80",t:0};
+      spots.forEach(([x,y],i)=>tele(f,{x,y,r:u*2.6,dur:1.25+i*.1,col:"255,40,30",then:()=>{ playVfx(VFX.abyssflame&&VFX.abyssflame.ok?"abyssflame":"bloodpillar",x,y,4.6,{dy:-1.4,add:true}); battle.shake=12; flash={a:.6,x,y,c:"255,60,40"}; for(let q=0;q<24;q++){ const a=-Math.PI*Math.random(); sparks.push({x,y,vx:Math.cos(a)*rnd(60,220),vy:Math.sin(a)*rnd(80,260),g:300,life:0,dur:rnd(.6,1.1),r:rnd(1.2,2.4),c:Math.random()<.5?"255,90,40":"60,0,0",trail:.05}); } },hit:o=>{ hurt(o,40*m,f); o.vy-=u*4; }})); break; }
+    case "doom": { battle.banner={text:sk.n,col:"255,60,90",t:0}; f.casting={t:2.6,dur:2.6,name:sk.n};
+      const P0=foesOf(f)[0]; let sx=0, sy=0; for(let k=0;k<20;k++){ sx=rnd(.12,.88)*W; sy=laneY(rnd(.1,.9)); if(!P0||Math.hypot(sx-P0.x,(sy-P0.y)*1.8)>Math.min(W,H)*.35) break; }
+      battle.safe={x:sx,y:sy,r:u*2.6,life:0,dur:2.6};
+      floater(sx,sy-u*2.4,"หลบในวงบัว!","255,230,140","skill");
+      tele(f,{x:f.x,y:f.y,r:Math.max(W,H),dur:2.6,col:"255,40,80",global:true,then:()=>{ const sf=battle.safe; battle.safe=null; f.casting=null; playVfx(VFX.doomring&&VFX.doomring.ok?"doomring":"formation",f.x,f.y,8,{flat:.55,add:true,back:true}); runeBursts.push({x:f.x,y:f.y,life:0,dur:1.4,r:Math.max(W,H)*.6,flat:true,glyph:true,col:"255,40,80"}); battle.shake=18;
+        for(const o of foesOf(f)){ if(sf&&Math.hypot(o.x-sf.x,(o.y-sf.y)*1.8)<sf.r){ floater(o.x,o.y-fSize(o)*2,"รอด!","255,230,140","skill"); continue; } hurt(o,55*m,f); o.buffs.cursed=5; o.vx+=Math.sign(o.x-f.x||1)*u*12; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); } }}); break; }
+    case "soulstorm": battle.banner={text:sk.n,col:"170,200,255",t:0}; playVfx(VFX.soulstorm&&VFX.soulstorm.ok?"soulstorm":"whirl",f.x,f.y,3.6,{follow:f,dy:-1.2,add:true});
+      for(let i=0;i<5;i++) battle.minions.push({x:f.x+rnd(-60,60),y:f.y+rnd(-14,14),owner:f,life:0,dur:12,bite:0,p:Math.random()*7,ghost:true,ward:true});
+      f.hp=Math.min(f.max,f.hp+f.max*.04); floater(f.x,f.y-s*2,"เกราะวิญญาณ! ชนผีให้แตก","170,200,255","skill"); break;
     case "claw": if(tgt){ for(let i=0;i<3;i++) setTimeout(()=>{ if(!battle||!tgt.alive) return; hurt(tgt,12*m*1.6,f,{crit:true}); playVfx("crossclaw",tgt.x+rnd(-8,8),tgt.y,2.4,{follow:tgt,dy:-.7,flip:Math.random()<.5}); floater(tgt.x+rnd(-14,14),tgt.y-fSize(tgt)*1.4,"แฮ่!","255,200,140"); sfx("bonk"); },i*160); } break;
   }
   skillVfx(id,f,tgt); sfx("bless"); updateHud();
@@ -2275,12 +2285,12 @@ function battleStep(dt,t){
     else {
       f.aiT-=dt; const tg=nearest(f);
       if(tg){ if(f.buffs.charmed>0){ tx=f.x+(f.x-tg.x); ty=f.y+(f.y-tg.y); } else { tx=tg.x+tg.vx*.4; ty=tg.y+tg.vy*.4; } } else { tx=f.x; ty=f.y; }
-      if(live&&f.aiT<=0){ f.aiT=f.duel||f.boss?rnd(.4,.9):rnd(.6,1.3); const usable=f.skills.filter(id=>f.sp>=SKILLS[id].cost); if(usable.length&&Math.random()<(f.duel||f.boss?.7:.45)) castSkill(f,usable[Math.random()*usable.length|0]); }
+      if(live&&f.aiT<=0&&!f.windup&&!f.casting&&!B.calm){ f.aiT=f.duel||f.boss?rnd(.4,.9):rnd(.6,1.3); const usable=f.skills.filter(id=>f.sp>=SKILLS[id].cost); if(usable.length&&Math.random()<(f.duel||f.boss?.7:.45)) castSkill(f,usable[Math.random()*usable.length|0]); }
     }
     if(live){
       const dx=tx-f.x, dy=(ty-f.y)*1.8, d=Math.hypot(dx,dy);
       const acc=u*14*f.spd*(f.buffs.haste>0?1.8:1)*(f.isPlayer?1:f.duel?1:f.boss?.92:Math.min(.85,.62+battle.level*.05));
-      if(d>u*.3){ f.vx+=dx/d*acc*dt; f.vy+=dy/d*acc*dt/1.8; }
+      if(d>u*.3&&!f.windup&&!f.casting){ f.vx+=dx/d*acc*dt; f.vy+=dy/d*acc*dt/1.8; }
     }
     const damp=f.buffs.dash>0?.4:2.2; f.vx-=f.vx*damp*dt; f.vy-=f.vy*damp*dt;
     const vmax=u*(f.buffs.dash>0?12:6.5)*f.spd*(f.buffs.haste>0?1.6:1); const sp=Math.hypot(f.vx,f.vy*1.8); if(sp>vmax){ f.vx*=vmax/sp; f.vy*=vmax/sp; }
@@ -2308,11 +2318,29 @@ function battleStep(dt,t){
     const e=a.buffs.pierce>0||b.buffs.pierce>0?.2:.9, imp=rel*(1+e)/2;
     a.vx-=imp*nx; a.vy-=imp*ny/1.8; b.vx+=imp*nx; b.vy+=imp*ny/1.8;
   }
+  // telegraphs
+  for(let i=B.teles.length-1;i>=0;i--){ const h=B.teles[i]; h.life+=dt; if(h.life<h.dur) continue; B.teles.splice(i,1); if(!h.owner.alive){ if(h.global){ B.safe=null; h.owner.casting=null; } continue; }
+    if(h.then) h.then(); if(h.hit) for(const o of B.all){ if(!o.alive||o.isPlayer===h.owner.isPlayer) continue; if(Math.hypot(o.x-h.x,(o.y-h.y)*1.8)<h.r+fSize(o)*.4) h.hit(o); } }
+  if(B.safe) B.safe.life+=dt;
+  // skull orbs: slow, lightly homing, dodgeable
+  for(let i=B.shots.length-1;i>=0;i--){ const q=B.shots[i]; q.life+=dt; if(q.life>q.dur){ B.shots.splice(i,1); continue; } const tg=nearest(q.owner)||{x:q.x,y:q.y};
+    const a=Math.atan2((tg.y-q.y)*1.8,tg.x-q.x), cur=Math.atan2(q.vy*1.8,q.vx), sp=Math.hypot(q.vx,q.vy*1.8); let da=((a-cur+Math.PI*3)%(Math.PI*2))-Math.PI; const na=cur+Math.max(-.9*dt,Math.min(.9*dt,da)); q.vx=Math.cos(na)*sp; q.vy=Math.sin(na)*sp/1.8;
+    q.x+=q.vx*dt; q.y+=q.vy*dt; for(const o of B.all){ if(!o.alive||o.isPlayer===q.owner.isPlayer) continue; if(Math.hypot(o.x-q.x,(o.y-fSize(o)*.5-q.y)*1.8)<fSize(o)*.8){ hurt(o,14*q.m,q.owner); o.buffs.cursed=5; floater(o.x,o.y-fSize(o)*2.2,"ถูกสาป!","150,255,110"); playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); B.shots.splice(i,1); break; } } }
+  // poison pools: standing in one keeps you poisoned
+  for(let i=B.pools.length-1;i>=0;i--){ const q=B.pools[i]; q.life+=dt; if(q.life>q.dur){ B.pools.splice(i,1); continue; }
+    for(const o of B.all){ if(!o.alive||o.isPlayer===q.owner.isPlayer) continue; if(Math.hypot(o.x-q.x,(o.y-q.y)*1.8)<q.r){ if(!(o.buffs.poison>0)) floater(o.x,o.y-fSize(o)*2.2,"ติดพิษ!","190,110,255"); o.buffs.poison=Math.max(o.buffs.poison||0,2.5); o._pm=q.m; } } }
+  // bosses: warded while their spirits live; the titan rains lava once enraged
+  for(const f of B.foes){ if(!f.alive) continue;
+    if(f.wardBoss||f.titan){ const wards=B.minions.filter(m=>m.owner===f&&(m.ward||f.wardBoss)).length+(f.wardBoss?B.foes.filter(o=>o!==f&&o.alive&&o.k.type==="m_ghost").length:0); const was=f.warded; f.warded=wards>0&&live; if(f.warded) f.buffs.shield=Math.max(f.buffs.shield||0,.15); if(was&&!f.warded){ floater(f.x,f.y-fSize(f)*2.6,"เกราะแตก!","255,230,140","skill"); B.shake=8; } }
+    if(f.titan&&f.enraged&&live){ f._rain=(f._rain||2)-dt; if(f._rain<=0){ f._rain=2.2; const P0=B.P; for(let k=0;k<2;k++){ const x=k?rnd(.1,.9)*W:P0.x+rnd(-1,1)*bU()*2, y=k?laneY(Math.random()):P0.y; tele(f,{x,y,r:bU()*1.8,dur:1.1,col:"255,120,40",then:()=>{ playVfx("meteor",x-bU(),y,4,{dy:-1.3,add:true}); ripples.push({x,y,r:bU()*2,life:0,dur:1.2,c:"255,150,90"}); },hit:o=>hurt(o,22*skillMul(f),f)}); } } }
+    if(f.windup){ f.windup.t-=dt; f.vx*=.8; f.vy*=.8; if(f.windup.t<=0){ const a=f.windup.ang; f.vx=Math.cos(a)*bU()*15; f.vy=Math.sin(a)*bU()*15/1.8; f.buffs.dash=.7; f.buffs.pierce=.7; f.windup=null; playVfx("evade",f.x,f.y,2.6,{dy:-.5}); } }
+    if(f.casting){ f.vx*=.9; f.vy*=.9; } }
   // hazards, minions
   for(let i=B.hazards.length-1;i>=0;i--){ const h=B.hazards[i]; h.life+=dt; if(h.life>h.dur){ B.hazards.splice(i,1); continue; }
     for(const o of B.all){ if(!o.alive||o.isPlayer===h.owner.isPlayer) continue; const dx=h.x-o.x, dy=(h.y-o.y)*1.8, d=Math.hypot(dx,dy); if(d<h.r){ o.vx+=dx/(d||1)*u*10*dt; o.vy+=dy/(d||1)*u*10*dt/1.8; o._vz=(o._vz||0)+dt; if(o._vz>.5){ o._vz=0; hurt(o,h.dps*.5,h.owner); } } } }
   for(let i=B.minions.length-1;i>=0;i--){ const m=B.minions[i]; m.life+=dt; if(m.life>m.dur||!m.owner.alive){ B.minions.splice(i,1); continue; }
-    const tg=nearest(m.owner); if(!tg) continue; const dx=tg.x-m.x, dy=tg.y-m.y, d=Math.hypot(dx,dy)||1; const sp=u*7; m.x+=dx/d*sp*dt+Math.sin(m.life*8+m.p)*.5; m.y+=dy/d*sp*dt*.6;
+    const tg=nearest(m.owner); if(!tg) continue; const dx=tg.x-m.x, dy=tg.y-m.y, d=Math.hypot(dx,dy)||1; const sp=u*(m.ghost?4.2:7); m.x+=dx/d*sp*dt+Math.sin(m.life*8+m.p)*.5; m.y+=dy/d*sp*dt*.6;
+    if(m.ghost){ const pl=B.all.find(o=>o.alive&&o.isPlayer!==m.owner.isPlayer&&Math.hypot(o.x-m.x,(o.y-fSize(o)*.5-m.y)*1.6)<fSize(o)*1.05&&Math.hypot(o.vx,o.vy*1.8)>u*2.6); if(pl){ B.minions.splice(i,1); playVfx("steam",m.x,m.y,1.8,{alpha:.8}); floater(m.x,m.y-20,"แตก!","200,220,255"); for(let q=0;q<14;q++){ const a=Math.random()*TAU; sparks.push({x:m.x,y:m.y,vx:Math.cos(a)*rnd(40,140),vy:Math.sin(a)*rnd(40,140),g:0,drag:2,life:0,dur:rnd(.4,.8),r:rnd(1,2),c:"200,220,255"}); } sfx("bonk"); continue; } }
     m.bite-=dt; if(d<fSize(tg)*1.1&&m.bite<=0){ m.bite=m.ghost?.9:.5; hurt(tg,(m.ghost?2.2:4)*skillMul(m.owner),m.owner); } }
   // end conditions
   if(!B.over){
@@ -2360,10 +2388,31 @@ function drawGhostWisp(c,m,t){ const s=bU()*.5, y=m.y-s*1.6+Math.sin(m.life*5+m.
 function battleDraw(c,t,dt){
   const B=battle;
   for(const h of B.hazards){ const a=1-h.life/h.dur; c.save(); c.translate(h.x,h.y); c.scale(1,.32); c.rotate(h.life*6); c.strokeStyle=`rgba(140,180,255,${.6*a})`; c.lineWidth=2; for(let k=0;k<4;k++){ c.beginPath(); c.arc(0,0,h.r*(.3+k*.22),k,k+4.2); c.stroke(); } c.restore(); }
+  // warnings on the water: they fill up, then strike
+  for(const h of B.teles){ const k=Math.min(1,h.life/h.dur), pu=.5+.5*Math.sin(B.t*20);
+    if(h.global){ c.save(); c.fillStyle=`rgba(${h.col},${.08+.14*k*pu})`; c.fillRect(0,0,W,H); c.restore(); continue; }
+    c.save(); c.translate(h.x,h.y); c.scale(1,.36);
+    c.fillStyle=`rgba(10,0,10,${.35+.1*pu})`; c.beginPath(); c.arc(0,0,h.r,0,TAU); c.fill();
+    c.fillStyle=`rgba(${h.col},${.35+.25*k})`; c.beginPath(); c.arc(0,0,h.r*k,0,TAU); c.fill();
+    c.lineWidth=4; c.strokeStyle=`rgba(255,250,220,${.75+.25*pu})`; c.setLineDash([14,9]); c.lineDashOffset=-B.t*40; c.beginPath(); c.arc(0,0,h.r,0,TAU); c.stroke(); c.setLineDash([]);
+    c.strokeStyle=`rgba(${h.col},1)`; c.lineWidth=2; c.beginPath(); c.arc(0,0,h.r*k,0,TAU); c.stroke();
+    c.fillStyle="rgba(255,250,220,.95)"; for(let q=0;q<4;q++){ const a2=q*Math.PI/2+B.t; c.save(); c.rotate(a2); c.beginPath(); c.moveTo(h.r+12,0); c.lineTo(h.r+2,-6); c.lineTo(h.r+2,6); c.closePath(); c.restore(); c.fill(); } c.restore(); }
+  if(B.safe){ const sf=B.safe, k=sf.life/sf.dur, pu=.5+.5*Math.sin(B.t*6); c.save(); c.globalCompositeOperation="lighter"; c.translate(sf.x,sf.y); c.scale(1,.36);
+    c.fillStyle=rg(c,0,0,0,sf.r,[[0,`rgba(255,230,140,${.35+.15*pu})`],[1,"rgba(255,200,90,.05)"]]); c.beginPath(); c.arc(0,0,sf.r,0,TAU); c.fill();
+    c.strokeStyle=`rgba(255,235,160,${.8})`; c.lineWidth=3; c.beginPath(); c.arc(0,0,sf.r,0,TAU); c.stroke(); c.restore();
+    if(PROP.bloom&&PROP.bloom.ok) propDraw(c,"bloom",sf.x,sf.y+bU()*.3,bU()*2.2,true); }
+  for(const q of B.pools){ const a=Math.min(1,q.life*3,(q.dur-q.life)/.8); c.save(); c.translate(q.x,q.y); c.scale(1,.36); c.fillStyle=rg(c,0,0,0,q.r,[[0,`rgba(150,60,220,${.45*a})`],[.8,`rgba(110,40,170,${.3*a})`],[1,"rgba(90,20,140,0)"]]); c.beginPath(); c.arc(0,0,q.r,0,TAU); c.fill(); c.restore();
+    for(let k=0;k<3;k++){ const ph=(B.t*.9+k/3+q.x*.01)%1; c.fillStyle=`rgba(200,140,255,${.6*a*(1-ph)})`; c.beginPath(); c.arc(q.x+Math.sin(k*2.3+q.x)*q.r*.5,q.y-ph*14,2+k,0,TAU); c.fill(); } }
+  for(const f of B.foes){ if(!f.alive) continue;
+    if(f.windup){ const L=Math.max(W,H); c.save(); c.globalCompositeOperation="lighter"; c.strokeStyle=`rgba(255,60,120,${.35+.35*Math.sin(B.t*30)})`; c.lineWidth=fSize(f)*.9; c.lineCap="round"; c.beginPath(); c.moveTo(f.x,f.y); c.lineTo(f.x+Math.cos(f.windup.ang)*L,f.y+Math.sin(f.windup.ang)*L/1.8); c.stroke(); c.restore(); }
+    if(f.warded){ const s2=fSize(f); c.save(); c.globalCompositeOperation="lighter"; c.strokeStyle=`rgba(150,170,255,${.5+.3*Math.sin(B.t*5)})`; c.lineWidth=3; c.fillStyle="rgba(120,140,255,.10)"; c.beginPath(); c.ellipse(f.x,f.y-s2*.9,s2*1.5,s2*1.6,0,0,TAU); c.fill(); c.stroke(); c.restore(); }
+    if(f.casting){ const s2=fSize(f), w=Math.max(80,s2*2.4), y=f.y-krTop(f.k,s2)-44, k=1-f.casting.t/f.casting.dur; f.casting.t=Math.max(0,f.casting.t-dt); c.fillStyle="rgba(10,0,8,.8)"; c.fillRect(f.x-w/2-2,y-2,w+4,9); c.fillStyle="#ff4060"; c.fillRect(f.x-w/2,y,w*k,5); c.font='700 13px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.fillStyle="#ffc0c8"; c.fillText("ร่าย "+f.casting.name,f.x,y-6); } }
   drawVfx(c,dt,true);
   const order=[...B.all].sort((a,b)=>a.y-b.y);
   for(const f of order) drawFighter(c,f,t);
   drawVfx(c,dt,false);
+  for(const q of B.shots){ c.save(); c.translate(q.x,q.y); c.globalCompositeOperation="lighter"; const r=bU()*.42; c.fillStyle=rg(c,0,0,0,r*2.4,[[0,"rgba(190,255,140,.7)"],[1,"rgba(90,200,60,0)"]]); c.beginPath(); c.arc(0,0,r*2.4,0,TAU); c.fill(); c.globalCompositeOperation="source-over";
+    c.fillStyle="#eef5dc"; c.beginPath(); c.arc(0,-r*.1,r*.7,0,TAU); c.fill(); c.fillRect(-r*.4,r*.3,r*.8,r*.35); c.fillStyle="#1c2a12"; c.beginPath(); c.arc(-r*.25,-r*.15,r*.17,0,TAU); c.arc(r*.25,-r*.15,r*.17,0,TAU); c.fill(); c.restore(); }
   for(const m of B.minions){ if(m.ghost){ drawGhostWisp(c,m,t); continue; } c.save(); c.translate(m.x,m.y); const s=bU()*.35; c.rotate(Math.sin(m.life*10)*.3); c.fillStyle="#ffa14a"; c.beginPath(); c.ellipse(0,0,s,s*.4,0,0,TAU); c.fill(); c.beginPath(); c.moveTo(-s*.9,0); c.lineTo(-s*1.5,-s*.4); c.lineTo(-s*1.5,s*.4); c.fill(); c.restore(); }
   for(let i=B.bolts.length-1;i>=0;i--){ const b=B.bolts[i]; b.life+=dt; if(b.life>.45){ B.bolts.splice(i,1); continue; } const a=1-b.life/.45; c.save(); c.globalCompositeOperation="lighter";
     if(b.meteor){ c.strokeStyle=`rgba(190,220,255,${a})`; c.lineWidth=4; c.beginPath(); c.moveTo(b.x-120,b.y-260*(1-b.life)); c.lineTo(b.x,b.y); c.stroke(); }
