@@ -56,7 +56,7 @@ function rollRelic(p) {
 }
 const floorReward = (f) => (15 + 12 * f) * (f % 5 === 0 ? 2 : 1);
 const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; out.push(pool[Math.floor(Math.random() * pool.length)]); return out; };
-const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, tickets: p.tickets || 0, inv: p.inv || {}, relics: p.relics || [], pity: p.pity || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
+const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, tickets: p.tickets || 0, inv: p.inv || {}, relics: p.relics || [], pity: p.pity || 0, assists: p.assists || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
 function newProg(item, token) {
   return { id: item.id, key: item.key, name: item.name, type: item.type, tokenHash: sha(token), coins: START_COINS,
     lv: { hp: 0, atk: 0, def: 0, spd: 0, sk: 0 }, sticks: null, kills: 0, wins: 0, losses: 0, defWins: 0, defLosses: 0, lastBattle: 0 };
@@ -200,7 +200,9 @@ export default async (req, context) => {
       }
       if (action === "dungeon_start") {
         const from = Number(b.from) === 11 && (p.bestDungeon || 0) >= 10 ? 11 : 1;
-        p.run = { id: Math.random().toString(36).slice(2, 10), t0: Date.now(), from };
+        // party: up to 2 allies (other krathongs, AI-controlled in the browser); they get a share of the coins
+        const allies = (Array.isArray(b.allies) ? b.allies : []).map(String).filter((x, i, a) => ID_RE.test(x) && x !== p.id && a.indexOf(x) === i).slice(0, 2);
+        p.run = { id: Math.random().toString(36).slice(2, 10), t0: Date.now(), from, allies };
         await store.setJSON("prog/" + p.id, p);
         return json({ runId: p.run.id, from });
       }
@@ -227,7 +229,15 @@ export default async (req, context) => {
         await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         if (floors >= 5) await store.setJSON("feed/" + String(now).padStart(15, "0") + "-" + Math.random().toString(36).slice(2, 7), { at: now, kind: "dungeon", a: p.name, aType: p.type, aLv: level(p), floor: floors });
         if (loot.some((g) => g.rar === "UR")) for (const g of loot) if (g.rar === "UR") await store.setJSON("feed/" + String(now).padStart(15, "0") + "-" + Math.random().toString(36).slice(2, 7), { at: now, kind: "gacha", a: p.name, aType: p.type, aLv: level(p), item: g.id, drop: true });
-        return json({ gain, floors, note, tickets, loot, prog: publicProg(p) });
+        // allies' share: 20% of the run's coins (before the leader's own cap), at most 1,500 per ally per hour
+        const helped = [];
+        for (const aid of run.allies || []) { if (!count) break; const ap = await store.get("prog/" + aid, { type: "json" }); if (!ap) continue;
+          if (!ap.allyHour || now - ap.allyHour.t0 > 3600_000) ap.allyHour = { t0: now, earned: 0 };
+          const share = Math.max(5, Math.min(1500 - ap.allyHour.earned, Math.round(gain * 0.2))); if (share <= 0) continue;
+          ap.allyHour.earned += share; ap.coins = (ap.coins || 0) + share; ap.assists = (ap.assists || 0) + 1; await store.setJSON("prog/" + aid, ap);
+          await store.setJSON("ch/" + aid + "/" + String(now).padStart(15, "0") + Math.floor(Math.random() * 9), { at: now, kind: "assist", attackerId: p.id, attackerName: p.name, attackerType: p.type, attackerLevel: level(p), floors, coins: share });
+          helped.push({ id: aid, name: ap.name, coins: share }); }
+        return json({ gain, floors, note, tickets, loot, helped, prog: publicProg(p) });
       }
       if (action === "gacha") {
         const n = Number(b.n) === 10 ? 10 : 1;
