@@ -12,6 +12,10 @@ PROPS = {
  'bloom':   ((112, 104), "a single green lotus leaf floating flat with one fully open pink and white lotus flower in the middle with a golden center, seen from a low three-quarter angle"),
  'boat':    ((224, 96), "a long Thai river dinner cruise boat at night seen from the side, dark wooden hull, rows of warm glowing windows, strings of colorful fairy lights along the roof, small Thai-style roof ornaments"),
  'otter':   ((112, 128), "a cute chibi otter wizard standing upright facing the viewer, brown fur with cream belly and face, happy open-mouth smile, wearing a big dark purple witch hat with a gold crescent moon and a gold star emblem and a purple bow, a short black cape with lavender trim and a purple gem brooch, holding a twisted wooden staff topped with a glowing purple crystal orb"),
+ 'cls_warrior':  ((48, 80), "a small slender Thai-style royal war banner on a thin golden pole, deep blue silk flag with a white ocean-wave emblem and gold trim, gently fluttering, elegant and minimal"),
+ 'cls_guardian': ((56, 56), "a small round shield shaped like a blooming golden lotus flower, polished gold petals with a soft glow and a tiny emerald gem in the center, elegant and minimal"),
+ 'cls_mystic':   ((56, 56), "a small floating silver crescent moon with a tiny glowing violet crystal orb hanging below it on a thin chain, a few soft magical sparkles, elegant and minimal"),
+ 'cls_racer':    ((112, 56), "a pair of small spread feathered wings in soft pastel rainbow gradient colors, seen from the front, symmetrical, slight glow, elegant and minimal"),
 }
 if __name__ == '__main__':
     before = gens()

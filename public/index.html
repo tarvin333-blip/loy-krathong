@@ -602,7 +602,27 @@ function krFront(c,k,s){
 }
 
 /* PixelLab scene props (tools/prop_art.py) */
-const PROP={}; for(const n of ["lantern","fish","pad","bud","bloom","boat","otter"]){ const im=new Image(); PROP[n]={img:im,ok:false}; im.onload=()=>{ PROP[n].ok=true; }; im.src="img/props/"+n+".png"; }
+const PROP={}; for(const n of ["lantern","fish","pad","bud","bloom","boat","otter","cls_warrior","cls_guardian","cls_mystic","cls_racer"]){ const im=new Image(); PROP[n]={img:im,ok:false}; im.onload=()=>{ PROP[n].ok=true; }; im.src="img/props/"+n+".png"; }
+/* class accessories and star aura: small, tucked where they do not hide the candle or the krathong's face */
+const STAR_COL=[null,"255,214,130","150,215,255","195,160,255","255,160,215"];
+function drawStarAura(c,k,s,t){ const st=k.stars|0; if(!st) return; const wl=waterLine(k,s), rx=hullRx(k,s)*1.25, sd=k.seed||0;
+  const col=st>=5?`${Math.round(200+55*Math.sin(t*1.3))},${Math.round(180+60*Math.sin(t*1.3+2))},${Math.round(200+55*Math.sin(t*1.3+4))}`:STAR_COL[st];
+  c.save(); c.globalCompositeOperation="lighter"; c.translate(0,wl); c.scale(1,.24);
+  c.fillStyle=rg(c,0,0,rx*.55,rx*1.15,[[0,`rgba(${col},0)`],[.55,`rgba(${col},${.13+.05*st+.05*Math.sin(t*2+sd*7)})`],[1,`rgba(${col},0)`]]); c.beginPath(); c.arc(0,0,rx*1.15,0,TAU); c.fill(); c.restore();
+  if(st>=3){ c.save(); c.globalCompositeOperation="lighter"; for(let i=0;i<st-1;i++){ const a=t*.9+i*TAU/(st-1)+sd*5, x=Math.cos(a)*rx, y=wl-s*.15+Math.sin(a)*rx*.22-s*.25*(.5+.5*Math.sin(t*2+i)); const r=Math.max(1,s*.04);
+    c.fillStyle=`rgba(${col},.85)`; c.fillRect(x-r*2,y-.5,r*4,1); c.fillRect(x-.5,y-r*2,1,r*4); } c.restore(); } }
+function drawAccessory(c,k,s,t,layer,hasPhoto){
+  const cl=k.cls; if(!cl) return; const P=PROP["cls_"+cl]; if(!P||!P.ok) return; const a=artOf(k.type); const b=a?artBox(a,s):{w:s*2.2,h:s*2.4,top:-s*1.95}; const base=ART_BASE*s, sd=k.seed||0;
+  c.save(); c.imageSmoothingEnabled=false;
+  if(layer==="back"&&cl==="warrior"){ const h=b.h*.82, w=h*P.img.width/P.img.height; c.translate(b.w*.34,base-b.h*.2); c.rotate(.08+Math.sin(t*1.6+sd*9)*.04); c.drawImage(P.img,-w*.25,-h,w,h); }
+  if(layer==="back"&&cl==="racer"){ const w=b.w*1.32*(1+Math.sin(t*3.2+sd*9)*.035), h=w*P.img.height/P.img.width; c.globalAlpha=.92; c.drawImage(P.img,-w/2,base-b.h*.52-h/2,w,h); }
+  if(layer==="front"&&cl==="guardian"){ const w=b.w*.26, h=w*P.img.height/P.img.width, x=(hasPhoto?1:-1)*b.w*.33, y=base-b.h*.3; c.drawImage(P.img,x-w/2,y-h/2,w,h);
+    c.globalCompositeOperation="lighter"; const g=.5+.5*Math.sin(t*1.7+sd*5); c.globalAlpha=.18*g; c.drawImage(P.img,x-w/2,y-h/2,w,h); }
+  if(layer==="front"&&cl==="mystic"){ const h=b.h*.32, w=h*P.img.width/P.img.height, x=b.w*.34, y=b.top+b.h*.14+Math.sin(t*1.4+sd*6)*s*.07;
+    c.globalCompositeOperation="lighter"; c.fillStyle=rg(c,x,y+h*.3,0,h*.6,[[0,"rgba(190,150,255,.28)"],[1,"rgba(190,150,255,0)"]]); c.beginPath(); c.arc(x,y+h*.3,h*.6,0,TAU); c.fill(); c.globalCompositeOperation="source-over";
+    c.drawImage(P.img,x-w/2,y-h/2,w,h); }
+  c.restore();
+}
 function propDraw(c,n,cx,bottom,w,smooth){ const P=PROP[n]; const h=w*P.img.height/P.img.width; c.save(); c.imageSmoothingEnabled=!!smooth; c.drawImage(P.img,cx-w/2,bottom-h,w,h); c.restore(); return h; }
 /* PixelLab sprites (tools/krathong_art.py); fx/fy = candle flame centre as a fraction of the sprite */
 const KR_ART={banana:{fx:.47,fy:.15},lotus:{fx:.49,fy:.13},bread:{fx:.465,fy:.26},coconut:{fx:.5,fy:.13},pride:{fx:.48,fy:.3},cat:{fx:.44,fy:.15},star:{fx:.47,fy:.26}};
@@ -1247,7 +1267,7 @@ for(let i=0;i<6;i++){ ambient.push({id:"amb"+i,amb:true,type:AMB_TYPES[i],candle
 function sanitize(id,d){
   const k={id, name:clean(d.name,30)||"ไม่ประสงค์ออกนาม", partner:clean(d.partner,30), wish:clean(d.wish,160),
     type:TYPE_BY[d.type]?d.type:"banana", cat:CAT_BY[d.cat]?d.cat:"", candle:CANDLE_BY[d.candle]?d.candle:"white",
-    lv:Math.max(1,+d.lv|0), kills:Math.max(0,+d.kills|0), stars:Math.max(0,Math.min(5,+d.stars|0)),
+    lv:Math.max(1,+d.lv|0), kills:Math.max(0,+d.kills|0), stars:Math.max(0,Math.min(5,+d.stars|0)), cls:["warrior","guardian","mystic","racer"].includes(d.cls)?d.cls:null,
     lane:Math.min(1,Math.max(0,+d.lane||.5)), seed:Math.min(1,Math.max(0,+d.seed||.5)), createdAt:+d.createdAt||Date.now()};
   if(d.img===true && /^[a-z0-9-]{1,40}$/.test(id)) k.photoUrl=API_IMG(id);
   else if(typeof d.photo==="string" && d.photo.startsWith("data:image/jpeg;base64,") && d.photo.length<90000) k.photoUrl=d.photo;
@@ -1357,10 +1377,12 @@ function frame(nowP){
     }
     drawGlow(c,k,p.s,.9+.12*Math.sin(t*9+(k.seed||0)*30));
     if(k.type==="bread"&&!k.amb){ for(let i=0;i<3;i++){ const a=t*1.2+i*2.1+k.seed*9; c.fillStyle="rgba(255,140,60,.55)"; const fx=Math.cos(a)*p.s*1.6, fy=p.s*.5+Math.sin(a)*p.s*.35; c.save(); c.translate(fx,fy); c.rotate(a+Math.PI/2); c.beginPath(); c.ellipse(0,0,p.s*.16,p.s*.06,0,0,TAU); c.fill(); c.beginPath(); c.moveTo(-p.s*.14,0); c.lineTo(-p.s*.26,-p.s*.06); c.lineTo(-p.s*.26,p.s*.06); c.fill(); c.restore(); } }
-    if(onWater) drawContactShadow(c,k,p.s);
+    if(onWater){ drawStarAura(c,k,p.s,t); drawContactShadow(c,k,p.s); }
     c.save(); c.rotate(p.rot);
+    drawAccessory(c,k,p.s,t,"back",!!photo);
     if(onWater) drawHull(c,sp,p.s,k,t); else blitSprite(c,sp,p.s);
     if(photo) drawPhoto(c,photo,p.s,k.type);
+    drawAccessory(c,k,p.s,t,"front",!!photo);
     krDynamic(c,k,p.s,t);
     c.restore();
     if(onWater) drawWaterRing(c,k,p.s,t);
@@ -1676,7 +1698,7 @@ function starStr(n){ return n?"★".repeat(n):""; }
 function makeFighter(k,isPlayer,o){
   o=o||{}; const st=BSTATS[k.type]||BSTATS.banana, S=statsFor(k.type,o.prog), hs=o.hpS||1, as=o.atkS||1;
   const hp=Math.round(S.hp*hs);
-  return {k:{...k,seed:k.seed??Math.random()},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,ramMul:S.ramMul,spMul:S.spMul,critC:S.critC,big:o.big||1,boss:!!o.boss,duel:!!o.duel,
+  return {k:{...k,seed:k.seed??Math.random(),cls:(o.prog&&o.prog.cls)||k.cls||null,stars:(o.prog&&o.prog.stars)||k.stars||0},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,ramMul:S.ramMul,spMul:S.spMul,critC:S.critC,big:o.big||1,boss:!!o.boss,duel:!!o.duel,
     x:0,y:0,vx:0,vy:0,alive:true,sinkT:0,buffs:{},hitT:0,aiT:0,skills:[],bump:new Map()};
 }
 function skillsFromSticks(st){ return (st||[]).slice(0,1).map(i=>FORTUNE_SKILL[i]).filter(Boolean); }
@@ -2058,14 +2080,16 @@ function drawFighter(c,f,t){
   const sk=f.alive?0:Math.min(1,f.sinkT/1.8); if(sk>=1) return;
   c.save(); c.translate(f.x,f.y+sk*s*1.2);
   c.globalAlpha=1-sk*.9;
-  if(!sk){ drawReflection(c,f.k,s,sp,t,0,.28); drawContactShadow(c,f.k,s); }
+  if(!sk){ drawReflection(c,f.k,s,sp,t,0,.28); drawStarAura(c,f.k,s,t); drawContactShadow(c,f.k,s); }
   drawGlow(c,f.k,s,sk?.3:1);
   const tilt=Math.sin(t*.9+f.k.seed*7)*.05+Math.max(-.25,Math.min(.25,f.vx/(bU()*30)))+(f.hitT>0?Math.sin(f.hitT*45)*.18:0)+sk*1.2*(f.k.seed>.5?1:-1);
   c.save(); c.rotate(tilt);
+  if(!sk) drawAccessory(c,f.k,s,t,"back",!!photo);
   if(sk){ c.beginPath(); c.rect(-s*4,-s*4,s*8,s*4+waterLine(f.k,s)-sk*s*1.2); c.clip(); blitSprite(c,sp,s); }
   else drawHull(c,sp,s,f.k,t);
   if(!sk&&f.flashT>0){ f.flashT=Math.max(0,f.flashT-1/60); c.save(); c.globalCompositeOperation="lighter"; c.globalAlpha=f.flashT/.18*.8; blitSprite(c,sp,s); c.restore(); }
   if(photo) drawPhoto(c,photo,s,f.k.type);
+  if(!sk) drawAccessory(c,f.k,s,t,"front",!!photo);
   if(!sk) krDynamic(c,f.k,s,t); else { const fp=flamePos(f.k,s); c.strokeStyle="rgba(200,200,220,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(fp.x,fp.y); for(let j=1;j<6;j++) c.lineTo(fp.x+Math.sin(t*2+j)*s*.15*j,fp.y-j*s*.25); c.stroke(); }
   c.restore();
   if(!sk) drawWaterRing(c,f.k,s,t);
