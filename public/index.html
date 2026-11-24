@@ -1626,6 +1626,21 @@ async function api(path,opts){ const r=await fetch(API+path,opts); const j=await
 function post(path,body){ return api(path,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body||{})}); }
 const STAT_INFO=[["hp","HP","+8% ต่อเลเวล · ทนได้นานขึ้น"],["atk","ATK","+1.5 ต่อเลเวล · ชนศัตรูแรงขึ้น"],["def","DEF","+1.5 ต่อเลเวล · โดนชนแล้วเจ็บน้อยลง"],["spd","SPD","+3% ต่อเลเวล · ว่ายเร็ว พุ่งชนแรงขึ้น หลบง่าย"],["sk","พลังสกิล","+10% ต่อเลเวล · สกิลแรงและฟื้นเลือดมากขึ้น"]];
 const upCost=lv=>25+lv*15;
+function spentOn(P){ let t=0; for(const [k] of STAT_INFO) for(let l=0;l<(P.lv[k]||0);l++) t+=upCost(l); return t; }
+function respecRefund(P){ const sp=spentOn(P); return (P.respecs||0)===0?sp:Math.floor(sp*.8); }
+function openRespec(id){
+  const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P){ openBattleMenu(); return; }
+  const refund=respecRefund(P), free=(P.respecs||0)===0;
+  showCard(card=>{
+    card.append(el("div","kind","ล้างค่าพลัง"));
+    card.append(el("h3",null,k.name+` (Lv.${P.level})`));
+    card.append(el("p","meta",`ค่าพลังทุกตัวจะกลับเป็นเลเวล 0 และได้เหรียญคืน ${refund} เหรียญ`+(free?" (ครั้งแรกคืนเต็ม 100%)":" (คืน 80% ของที่เคยใช้อัป)")+" สกิลจากเซียมซียังอยู่เหมือนเดิม"));
+    card.append(el("div","coins",`💰 ${P.coins} → ${P.coins+refund} เหรียญ`));
+    const acts=el("div","acts"); const go=el("button","btn danger","ล้างค่าพลัง");
+    go.addEventListener("click",async()=>{ go.disabled=true; try{ const j=await post("?action=respec",{id,token:tokens[id]}); myProgs[id].prog=j.prog; sfx("bless"); toast(`ล้างค่าพลังแล้ว ได้คืน ${j.refund} เหรียญ`); openUpgrade(id); }catch(e){ toast(e.message); go.disabled=false; } });
+    acts.append(go); backBtn(acts,"ไม่ล้าง",()=>openUpgrade(id)); card.append(acts);
+  });
+}
 function statsFor(type,prog){ const b=BSTATS[type]||BSTATS.banana, L=(prog&&prog.lv)||{};
   return {hp:Math.round(b.hp*1.6*(1+.08*(L.hp||0))),atk:+(b.atk+1.5*(L.atk||0)).toFixed(1),def:+(b.def+1.5*(L.def||0)).toFixed(1),spd:+(b.spd*(1+.03*(L.spd||0))).toFixed(2),sk:+(1+.1*(L.sk||0)).toFixed(2)}; }
 function makeFighter(k,isPlayer,o){
@@ -1711,7 +1726,9 @@ function openUpgrade(id){
     const acts=el("div","acts");
     const rr=el("button","btn",P.sticks?"เสี่ยงเซียมซีใหม่ (40)":"เสี่ยงเซียมซีรับสกิล (ฟรี)"); rr.disabled=!!P.sticks&&P.coins<40;
     rr.addEventListener("click",async()=>{ rr.disabled=true; try{ const j=await post("?action=sticks",{id,token:tokens[id]}); myProgs[id].prog=j.prog; sfx("chime"); openUpgrade(id); }catch(e){ toast(e.message); rr.disabled=false; } });
-    acts.append(rr); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
+    acts.append(rr);
+    if(P.level>1){ const rs=el("button","btn",(P.respecs||0)===0?"ล้างค่าพลัง (ครั้งแรกคืนเต็ม)":"ล้างค่าพลัง (คืน 80%)"); rs.addEventListener("click",()=>openRespec(id)); acts.append(rs); }
+    backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
   });
 }
 function openDuelPicker(id){

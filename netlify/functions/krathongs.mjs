@@ -11,7 +11,7 @@
 // GET    ?inbox=<id,id,...>          → ค่าพลังและประวัติการถูกท้าของกระทงหลายใบ
 // GET    ?feed                       → ศึกล่าสุดของทั้งแม่น้ำ (ข้อความสด)
 // POST   ?claim=<id>                 → รับกุญแจให้กระทงเก่าที่ยังไม่มีเจ้าของ
-// POST   ?action=upgrade|sticks|battle  body {id, token, ...}
+// POST   ?action=upgrade|sticks|respec|battle  body {id, token, ...}
 import { getStore } from "@netlify/blobs";
 import { createHash, randomBytes } from "node:crypto";
 
@@ -28,11 +28,13 @@ const ID_RE = /^[a-z0-9-]{1,40}$/;
 const STATS = ["hp", "atk", "def", "spd", "sk"];
 const MAX_LV = 20, START_COINS = 60, REROLL_COST = 40, BATTLE_COOLDOWN_MS = 12_000, N_FORTUNES = 16;
 const upCost = (lv) => 25 + lv * 15;
+const spentOn = (p) => STATS.reduce((a, k) => { let t = 0; for (let l = 0; l < (p.lv?.[k] || 0); l++) t += upCost(l); return a + t; }, 0);
+const respecRefund = (p) => { const spent = spentOn(p); return (p.respecs || 0) === 0 ? spent : Math.floor(spent * 0.8); };
 const sha = (t) => createHash("sha256").update(String(t)).digest("hex");
 const newToken = () => randomBytes(18).toString("base64url");
 const level = (p) => 1 + STATS.reduce((a, k) => a + (p.lv?.[k] || 0), 0);
 const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; out.push(pool[Math.floor(Math.random() * pool.length)]); return out; };
-const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
+const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
 function newProg(item, token) {
   return { id: item.id, key: item.key, name: item.name, type: item.type, tokenHash: sha(token), coins: START_COINS,
     lv: { hp: 0, atk: 0, def: 0, spd: 0, sk: 0 }, sticks: null, kills: 0, wins: 0, losses: 0, defWins: 0, defLosses: 0, lastBattle: 0 };
@@ -151,6 +153,13 @@ export default async (req, context) => {
         p.coins -= cost; p.lv[st] = cur + 1;
         await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         return json({ prog: publicProg(p) });
+      }
+      if (action === "respec") {
+        if (level(p) <= 1) return json({ error: "ยังไม่ได้อัปค่าพลัง" }, 400);
+        const refund = respecRefund(p);
+        p.coins += refund; p.lv = { hp: 0, atk: 0, def: 0, spd: 0, sk: 0 }; p.respecs = (p.respecs || 0) + 1;
+        await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        return json({ refund, prog: publicProg(p) });
       }
       if (action === "sticks") {
         if (p.sticks) { if (p.coins < REROLL_COST) return json({ error: "เหรียญไม่พอ" }, 400); p.coins -= REROLL_COST; }
