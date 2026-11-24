@@ -678,6 +678,26 @@ function sprite(k,s){
   }
   return sp;
 }
+/* sitting in the water: the bottom of the krathong dips below a water line, with its reflection and a ring of ripples */
+function waterLine(k,s){ const a=artOf(k.type); return a?ART_BASE*s-artBox(a,s).h*.14:.3*s; }
+function hullRx(k,s){ const a=artOf(k.type); return a?artBox(a,s).w*.44:s*.95; }
+function drawReflection(c,k,s,sp,t,rot,alpha){
+  const wl=waterLine(k,s); c.save(); c.beginPath(); c.rect(-s*4,wl,s*8,s*5); c.clip();
+  c.translate(Math.sin(t*1.7+k.seed*9)*1.2,wl); c.scale(1,-.62); c.translate(0,-wl); c.globalAlpha*=alpha; c.rotate(rot); blitSprite(c,sp,s); c.restore();
+}
+function drawContactShadow(c,k,s){ const wl=waterLine(k,s), rx=hullRx(k,s), ry=rx*.2; c.fillStyle="rgba(3,6,26,.38)"; c.beginPath(); c.ellipse(0,wl+ry*.25,rx*1.08,ry*1.15,0,0,TAU); c.fill(); }
+function drawHull(c,sp,s,k){
+  const wl=waterLine(k,s);
+  c.save(); c.beginPath(); c.rect(-s*4,-s*7,s*8,s*7+wl); c.clip(); blitSprite(c,sp,s); c.restore();
+  c.save(); c.beginPath(); c.rect(-s*4,wl,s*8,s*3); c.clip(); c.globalAlpha*=.22; blitSprite(c,sp,s); c.restore();
+}
+function drawWaterRing(c,k,s,t){
+  const wl=waterLine(k,s), rx=hullRx(k,s), ry=rx*.2, ph=frac(t*.45+(k.seed||0)*3);
+  c.save(); c.lineWidth=Math.max(1,s*.05);
+  c.strokeStyle=`rgba(215,232,255,${.4+.12*Math.sin(t*2+(k.seed||0)*7)})`; c.beginPath(); c.ellipse(0,wl,rx,ry,0,Math.PI*.04,Math.PI*.96); c.stroke();
+  c.lineWidth=1; c.strokeStyle=`rgba(200,222,255,${.28*(1-ph)})`; c.beginPath(); c.ellipse(0,wl,rx*(1+ph*.9),ry*(1+ph*.9),0,0,TAU); c.stroke();
+  c.restore();
+}
 function blitSprite(c,sp,s){ const f=s/sp.sb; c.drawImage(sp.cvs,-sp.ox*f,-sp.oy*f,sp.w*f,sp.h*f); }
 
 /* ================= scene ================= */
@@ -1254,17 +1274,20 @@ function frame(nowP){
     c.save(); c.translate(p.x,p.y); if(k.amb) c.globalAlpha=.5;
     // reflection
     if(onWater && p.s>9){
-      c.save(); const wl=.3*p.s; c.translate(Math.sin(t*1.7+p.y*.09)*1.5,wl); c.scale(1,-.5); c.translate(0,-wl); c.globalAlpha*=.26; c.rotate(p.rot); blitSprite(c,sp,p.s); c.restore();
+      drawReflection(c,k,p.s,sp,t,p.rot,.3);
       c.save(); c.globalCompositeOperation="lighter"; c.fillStyle=rg(c,0,.95*p.s,0,1.4*p.s,[[0,"rgba(255,190,90,.3)"],[1,"rgba(255,150,50,0)"]]); c.scale(.5,1); c.beginPath(); c.arc(0,.95*p.s,1.4*p.s,0,TAU); c.fill(); c.restore();
       // wake trail
       if(p.s>18){ c.strokeStyle="rgba(200,220,255,.12)"; c.lineWidth=1; for(let j=1;j<4;j++){ const ox=-p.s*(.9+j*.55), a=.35*j*p.s; c.beginPath(); c.moveTo(ox,.32*p.s-a*.25); c.quadraticCurveTo(ox+p.s*.25,.32*p.s,ox,.32*p.s+a*.25); c.stroke(); } }
     }
     drawGlow(c,k,p.s,.9+.12*Math.sin(t*9+(k.seed||0)*30));
     if(k.type==="bread"&&!k.amb){ for(let i=0;i<3;i++){ const a=t*1.2+i*2.1+k.seed*9; c.fillStyle="rgba(255,140,60,.55)"; const fx=Math.cos(a)*p.s*1.6, fy=p.s*.5+Math.sin(a)*p.s*.35; c.save(); c.translate(fx,fy); c.rotate(a+Math.PI/2); c.beginPath(); c.ellipse(0,0,p.s*.16,p.s*.06,0,0,TAU); c.fill(); c.beginPath(); c.moveTo(-p.s*.14,0); c.lineTo(-p.s*.26,-p.s*.06); c.lineTo(-p.s*.26,p.s*.06); c.fill(); c.restore(); } }
-    c.rotate(p.rot);
-    blitSprite(c,sp,p.s);
+    if(onWater) drawContactShadow(c,k,p.s);
+    c.save(); c.rotate(p.rot);
+    if(onWater) drawHull(c,sp,p.s,k); else blitSprite(c,sp,p.s);
     if(photo) drawPhoto(c,photo,p.s,k.type);
     krDynamic(c,k,p.s,t);
+    c.restore();
+    if(onWater) drawWaterRing(c,k,p.s,t);
     c.restore();
     if(p.drop>0 && p.drop<.06 && !k._splashed){ k._splashed=true; splash(p.x,p.y,p.s,mine.has(k.id)); }
     const hi = highlight===k.id && nowP<highlightUntil;
@@ -1839,13 +1862,16 @@ function drawFighter(c,f,t){
   const sk=f.alive?0:Math.min(1,f.sinkT/1.8); if(sk>=1) return;
   c.save(); c.translate(f.x,f.y+sk*s*1.2);
   c.globalAlpha=1-sk*.9;
-  if(!sk){ c.save(); const wl=.3*s; c.translate(0,wl); c.scale(1,-.5); c.translate(0,-wl); c.globalAlpha*=.24; blitSprite(c,sp,s); c.restore(); }
+  if(!sk){ drawReflection(c,f.k,s,sp,t,0,.28); drawContactShadow(c,f.k,s); }
   drawGlow(c,f.k,s,sk?.3:1);
   const tilt=Math.sin(t*.9+f.k.seed*7)*.05+Math.max(-.25,Math.min(.25,f.vx/(bU()*30)))+(f.hitT>0?Math.sin(f.hitT*45)*.18:0)+sk*1.2*(f.k.seed>.5?1:-1);
-  c.rotate(tilt);
-  if(sk){ c.beginPath(); c.rect(-s*3,-s*3,s*6,s*3.3-sk*s*1.2); c.clip(); }
-  blitSprite(c,sp,s); if(photo) drawPhoto(c,photo,s,f.k.type);
-  if(!sk) krDynamic(c,f.k,s,t); else { c.strokeStyle="rgba(200,200,220,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(0,-.7*s); for(let j=1;j<6;j++) c.lineTo(Math.sin(t*2+j)*s*.15*j,-.7*s-j*s*.25); c.stroke(); }
+  c.save(); c.rotate(tilt);
+  if(sk){ c.beginPath(); c.rect(-s*4,-s*4,s*8,s*4+waterLine(f.k,s)-sk*s*1.2); c.clip(); blitSprite(c,sp,s); }
+  else drawHull(c,sp,s,f.k);
+  if(photo) drawPhoto(c,photo,s,f.k.type);
+  if(!sk) krDynamic(c,f.k,s,t); else { const fp=flamePos(f.k,s); c.strokeStyle="rgba(200,200,220,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(fp.x,fp.y); for(let j=1;j<6;j++) c.lineTo(fp.x+Math.sin(t*2+j)*s*.15*j,fp.y-j*s*.25); c.stroke(); }
+  c.restore();
+  if(!sk) drawWaterRing(c,f.k,s,t);
   c.restore();
   if(f.buffs.shield>0&&f.alive){ c.save(); c.globalCompositeOperation="lighter"; c.strokeStyle=`rgba(150,220,255,${.5+.3*Math.sin(t*8)})`; c.lineWidth=2; c.fillStyle="rgba(150,220,255,.08)"; c.beginPath(); c.ellipse(f.x,f.y-s*.4,s*1.5,s*1.3,0,0,TAU); c.fill(); c.stroke(); c.restore(); }
   if(f.buffs.charmed>0&&f.alive){ c.fillStyle="#ff8fc8"; c.font=`700 ${Math.max(12,s*.5)}px sans-serif`; c.textAlign="center"; c.fillText("♥",f.x+Math.sin(t*4)*s*.4,f.y-s*2.2); }
@@ -2052,7 +2078,7 @@ function previewLoop(){
   const k={type:form.type,candle:form.candle,seed:.37};
   const s=Math.min(54,r.height*.27);
   c.save(); c.translate(r.width/2,r.height*.64+Math.sin(t*1.3)*2.5);
-  c.save(); c.translate(0,.3*s); c.scale(1,-.45); c.translate(0,-.3*s); c.globalAlpha=.22; krStatic(c,k,s,1); c.restore();
+  { const wl=waterLine(k,s); c.save(); c.beginPath(); c.rect(-s*4,wl,s*8,s*4); c.clip(); c.translate(0,wl); c.scale(1,-.55); c.translate(0,-wl); c.globalAlpha=.24; krStatic(c,k,s,1); c.restore(); }
   drawGlow(c,k,s,1); c.rotate(Math.sin(t*.9)*.04); krFull(c,k,s,t,form.photoImg); c.restore();
   const nm=$("inName").value.trim(), pt=$("inPartner").value.trim();
   if(nm){ c.font='600 14px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.fillStyle="#fff3dc"; c.fillText(pt?`${nm} ♥ ${pt}`:nm, r.width/2, 22, r.width-20); }
