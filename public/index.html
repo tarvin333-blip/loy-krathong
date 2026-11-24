@@ -1143,13 +1143,15 @@ function drawLantern(c,L,t){
   if(L.mine && s>6){ c.fillStyle="rgba(150,50,10,.55)"; c.font=`700 ${Math.max(7,s*.6)}px "Bai Jamjuree",sans-serif`; c.textAlign="center"; c.fillText("♥",0,s*.2); }
   c.restore();
 }
+const rabbitImg=new Image(); let rabbitTint=null, rabbitFade=0;
+rabbitImg.onload=()=>{ const cv2=document.createElement("canvas"); cv2.width=rabbitImg.width; cv2.height=rabbitImg.height; const x=cv2.getContext("2d"); x.drawImage(rabbitImg,0,0); x.globalCompositeOperation="source-in"; x.fillStyle="rgb(120,82,40)"; x.fillRect(0,0,cv2.width,cv2.height); rabbitTint=cv2; };
+rabbitImg.src="img/rabbit.png";
 function drawRabbit(c,x,y,r,t){
-  c.save(); c.translate(x,y); c.fillStyle="rgba(150,110,60,.5)";
-  c.beginPath(); c.ellipse(-.05*r,.18*r,.32*r,.24*r,0,0,TAU); c.fill();
-  c.beginPath(); c.arc(.22*r,-.05*r,.16*r,0,TAU); c.fill();
-  c.beginPath(); c.ellipse(.18*r,-.4*r,.05*r,.2*r,-.2+Math.sin(t*3)*.08,0,TAU); c.fill();
-  c.beginPath(); c.ellipse(.3*r,-.38*r,.05*r,.2*r,.25,0,TAU); c.fill();
-  c.fillRect(-.45*r,0,.08*r,.45*r); c.beginPath(); c.ellipse(-.41*r,0,.12*r,.08*r,0,0,TAU); c.fill();
+  if(!rabbitTint) return;
+  rabbitFade=Math.min(1,rabbitFade+.03);
+  const h=r*1.25, w=h*rabbitTint.width/rabbitTint.height, hop=Math.max(0,Math.sin(t*2.2))*r*.04;
+  c.save(); c.beginPath(); c.arc(x,y,r*.97,0,TAU); c.clip();
+  c.globalAlpha=.5*rabbitFade; c.drawImage(rabbitTint,x-w*.5,y-h*.55-hop,w,h);
   c.restore();
 }
 function splash(x,y,s,celebrate){
@@ -1192,7 +1194,7 @@ cv.addEventListener("click", e=>{
     const nowT=performance.now(); moonTaps = nowT-moonTapAt<1500 ? moonTaps+1 : 1; moonTapAt=nowT;
     if(moonTaps>=7 && scene!==MAGIC_SCENE){ moonTaps=0; unlockMagic(); return; }
     if(moonTaps>=3 && scene!==MAGIC_SCENE){ toast(`ดวงจันทร์สั่นไหว… ${moonTaps}/7`); ripples.push({x:moon.x,y:HOR+20,r:moon.r*2,life:0,dur:1.2,c:"160,220,255"}); return; }
-    rabbit=!rabbit; toast(rabbit?"เห็นกระต่ายบนดวงจันทร์ไหม? คนโบราณว่าเห็นแล้วโชคดี":"กระต่ายกระโดดหลบไปแล้ว"); return; }
+    rabbit=!rabbit; rabbitFade=0; toast(rabbit?"เห็นกระต่ายบนดวงจันทร์ไหม? คนโบราณว่าเห็นแล้วโชคดี":"กระต่ายกระโดดหลบไปแล้ว"); return; }
   if(scene===MAGIC_SCENE && otter.s && Math.abs(x-otter.x)<otter.s*.9 && y>otter.y-otter.s*2.1 && y<otter.y+otter.s*.3){ castOtter(); return; }
   for(let i=hitList.length-1;i>=0;i--){ const {k,p}=hitList[i]; if(k.amb) continue; if(Math.abs(x-p.x)<p.s*1.3 && y>p.y-p.s*1.8 && y<p.y+p.s*.7){ openKCard(k); return; } }
   if(y<HOR){ addLantern(x,y,false); sfx("chime"); return; }
