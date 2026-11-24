@@ -247,7 +247,7 @@ const BACKDROPS = {
   0:{src:"img/grand-palace.webp", w:1672, h:941, hor:462, moon:[1357,140,56], fx:.36, petals:["#ff9fbf","#ffd36a","#ffffff","#ff8a3a","#ffb3cf"], flies:0},
   2:{src:"img/forest-lake.webp", w:1916, h:821, hor:452, moon:[1155,107,57], fx:.6, fxWide:.55, petals:["#d8f5a2","#ffffff","#b6e27a","#fff3c4"], flies:70},
   5:{src:"img/magic-lake.webp", w:2000, h:667, hor:381, moon:[1730,68,72], fx:.72, fxWide:.55, petals:["#ffb3ea","#d9b6ff","#ffffff","#9ff3ff"], flies:60, magic:true},
-  1:{src:"img/lake-pavilion.webp", w:1916, h:821, hor:398, moon:[463,142,70], fx:.62, fxWide:.45, petals:["#ffd36a","#ffe28a","#fff3c4","#f5b942"], flies:40}
+  1:{src:"img/lake-pavilion.webp", w:1916, h:821, hor:398, moon:[463,142,70], fx:.62, fxWide:.45, lotus:true, petals:["#ffd36a","#ffe28a","#fff3c4","#f5b942"], flies:40}
 };
 for(const B of Object.values(BACKDROPS)){ B.img=new Image(); B.ok=false; }
 const FORTUNES = [
@@ -714,7 +714,7 @@ function buildPhotoScene(B){
   if(B.ok) b.drawImage(B.img,f.ox,f.oy,f.iw,f.ih);
   else { b.fillStyle=lg(b,0,0,0,H,[[0,"#0c0f3a"],[.48,"#2b3a6e"],[.5,"#141c5a"],[1,"#060a26"]]); b.fillRect(0,0,W,H); }
   twinkles=[]; for(let i=0;i<45;i++) twinkles.push({x:R()*W,y:R()*HOR*.55,p:R()*7,big:R()<.15});
-  cityLights=[]; pads=[]; clouds=[];
+  cityLights=[]; pads=B.lotus?makeLotusPads(R):[]; clouds=[];
   flies=[]; for(let i=0;i<B.flies;i++) flies.push({x:R()*W,y:HOR-HOR*.35*R()+R()*25,p:R()*7,sp:.3+R()*.7});
   petals=[]; for(let i=0;i<30;i++){ petals.push({x:R()*W,d:R(),r:R()*TAU,vr:(R()-.5)*.6,col:B.petals[i%B.petals.length],vx:4+R()*6,p:R()*7}); }
   mists=[]; for(let i=0;i<3;i++) mists.push({x:R()*W,y:HOR-6+R()*20,s:.7+R()*.6,v:4+R()*5});
@@ -946,6 +946,31 @@ function unlockMagic(){
 }
 
 
+function lotusBloom(c,x,y,s,white,t,ph){
+  const base=white?"#fffdf7":"#fff0f5", tip=white?"#efe6ff":"#ff5f97", tip2=white?"#ffffff":"#ff86b0";
+  c.save(); c.translate(x,y);
+  c.save(); c.globalCompositeOperation="lighter"; c.fillStyle=rg(c,0,-s*.5,0,s*3,[[0,white?"rgba(255,250,235,.22)":"rgba(255,140,190,.25)"],[1,"rgba(255,140,190,0)"]]); c.beginPath(); c.arc(0,-s*.5,s*3,0,TAU); c.fill(); c.restore();
+  const breathe=1+Math.sin(t*.9+ph)*.03;
+  const R1={n:9,rx:.3,ry:.12,out:4.2*breathe,up:.55,w:.3,col:()=>[base,tip],edge:"rgba(255,255,255,.65)",vein:white?"rgba(180,170,220,.25)":"rgba(210,60,110,.22)"};
+  const R2={n:7,rx:.22,ry:.09,out:4.2,up:1.25,w:.27,col:()=>[base,tip2],edge:"rgba(255,255,255,.75)",vein:white?"rgba(180,170,220,.2)":"rgba(210,60,110,.2)",off:.35};
+  const R3={n:5,rx:.14,ry:.06,out:4.5,up:1.7,w:.22,col:()=>[base,tip2],edge:"#fff",off:.1};
+  ring(c,s,R1,false); ring(c,s,R2,false); ring(c,s,R3,false);
+  c.fillStyle=rg(c,0,-s*.75,0,s*.45,[[0,"#fff6b0"],[.7,"#ffd23f"],[1,"#c99a1c"]]); c.beginPath(); c.ellipse(0,-s*.75,s*.42,s*.2,0,0,TAU); c.fill();
+  c.fillStyle="rgba(150,110,20,.7)"; for(let i=0;i<7;i++){ const a=i/7*TAU; c.beginPath(); c.arc(Math.cos(a)*s*.22,-s*.75+Math.sin(a)*s*.09,s*.035,0,TAU); c.fill(); }
+  c.strokeStyle="#ffe58a"; c.lineWidth=Math.max(.5,s*.03); for(let i=0;i<12;i++){ const a=i/12*TAU; c.beginPath(); c.moveTo(Math.cos(a)*s*.4,-s*.72+Math.sin(a)*s*.18); c.lineTo(Math.cos(a)*s*.5,-s*.9+Math.sin(a)*s*.2); c.stroke(); }
+  ring(c,s,R3,true); ring(c,s,R2,true); ring(c,s,R1,true);
+  c.restore();
+}
+function makeLotusPads(R){
+  const out=[], span=H-HOR;
+  // clusters near the banks plus a few strays, so the middle stays open for krathongs
+  const centres=[[.08,.25],[.9,.18],[.18,.72],[.86,.62],[.96,.92],[.35,.08],[.68,.4]];
+  for(const [cx,cd] of centres){ const n=3+(R()*3|0);
+    for(let i=0;i<n;i++){ const d=Math.min(.97,Math.max(.03,cd+(R()-.5)*.18)); const y=HOR+8+Math.pow(d,1.25)*(span-30);
+      const r=6+Math.pow(d,1.25)*52; const x=cx*W+(R()-.5)*W*.16;
+      const roll=R(); out.push({x,y,r,rot:(R()-.5)*.6,p:R()*7,dx:(R()-.5)*.3,kind:roll<.38?"bloom":roll<.62?"bud":"none",white:R()<.3}); } }
+  return out.sort((a,b)=>a.y-b.y);
+}
 function laneY(l){ const top=HOR+Math.max(18,H*.04), bot=H-Math.max(150,H*.2); return top+l*Math.max(40,bot-top); }
 function unit(){ return Math.max(16,Math.min(46,Math.min(W,H)*.07)); }
 function depthScale(y){ return .35+Math.max(0,(y-HOR)/(H-HOR))*1.1; }
@@ -1040,10 +1065,14 @@ function frame(nowP){
   // mist on the horizon
   for(const m of mists){ m.x+=m.v*dt; const w=600*m.s; if(m.x>W+w/2) m.x=-w/2; c.drawImage(mistSprite,m.x-w/2,m.y-60*m.s,w,120*m.s); }
   // lotus pads
-  for(const p of pads){ c.save(); c.translate(p.x,p.y+Math.sin(t+p.p)*1.2);
-    c.fillStyle=rg(c,0,0,0,p.r,[[0,"#2f7a3a"],[1,"#153f1d"]]); c.beginPath(); c.ellipse(0,0,p.r,p.r*.32,0,.25,TAU-.25); c.lineTo(0,0); c.fill();
-    c.strokeStyle="rgba(150,220,150,.25)"; c.lineWidth=.8; for(let i=1;i<8;i++){ const a=.25+i*(TAU-.5)/8; c.beginPath(); c.moveTo(0,0); c.lineTo(Math.cos(a)*p.r*.9,Math.sin(a)*p.r*.29); c.stroke(); }
-    if(p.bud){ const s=p.r*.35; bud(c,0,-s*.1,s); }
+  for(const p of pads){ c.save(); c.translate(p.x,p.y+Math.sin(t*.8+p.p)*1.1); c.rotate(Math.sin(t*.5+p.p)*.02);
+    // pad with a notch, veins and a lit rim
+    c.fillStyle="rgba(0,0,0,.25)"; c.beginPath(); c.ellipse(p.r*.04,p.r*.06,p.r,p.r*.32,0,0,TAU); c.fill();
+    c.fillStyle=rg(c,-p.r*.2,-p.r*.08,0,p.r,[[0,"#4f9a4a"],[.6,"#2c6e33"],[1,"#163f1f"]]); c.beginPath(); c.ellipse(0,0,p.r,p.r*.32,p.rot,.22,TAU-.22); c.lineTo(0,0); c.closePath(); c.fill();
+    c.strokeStyle="rgba(170,230,160,.22)"; c.lineWidth=.8; for(let i=1;i<10;i++){ const a=p.rot+.22+i*(TAU-.44)/10; c.beginPath(); c.moveTo(0,0); c.lineTo(Math.cos(a)*p.r*.92,Math.sin(a)*p.r*.29); c.stroke(); }
+    c.strokeStyle="rgba(200,240,180,.35)"; c.lineWidth=1; c.beginPath(); c.ellipse(0,0,p.r,p.r*.32,p.rot,Math.PI*1.1,Math.PI*1.9); c.stroke();
+    if(p.kind==="bloom") lotusBloom(c,p.dx*p.r,-p.r*.05,p.r*.34,p.white,t,p.p);
+    else if(p.kind==="bud"){ const s2=p.r*.3; bud(c,p.dx*p.r,-s2*.1,s2); }
     c.restore(); }
   // floating petals
   for(const f of petals){ f.x+=f.vx*dt*(.4+f.d); f.r+=f.vr*dt; if(f.x>W+10) f.x=-10; const y=HOR+8+Math.pow(f.d,1.3)*(H-HOR-12)+Math.sin(t*1.1+f.p)*1.5, sc=depthScale(y);
