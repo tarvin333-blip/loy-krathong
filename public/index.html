@@ -224,7 +224,7 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
 </header>
 
 <div class="empty" id="empty" hidden><b>แม่น้ำยังว่างอยู่</b><span>กด “ลอยกระทง” แล้วเป็นคนแรกที่ส่งคำอธิษฐานลงน้ำคืนนี้</span></div>
-<div class="status" id="status">กำลังเชื่อมต่อแม่น้ำ…</div>
+<div class="status" id="status" hidden></div>
 
 <nav class="scenes" aria-label="เลือกแม่น้ำ"><div class="scene-row" id="sceneRow"></div></nav>
 
@@ -2142,10 +2142,10 @@ function renderList(){
 /* ================= server sync ================= */
 let dbState="connecting";
 function setStatus(){
+  // only speak up when something is wrong; a working shared river needs no caption
   const s=$("status");
-  if(dbState==="connecting") s.textContent="กำลังเชื่อมต่อแม่น้ำ…";
-  else if(dbState==="off") s.textContent="คุณกำลังลอยกระทงในแม่น้ำส่วนตัว · บันทึกการ์ดหรือคัดลอกคำอธิษฐานไปแชร์ให้เพื่อนได้";
-  else s.textContent="แม่น้ำนี้แชร์กัน ทุกคนเห็นกระทงของกันและกัน · แตะท้องฟ้าเพื่อปล่อยโคม"+(isOwner?" · โหมดผู้ดูแล":"");
+  s.textContent = dbState==="off" ? "ต่อแม่น้ำส่วนกลางไม่ได้ กระทงที่ลอยตอนนี้จะอยู่ในเครื่องนี้ก่อน" : (isOwner&&dbState==="live" ? "โหมดผู้ดูแล" : "");
+  s.hidden = !s.textContent;
 }
 async function loadRiver(first){
   try{
