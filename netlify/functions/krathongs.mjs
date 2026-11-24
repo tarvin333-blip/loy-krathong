@@ -11,7 +11,7 @@
 // GET    ?inbox=<id,id,...>          → ค่าพลังและประวัติการถูกท้าของกระทงหลายใบ
 // GET    ?feed                       → ศึกล่าสุดของทั้งแม่น้ำ (ข้อความสด)
 // POST   ?claim=<id>                 → รับกุญแจให้กระทงเก่าที่ยังไม่มีเจ้าของ
-// POST   ?action=upgrade|sticks|respec|battle  body {id, token, ...}
+// POST   ?action=upgrade|sticks|respec|ascend|class|battle  body {id, token, ...}
 import { getStore } from "@netlify/blobs";
 import { createHash, randomBytes } from "node:crypto";
 
@@ -26,15 +26,18 @@ const HIDE_AT_REPORTS = 3;
 const BANNED = ["http://", "https://", "www."];
 const ID_RE = /^[a-z0-9-]{1,40}$/;
 const STATS = ["hp", "atk", "def", "spd", "sk"];
-const MAX_LV = 20, START_COINS = 60, REROLL_COST = 40, BATTLE_COOLDOWN_MS = 12_000, N_FORTUNES = 16;
+const MAX_LV = 20, MAX_STARS = 5, START_COINS = 60, HOURLY_SOFT_CAP = 2500, DUEL_REPEAT_MS = 15 * 60_000, CLASS_CHANGE_COST = 500, REROLL_COST = 40, BATTLE_COOLDOWN_MS = 12_000, N_FORTUNES = 16;
 const upCost = (lv) => 25 + lv * 15;
 const spentOn = (p) => STATS.reduce((a, k) => { let t = 0; for (let l = 0; l < (p.lv?.[k] || 0); l++) t += upCost(l); return a + t; }, 0);
 const respecRefund = (p) => { const spent = spentOn(p); return (p.respecs || 0) === 0 ? spent : Math.floor(spent * 0.8); };
 const sha = (t) => createHash("sha256").update(String(t)).digest("hex");
 const newToken = () => randomBytes(18).toString("base64url");
 const level = (p) => 1 + STATS.reduce((a, k) => a + (p.lv?.[k] || 0), 0);
+const CLASSES = ["warrior", "guardian", "mystic", "racer"];
+const capOf = (p) => MAX_LV + 5 * (p.stars || 0);                // each star lifts every stat cap by 5
+const ascendCost = (p) => 2500 * ((p.stars || 0) + 1);
 const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; out.push(pool[Math.floor(Math.random() * pool.length)]); return out; };
-const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
+const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
 function newProg(item, token) {
   return { id: item.id, key: item.key, name: item.name, type: item.type, tokenHash: sha(token), coins: START_COINS,
     lv: { hp: 0, atk: 0, def: 0, spd: 0, sk: 0 }, sticks: null, kills: 0, wins: 0, losses: 0, defWins: 0, defLosses: 0, lastBattle: 0 };
@@ -42,7 +45,7 @@ function newProg(item, token) {
 async function findKey(store, id) { const { blobs } = await store.list({ prefix: "k/" }); const hit = blobs.find((b) => b.key.endsWith("-" + id)); return hit ? hit.key : null; }
 async function syncSummary(store, p) {
   if (!p.key) return; const it = await store.get(p.key, { type: "json" }); if (!it) return;
-  it.lv = level(p); it.kills = p.kills || 0; await store.setJSON(p.key, it);
+  it.lv = level(p); it.kills = p.kills || 0; it.stars = p.stars || 0; it.cls = p.cls || null; await store.setJSON(p.key, it);
 }
 
 const json = (body, status = 200, extra = {}) =>
@@ -148,10 +151,26 @@ export default async (req, context) => {
       if (!p || p.tokenHash !== sha(b.token || "")) return json({ error: "กระทงนี้ไม่ใช่ของคุณ" }, 403);
       if (action === "upgrade") {
         const st = String(b.stat || ""); if (!STATS.includes(st)) return json({ error: "ค่าพลังไม่ถูกต้อง" }, 400);
-        const cur = p.lv[st] || 0; if (cur >= MAX_LV) return json({ error: "ตันแล้ว" }, 400);
+        const cur = p.lv[st] || 0; if (cur >= capOf(p)) return json({ error: "ตันแล้ว ยกระดับดาวเพื่อปลดเพดาน" }, 400);
         const cost = upCost(cur); if (p.coins < cost) return json({ error: "เหรียญไม่พอ" }, 400);
         p.coins -= cost; p.lv[st] = cur + 1;
         await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        return json({ prog: publicProg(p) });
+      }
+      if (action === "ascend") {
+        if ((p.stars || 0) >= MAX_STARS) return json({ error: "ดาวเต็มแล้ว" }, 400);
+        if (STATS.some((k) => (p.lv[k] || 0) < capOf(p))) return json({ error: "ต้องอัปทุกค่าให้ตันก่อน" }, 400);
+        const cost = ascendCost(p); if (p.coins < cost) return json({ error: "เหรียญไม่พอ" }, 400);
+        p.coins -= cost; p.stars = (p.stars || 0) + 1;
+        await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        return json({ prog: publicProg(p) });
+      }
+      if (action === "class") {
+        const c = String(b.cls || ""); if (!CLASSES.includes(c)) return json({ error: "ไม่มีคลาสนี้" }, 400);
+        if (!(p.stars >= 1)) return json({ error: "ปลดล็อกคลาสเมื่อได้ ★1" }, 400);
+        if (p.cls === c) return json({ prog: publicProg(p) });
+        if (p.cls) { if (p.coins < CLASS_CHANGE_COST) return json({ error: "เหรียญไม่พอ" }, 400); p.coins -= CLASS_CHANGE_COST; }
+        p.cls = c; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         return json({ prog: publicProg(p) });
       }
       if (action === "respec") {
@@ -170,12 +189,27 @@ export default async (req, context) => {
         const now = Date.now(); if (now - (p.lastBattle || 0) < BATTLE_COOLDOWN_MS) return json({ error: "พักหายใจสักครู่ก่อนบันทึกศึกถัดไป" }, 429);
         p.lastBattle = now;
         const win = !!b.win, mode = b.mode === "duel" ? "duel" : "pve";
-        const stage = Math.max(1, Math.min(50, Math.floor(Number(b.level) || 1)));
-        const maxKills = mode === "duel" ? 1 : Math.min(3, 1 + Math.floor((stage - 1) / 2) + (stage >= 2 ? 1 : 0));
+        // the stage is tracked here, not trusted from the browser; older saves may claim up to one stage per recorded win
+        if (!p.pve) p.pve = Math.max(1, Math.min(Math.floor(Number(b.level) || 1), (p.wins || 0) + 1));
+        const stage = mode === "pve" ? Math.max(1, Math.min(p.pve, Math.floor(Number(b.level) || 1))) : 1;
+        const boss = mode === "pve" && stage % 5 === 0;
+        const maxKills = mode === "duel" ? 1 : boss ? (stage >= 10 ? 2 : 1) : Math.min(3, 1 + Math.floor((stage - 1) / 2) + (stage >= 2 ? 1 : 0));
         const kills = Math.max(0, Math.min(maxKills, Math.floor(Number(b.kills) || 0)));
-        let gain = 0;
-        if (mode === "pve") gain = (win ? 20 + stage * 10 : 5) + kills * 4;
-        else gain = win ? 40 : 8;
+        let gain = 0, note = "";
+        if (mode === "pve") {
+          gain = (win ? 20 + stage * 8 : 5) + kills * 3; if (win && boss) gain *= 2;
+          if (win) { p.pve = Math.max(p.pve, stage + 1); p.bestPve = Math.max(p.bestPve || 0, stage); }
+        } else {
+          p.duels = p.duels || {}; const last = p.duels[b.defender] || 0;
+          if (now - last < DUEL_REPEAT_MS) { gain = win ? 4 : 2; note = "ท้าคนเดิมถี่เกินไป ได้เหรียญน้อยลง (รอ 15 นาที)"; }
+          else { let dLv = 1; const dp0 = ID_RE.test(String(b.defender || "")) ? await store.get("prog/" + b.defender, { type: "json" }) : null; if (dp0) dLv = level(dp0) + 10 * (dp0.stars || 0);
+            const aLv = level(p) + 10 * (p.stars || 0); gain = win ? Math.round(Math.max(10, Math.min(70, 15 + 30 * dLv / aLv))) : 8; }
+          p.duels[b.defender] = now;
+          for (const k of Object.keys(p.duels)) if (now - p.duels[k] > DUEL_REPEAT_MS) delete p.duels[k];
+        }
+        if (!p.hour || now - p.hour.t0 > 3600_000) p.hour = { t0: now, earned: 0 };
+        if (p.hour.earned >= HOURLY_SOFT_CAP) { gain = Math.ceil(gain * 0.2); note = "ฟาร์มหนักแล้วชั่วโมงนี้ เหรียญลดเหลือ 20% (รีเซ็ตทุกชั่วโมง)"; }
+        p.hour.earned += gain;
         p.coins += gain; p.kills = (p.kills || 0) + kills; if (win) p.wins = (p.wins || 0) + 1; else p.losses = (p.losses || 0) + 1;
         await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         let defender = null;
@@ -190,7 +224,7 @@ export default async (req, context) => {
         const feedKey = "feed/" + String(now).padStart(15, "0") + "-" + Math.random().toString(36).slice(2, 7);
         if (mode === "duel" && defender) await store.setJSON(feedKey, { at: now, kind: "duel", a: p.name, aType: p.type, aLv: level(p), d: defender.name, dType: defender.type, dLv: defender.level, attackerWon: win });
         else if (mode === "pve" && win && stage >= 3) await store.setJSON(feedKey, { at: now, kind: "pve", a: p.name, aType: p.type, aLv: level(p), stage });
-        return json({ gain, prog: publicProg(p), defender });
+        return json({ gain, note, prog: publicProg(p), defender });
       }
       return json({ error: "ไม่รู้จักคำสั่งนี้" }, 400);
     }
