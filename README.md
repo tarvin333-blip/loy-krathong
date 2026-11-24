@@ -41,6 +41,6 @@ npx netlify-cli deploy --prod
 - หน้าเว็บแสดงกระทงล่าสุด 150 ใบ และดึงข้อมูลใหม่ทุก 15 วินาที
 
 ## เพลง
-- `public/audio/sainam-khuen-pen.mp3` (ฉากหลัก) และ `public/audio/mon-chanthra.mp3` (ฉากลับ) แต่งขึ้นใหม่ด้วยการสังเคราะห์เสียงใน `tools/compose.py`
-- ไม่มีการใช้เสียงหรือเพลงของคนอื่น จึงไม่ติดลิขสิทธิ์
-- ต้องการแก้เพลง: แก้ไฟล์ `tools/compose.py` แล้วรัน `python3 tools/compose.py` (ต้องมี numpy และ ffmpeg)
+- `public/audio/main_1.mp3`, `main_2.mp3` (ฉากหลัก) และ `magic_1.mp3`, `magic_2.mp3` (ฉากลับ) แต่งด้วย PixelLab ผ่าน `tools/music_gen.py` คำสั่งที่ใช้แต่งเก็บอยู่ใน `tools/music.json`
+- หน้าเว็บสุ่มเลือก 1 เวอร์ชันต่อการเปิดเว็บแต่ละครั้ง และเล่นวนแบบค่อยๆ ผสมตอนจบเข้ากับตอนต้น
+- `tools/compose.py` คือเพลงแบบสังเคราะห์เสียงชุดเดิม เก็บไว้เป็นตัวสำรอง

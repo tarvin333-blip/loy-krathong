@@ -1401,20 +1401,25 @@ function startAmbient(){ if(!ensureAC()) return; AC.resume();
   playMusic();
 }
 function stopAmbient(){ if(ambNodes){ try{ ambNodes.src.stop(); ambNodes.lfo.stop(); }catch(e){} ambNodes=null; } clearTimeout(chimeTimer); stopMusic(); }
-/* background music: one loop for the main scenes, one for the secret scene, cross-faded on scene change */
-const TRACKS={main:"audio/sainam-khuen-pen.mp3",magic:"audio/mon-chanthra.mp3"};
-const trackBuf={}; let musicSrc=null, musicGain=null, musicKey=null;
-async function loadTrack(k){ if(trackBuf[k]) return trackBuf[k]; const r=await fetch(TRACKS[k]); if(!r.ok) throw new Error("track"); const ab=await r.arrayBuffer(); trackBuf[k]=await new Promise((ok,no)=>AC.decodeAudioData(ab,ok,no)); return trackBuf[k]; }
+/* background music (made with PixelLab): two takes per track, one picked at random per visit, cross-faded loop */
+const TRACKS={main:["audio/main_1.mp3","audio/main_2.mp3"],magic:["audio/magic_1.mp3","audio/magic_2.mp3"]};
+const takeOf={main:Math.random()*2|0,magic:Math.random()*2|0};
+const trackBuf={}; let musicKey=null, curLayer=null, loopTimer=0;
+async function loadTrack(k){ if(trackBuf[k]) return trackBuf[k]; const r=await fetch(TRACKS[k][takeOf[k]]); if(!r.ok) throw new Error("track"); const ab=await r.arrayBuffer(); trackBuf[k]=await new Promise((ok,no)=>AC.decodeAudioData(ab,ok,no)); return trackBuf[k]; }
+function fadeLayer(L,secs){ if(!L) return; const now=AC.currentTime; L.g.gain.cancelScheduledValues(now); L.g.gain.setValueAtTime(L.g.gain.value,now); L.g.gain.linearRampToValueAtTime(0,now+secs); setTimeout(()=>{ try{ L.src.stop(); }catch(e){} },secs*1000+200); }
+function runLoop(k,buf,fade){
+  fadeLayer(curLayer,fade);
+  const now=AC.currentTime, g=AC.createGain(); g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(.6,now+fade); g.connect(master);
+  const src=AC.createBufferSource(); src.buffer=buf; src.connect(g); src.start(); curLayer={src,g};
+  clearTimeout(loopTimer); loopTimer=setTimeout(()=>{ if(musicKey===k&&ambOn) runLoop(k,buf,4); },Math.max(5,buf.duration-4)*1000);
+}
 async function playMusic(){
   if(!ambOn||!AC) return; const k=scene===MAGIC_SCENE?"magic":"main"; if(musicKey===k) return; musicKey=k;
   let buf; try{ buf=await loadTrack(k); }catch(e){ musicKey=null; return; }
   if(musicKey!==k||!ambOn) return;
-  const now=AC.currentTime, g=AC.createGain(); g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(.6,now+2.5); g.connect(master);
-  const src=AC.createBufferSource(); src.buffer=buf; src.loop=true; src.connect(g); src.start();
-  if(musicSrc){ const os=musicSrc, og=musicGain; og.gain.cancelScheduledValues(now); og.gain.setValueAtTime(og.gain.value,now); og.gain.linearRampToValueAtTime(0,now+2.5); setTimeout(()=>{ try{ os.stop(); }catch(e){} },2800); }
-  musicSrc=src; musicGain=g;
+  runLoop(k,buf,2.5);
 }
-function stopMusic(){ if(musicSrc&&AC){ const os=musicSrc, og=musicGain, now=AC.currentTime; og.gain.cancelScheduledValues(now); og.gain.setValueAtTime(og.gain.value,now); og.gain.linearRampToValueAtTime(0,now+.8); setTimeout(()=>{ try{ os.stop(); }catch(e){} },1000); } musicSrc=null; musicKey=null; }
+function stopMusic(){ clearTimeout(loopTimer); if(curLayer&&AC) fadeLayer(curLayer,.8); curLayer=null; musicKey=null; }
 const PENTA=[261.6,293.7,329.6,392,440,523.3,587.3,659.3,784,880];
 function tone(freq,when,dur,vol,type){ const o=AC.createOscillator(), g=AC.createGain(); o.type=type||"sine"; o.frequency.value=freq; g.gain.setValueAtTime(0,when); g.gain.linearRampToValueAtTime(vol,when+.01); g.gain.exponentialRampToValueAtTime(.0001,when+dur); o.connect(g); g.connect(master); o.start(when); o.stop(when+dur+.05); }
 function sfx(kind,soft){
