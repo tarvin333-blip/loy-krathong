@@ -317,6 +317,11 @@ body.in-battle .devfab,.devfab[hidden],.devbar[hidden]{display:none!important}
 .end-text h2.show{opacity:1}
 .end-btn{pointer-events:auto;margin-top:16px;font-size:18px;padding:12px 30px}
 body.in-ending .top,body.in-ending .scenes,body.in-ending .cta-wrap,body.in-ending .status,body.in-ending .empty,body.in-ending .drawer,body.in-ending .ticker,body.in-ending .devfab,body.in-ending .toast{display:none!important}
+.type.special{border-color:rgba(255,215,130,.6);background:linear-gradient(160deg,rgba(255,215,130,.16),rgba(120,240,230,.08))}
+.type.special b{color:#ffe2a0}
+.type.special.locked{filter:grayscale(.85) brightness(.7)}
+.type.special.locked small::before{content:"🔒 พิชิตชั้น 20 · "}
+.unlock-art{display:block;margin:6px auto 4px;width:160px;height:160px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 18px rgba(255,220,140,.8));animation:gpop .7s cubic-bezier(.2,1.6,.4,1) both}
 .cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
 .cls-box b{color:#bcd4ff}
 .tut-ic{font-size:44px;line-height:1;text-align:center;margin:6px 0 2px;filter:drop-shadow(0 0 14px rgba(255,200,97,.55))}
@@ -427,7 +432,8 @@ const TYPES = [
   {id:"coconut", name:"กระทงกะลา", desc:"ทนทาน ลอยได้ไกล"},
   {id:"pride", name:"กระทงสายรุ้ง", desc:"รักคือรัก ลอยให้สุด"},
   {id:"cat", name:"กระทงน้องแมว", desc:"หูตั้ง หนวดเฟี้ยว"},
-  {id:"star", name:"กระทงดวงดาว", desc:"คริสตัลเรืองแสง"}
+  {id:"star", name:"กระทงดวงดาว", desc:"คริสตัลเรืองแสง"},
+  {id:"ganga", name:"กระทงคงคาสวรรค์", desc:"พรจากพระแม่คงคา", special:true}
 ];
 const TYPE_BY = Object.fromEntries(TYPES.map(t=>[t.id,t]));
 const CATS = [
@@ -730,7 +736,7 @@ function drawAccessory(c,k,s,t,layer,hasPhoto){
 }
 function propDraw(c,n,cx,bottom,w,smooth){ const P=PROP[n]; const h=w*P.img.height/P.img.width; c.save(); c.imageSmoothingEnabled=!!smooth; c.drawImage(P.img,cx-w/2,bottom-h,w,h); c.restore(); return h; }
 /* PixelLab sprites (tools/krathong_art.py); fx/fy = candle flame centre as a fraction of the sprite */
-const KR_ART={banana:{fx:.47,fy:.15},lotus:{fx:.49,fy:.13},bread:{fx:.465,fy:.26},coconut:{fx:.5,fy:.13},pride:{fx:.48,fy:.3},cat:{fx:.44,fy:.15},star:{fx:.47,fy:.26},
+const KR_ART={banana:{fx:.47,fy:.15},lotus:{fx:.49,fy:.13},bread:{fx:.465,fy:.26},coconut:{fx:.5,fy:.13},pride:{fx:.48,fy:.3},cat:{fx:.44,fy:.15},star:{fx:.47,fy:.26},ganga:{fx:.51,fy:.17,glow:"255,225,150"},
   m_ghost:{fx:.45,fy:.19,glow:"120,170,255"},m_skull:{fx:.38,fy:.15,glow:"150,255,110"},m_swamp:{fx:.51,fy:.21,glow:"200,110,255"},m_serpent:{fx:.49,fy:.16,glow:"210,120,255"},m_hell:{fx:.5,fy:.29,glow:"255,90,50"},m_boss:{fx:.5,fy:.19,glow:"255,50,60"},m_titan:{fx:.5,fy:.33,glow:"255,40,50"},m_wraith:{fx:.48,fy:.2,glow:"120,230,255"},m_spider:{fx:.5,fy:.14,glow:"190,255,90"},m_lich:{fx:.52,fy:.42,glow:"190,110,255"},m_kraken:{fx:.5,fy:.12,glow:"90,230,255"},m_void:{fx:.5,fy:.4,glow:"170,90,255"}};
 for(const [t,a] of Object.entries(KR_ART)){ a.img=new Image(); a.ok=false; a.img.onload=()=>{ a.ok=true; spriteCache.clear(); }; a.img.src="img/kr/"+t+".png"; }
 const ART_W=2.3, ART_BASE=.45;
@@ -776,6 +782,26 @@ function flame(c,x,y,s,t,seed,big){
   path(.55); c.fillStyle="rgba(255,255,240,.95)"; c.fill();
 }
 
+// the celestial krathong comes alive: gold glints run over its petals and naga, its painted droplets breathe light,
+// sacred droplets orbit it and golden motes rise from the candle
+function gangaPoints(a){ if(a.pts) return a.pts; const im=a.img, cv=document.createElement("canvas"); cv.width=im.width; cv.height=im.height; const x=cv.getContext("2d"); x.drawImage(im,0,0); let d; try{ d=x.getImageData(0,0,im.width,im.height).data; }catch(e){ a.pts={gold:[],cyan:[]}; return a.pts; }
+  const gold=[], cyan=[]; for(let y=0;y<im.height;y++) for(let q=0;q<im.width;q++){ const o=(y*im.width+q)*4, r=d[o], g=d[o+1], b=d[o+2], al=d[o+3]; if(al<200) continue;
+    if(r>225&&g>180&&b<170&&(q+y)%2===0) gold.push([q/im.width,y/im.height]); else if(g>170&&b>160&&r<150) cyan.push([q/im.width,y/im.height]); }
+  a.pts={gold,cyan}; return a.pts; }
+function gangaFx(c,k,s,t,seed){ const a=artOf("ganga"); if(!a) return; const b=artBox(a,s), P=gangaPoints(a), X=fx=>-b.w/2+fx*b.w, Y=fy=>b.top+fy*b.h;
+  c.save(); c.globalCompositeOperation="lighter";
+  // breathing glow on the painted water droplets
+  const br=.5+.5*Math.sin(t*2.4+seed*7); for(let i=0;i<P.cyan.length;i+=3){ const [u,v]=P.cyan[i], ph=.5+.5*Math.sin(t*2.4+u*9+v*7); c.fillStyle=`rgba(120,245,235,${.10+.22*ph*br})`; c.fillRect(X(u)-s*.04,Y(v)-s*.04,s*.08,s*.08); }
+  // gold glints that come and go across the petals and naga
+  if(P.gold.length){ for(let i=0;i<9;i++){ const slot=Math.floor(t*1.6+i*.37+seed*5), ph=(t*1.6+i*.37+seed*5)%1, pt=P.gold[(slot*131+i*977+((seed*1000)|0))%P.gold.length], z=s*.16*Math.sin(Math.PI*ph);
+    const x=X(pt[0]), y=Y(pt[1]); c.fillStyle=`rgba(255,245,200,${.9*Math.sin(Math.PI*ph)})`; c.beginPath(); c.moveTo(x,y-z); c.lineTo(x+z*.18,y); c.lineTo(x,y+z); c.lineTo(x-z*.18,y); c.fill(); c.beginPath(); c.moveTo(x-z,y); c.lineTo(x,y+z*.18); c.lineTo(x+z,y); c.lineTo(x,y-z*.18); c.fill(); } }
+  // sacred droplets orbiting
+  for(let i=0;i<6;i++){ const a2=t*.8+i*1.05+seed*5, x=Math.cos(a2)*1.3*s, y=Math.sin(a2)*.45*s-.45*s, r=(.045+.02*Math.sin(t*3+i))*s, col=i%2?"120,240,230":"255,225,140", front=Math.sin(a2)>0;
+    c.globalAlpha=front?1:.55; c.fillStyle=rg(c,x,y,0,r*3,[[0,`rgba(${col},.55)`],[1,`rgba(${col},0)`]]); c.beginPath(); c.arc(x,y,r*3,0,TAU); c.fill(); c.fillStyle=`rgba(${col},.95)`; c.beginPath(); c.ellipse(x,y,r*.7,r,0,0,TAU); c.fill(); }
+  c.globalAlpha=1;
+  // golden motes rising from the candle
+  const f=flamePos(k,s); for(let i=0;i<5;i++){ const ph=(t*.45+i/5+seed)%1, x=f.x+Math.sin(t*1.7+i*2.1)*s*.25*ph, y=f.y-ph*s*1.6, r=s*.035*(1-ph); c.fillStyle=`rgba(255,225,150,${.85*(1-ph)})`; c.beginPath(); c.arc(x,y,r+.4,0,TAU); c.fill(); }
+  c.restore(); }
 function krDynamic(c,k,s,t){
   if(artOf(k.type)){ const f=flamePos(k,s), seed=k.seed||.3, fl=1+Math.sin(t*17+seed*40)*.12+Math.sin(t*7.3+seed*9)*.08;
     const cd=CANDLE_BY[k.candle]||CANDLES[0], gc=(KR_ART[k.type]||{}).glow;
@@ -784,6 +810,7 @@ function krDynamic(c,k,s,t){
     c.fillStyle=rg(c,f.x,f.y,0,s*.55*fl,[[0,"rgba(255,245,200,.55)"],[.35,"rgba(255,190,90,.22)"],[1,"rgba(255,140,40,0)"]]); c.beginPath(); c.arc(f.x,f.y,s*.55*fl,0,TAU); c.fill();
     c.fillStyle=`rgba(${parseInt(cd.c.slice(1,3),16)},${parseInt(cd.c.slice(3,5),16)},${parseInt(cd.c.slice(5,7),16)},.16)`; c.beginPath(); c.arc(f.x,f.y,s*.28*fl,0,TAU); c.fill();
     c.restore();
+    if(k.type==="ganga") gangaFx(c,k,s,t,seed);
     if(k.type==="star"){ c.save(); c.globalCompositeOperation="lighter"; for(let i=0;i<5;i++){ const a2=t*.7+i*1.25+seed*5, x=Math.cos(a2)*1.25*s, y=Math.sin(a2)*.45*s-.5*s, r=(.03+.02*Math.sin(t*4+i))*s; c.fillStyle="rgba(200,240,255,.85)"; c.beginPath(); c.moveTo(x,y-r*2.2); c.lineTo(x+r*.45,y); c.lineTo(x,y+r*2.2); c.lineTo(x-r*.45,y); c.fill(); } c.restore(); }
     return; }
   const seed=k.seed||.3;
@@ -1739,6 +1766,7 @@ const BSTATS={
   pride:{hp:105,atk:15,def:10,spd:1.2,pas:"รุ้งพลังใจ: SP มาไวขึ้น 50%",sig:"rainbow"},
   cat:{hp:95,atk:16,def:9,spd:1.25,pas:"แมวเหมียว: ชนติดคริ 25% (x1.8)",sig:"claw"},
   star:{hp:92,atk:13,def:8,spd:1.05,pas:"พลังดวงดาว: สกิลแรงขึ้น 35%",sig:"meteor"},
+  ganga:{hp:140,atk:15,def:14,spd:1.05,pas:"พรแห่งสายน้ำ: ฟื้น HP 2/วิ และ SP มาไว +20%",sig:"gangablessing"},
   // villains of the dungeon (never offered to players)
   m_ghost:{hp:100,atk:13,def:9,spd:1.1,sig:"haunt"},
   m_skull:{hp:120,atk:14,def:12,spd:.9,sig:"curse"},
@@ -1783,6 +1811,7 @@ const SKILLS={
   hellfire:{n:"เสาเพลิงนรก",d:"เสาไฟผุดใต้ศัตรู ดาเมจ 30",cost:50,c:"255,90,60",sig:1,mon:1},
   abyss:{n:"เพลิงบาดาลปะทุ",d:"ไฟนรกปะทุใต้ศัตรู ดาเมจ 40 กระเด็น",cost:45,c:"255,60,60",sig:1,mon:1},
   doom:{n:"วงแหวนวันสิ้นโลก",d:"คลื่นปีศาจแผ่ทั้งสนาม ดาเมจ 26 และสาป",cost:60,c:"255,40,80",sig:1,mon:1},
+  gangablessing:{n:"คงคาประทานพร",d:"คลื่นศักดิ์สิทธิ์ซัดศัตรูทุกตัว 30 · ฟื้น HP ทั้งทีม 20% · ล้างสถานะร้าย",cost:55,c:"255,225,150",sig:1},
   nagawrath:{n:"นาคาพิโรธ",d:"พญานาคซัดคลื่นใส่ศัตรูทุกตัว ลำละ 34 กระเด็น",cost:60,c:"80,230,210",sig:1,set:1},
   moonward:{n:"แสงจันทร์คุ้มภัย",d:"ฟื้น HP 25% · เกราะ 3 วิ · ล้างพิษ/สาป/ช้า",cost:55,c:"220,230,255",sig:1,set:1},
   asuraslash:{n:"ฟันเพลิงอสูร",d:"ฟันเพลิงเป็นแนวยาว ดาเมจ 55",cost:50,c:"255,90,60",sig:1,set:1},
@@ -1899,6 +1928,7 @@ async function refreshMyProgs(){
   for(const id of mine){ if(!tokens[id] && !String(id).startsWith("local-") && kOf(id)){ try{ const j=await post("?claim="+encodeURIComponent(id)); tokens[id]=j.token; saveTokens(); }catch(e){} } }
   const ids=myOnlineIds(); if(!ids.length){ myProgs={}; return myProgs; }
   try{ myProgs=(await api("?inbox="+ids.map(encodeURIComponent).join(","))).inbox||{}; }catch(e){}
+  if(!gangaKey()){ const hit=Object.entries(myProgs).find(([,v])=>v&&v.prog&&(v.prog.bestDungeon||0)>=20); if(hit){ lsSet("lk.gangaKey",hit[0]); syncForm(); } }
   return myProgs;
 }
 function newChallenges(){ const seen=lsGet("lk.seenCh",0); let n=0; for(const v of Object.values(myProgs)) for(const l of (v.logs||[])) if(l.at>seen) n++; return n; }
@@ -2149,6 +2179,7 @@ function openDev(){
     const g=el("div","dev-grid"); for(let f=1;f<=DUN_MAX;f++){ const b=el("button","btn"+(f%5===0?" dun":""),String(f)); b.addEventListener("click",()=>devStart(f)); g.append(b); } card.append(g);
     const acts=el("div","acts");
     const tu=el("button","btn","ดูวิธีเล่นใหม่"); tu.addEventListener("click",()=>openTutorial(0,openDev)); acts.append(tu);
+    const gu=el("button","btn","การ์ดปลดล็อก"); gu.addEventListener("click",()=>showGangaUnlock(openDev)); acts.append(gu);
     const en=el("button","btn","ดูฉากจบ"); en.addEventListener("click",()=>playEnding("DEV · "+(TYPE_BY[devPick.type]||TYPES[0]).name,openDev)); acts.append(en);
     const off=el("button","btn danger","ปิด Dev mode"); off.addEventListener("click",()=>{ setDev(false); closeCard(); toast("ปิด Dev mode แล้ว"); }); acts.append(off);
     backBtn(acts,"ปิด",closeCard); card.append(acts);
@@ -2228,6 +2259,15 @@ function playEnding(name,done){
   sfx("bell"); playMusic();
 }
 $("endBtn").addEventListener("click",()=>{ const d=ending&&ending.done; ending=null; $("ending").hidden=true; document.body.classList.remove("in-ending"); sfx("win"); for(let i=0;i<10;i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*220); if(d) d(); });
+function showGangaUnlock(next){
+  showCard(card=>{
+    card.append(el("div","kind","✨ ปลดล็อกกระทงพิเศษ ✨")); const im=document.createElement("img"); im.src="img/kr/ganga.png"; im.className="unlock-art"; im.alt=""; card.append(im);
+    card.append(el("h3",null,"กระทงคงคาสวรรค์")); card.append(el("p","meta","ของขวัญจากพระแม่คงคาแด่ผู้พิชิตบาดาลทั้ง 20 ชั้น · บัวขาวกลีบทอง มีพญานาคทองโอบ ตอนลอยจะมีหยดน้ำศักดิ์สิทธิ์ลอยวนรอบ"));
+    card.append(statGrid(statsFor("ganga",null))); card.append(el("p","meta","ติดตัว: "+BSTATS.ganga.pas)); card.append(skillList(["gangablessing"]));
+    const acts=el("div","acts"); const go=el("button","btn primary","ลอยกระทงคงคาสวรรค์เลย"); go.addEventListener("click",()=>{ form.type="ganga"; syncForm(); saveDraft(); closeCard(); $("btnOpen").click(); }); acts.append(go);
+    backBtn(acts,"ไว้ทีหลัง",next||closeCard); card.append(acts);
+  });
+}
 function drawEnding(c,t,dt){
   const E=ending; E.t+=dt; const k=E.t, hor=HOR;
   // backdrop: the painted ending scene, or the current river washed in golden dawn light
@@ -2598,6 +2638,9 @@ function castSkill(f,id){
       tele(f,{x:f.x,y:f.y,r:Math.max(W,H),dur:2.6,col:"255,40,80",global:true,then:()=>{ const sf=battle.safe; battle.safe=null; f.casting=null; playVfx(VFX.doomring&&VFX.doomring.ok?"doomring":"formation",f.x,f.y,8,{flat:.55,add:true,back:true}); runeBursts.push({x:f.x,y:f.y,life:0,dur:1.4,r:Math.max(W,H)*.6,flat:true,glyph:true,col:"255,40,80"}); battle.shake=18;
         for(const o of foesOf(f)){ if(sf&&Math.hypot(o.x-sf.x,(o.y-sf.y)*1.8)<sf.r){ floater(o.x,o.y-fSize(o)*2,"รอด!","255,230,140","skill"); continue; } hurt(o,55*m,f); o.buffs.cursed=5; o.vx+=Math.sign(o.x-f.x||1)*u*12; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); } }}); break; }
     case "__setfx": break;
+    case "gangablessing": { battle.banner={text:sk.n,col:sk.c,t:0}; flash={a:.8,x:f.x,y:f.y,c:"255,230,170"}; playVfx(vfxOr("holyaura","holyhand"),f.x,f.y,4.4,{follow:f,dy:-.4,add:true});
+      for(const al of battle.all.filter(o=>o.alive&&o.isPlayer===f.isPlayer)){ al.hp=Math.min(al.max,al.hp+al.max*.2); for(const b of ["poison","cursed","slow"]) al.buffs[b]=0; floater(al.x,al.y-fSize(al)*2.2,"+"+Math.round(al.max*.2),"120,255,160","heal"); playVfx(vfxOr("moonlight","firstaid"),al.x,al.y,3,{follow:al,dy:-1,add:true}); }
+      foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; playVfx(vfxOr("nagawave","fish"),o.x,o.y,4.6,{dy:-1.3}); hurt(o,30*m,f); o.vx+=Math.sign(o.x-f.x||1)*u*9; },120+i*130)); break; }
     case "nagawrath": { battle.banner={text:sk.n,col:sk.c,t:0}; battle.shake=12; foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; playVfx(vfxOr("nagawave","fish"),o.x,o.y,5.6,{dy:-1.6}); hurt(o,34*m,f); o.vx+=Math.sign(o.x-f.x||1)*u*12; ripples.push({x:o.x,y:o.y,r:u*2.4,life:0,dur:1.3,c:"120,240,220"}); },150+i*160)); break; }
     case "moonward": { f.hp=Math.min(f.max,f.hp+f.max*.25*m/skillMul(f)*Math.min(1.4,skillMul(f))); f.buffs.shield=3; for(const b of ["poison","cursed","slow"]) f.buffs[b]=0; playVfx(vfxOr("moonlight","holyhand"),f.x,f.y,4,{follow:f,dy:-1.2,add:true}); floater(f.x,f.y-s*2.2,"ล้างคำสาป!","220,230,255","skill"); break; }
     case "asuraslash": if(tgt){ const a=Math.atan2((tgt.y-f.y)*1.8,tgt.x-f.x), L=Math.max(W,H)*.6; for(let q=0;q<3;q++) playVfx(vfxOr("fireslash","crescent"),f.x+Math.cos(a)*u*(3+q*3.2),f.y+Math.sin(a)*u*(3+q*3.2)/1.8-s*.4,4.6,{flip:Math.cos(a)<0,speed:.7,rot:Math.sin(a)*.6}); battle.shake=10;
@@ -2638,8 +2681,8 @@ function battleStep(dt,t){
     f.hitT=Math.max(0,f.hitT-dt);
     if(!f.alive){ f.sinkT+=dt; f.vx*=.95; f.vy*=.95; continue; }
     if(live){
-      f.sp=Math.min(100,f.sp+dt*(f.isPlayer?9:f.duel?8:6)*(f.k.type==="pride"?1.5:1)*(f.buffs.calm>0?2:1)*(f.spMul||1));
-      if(f.k.type==="lotus") f.hp=Math.min(f.max,f.hp+2*dt);
+      f.sp=Math.min(100,f.sp+dt*(f.isPlayer?9:f.duel?8:6)*(f.k.type==="pride"?1.5:f.k.type==="ganga"?1.2:1)*(f.buffs.calm>0?2:1)*(f.spMul||1));
+      if(f.k.type==="lotus"||f.k.type==="ganga") f.hp=Math.min(f.max,f.hp+2*dt);
       if(f.regen) f.hp=Math.min(f.max,f.hp+f.regen*dt);
       if(f.buffs.calm>0) f.hp=Math.min(f.max,f.hp+6*dt);
       if(f.titan&&!f.enraged&&f.hp<f.max*.5){ f.enraged=true; f.sp=100; f.atk*=1.2; f.spd*=1.15; B.banner={text:f.voidBoss?"ความว่างเปล่าตื่น!":"ราชาปีศาจคลั่ง!",col:f.voidBoss?"190,120,255":"255,50,60",t:0};
@@ -2830,7 +2873,8 @@ async function showDungeonResult(win){
     card.append(acts); card.hidden=false; $("veil").hidden=false; return;
   }
   const cleared=win?floor:floor-1, j=await finishDungeon(cleared); endBattle();
-  if(win&&floor>=DUN_MAX){ playEnding(B.P.name,()=>dungeonSummary(j,cleared,win,!win,from)); return; }
+  if(win&&floor>=DUN_MAX){ const first=!gangaKey(); if(j&&!j.error&&!j.dev&&tokens[R.id]){ lsSet("lk.gangaKey",R.id); syncForm(); }
+    playEnding(B.P.name,()=>{ if(first&&gangaKey()) showGangaUnlock(()=>dungeonSummary(j,cleared,win,!win,from)); else dungeonSummary(j,cleared,win,!win,from); }); return; }
   dungeonSummary(j,cleared,win,!win,from);
   if(win) for(let i=0;i<8;i++) setTimeout(()=>launch(rnd(.15,.85)*W,i%2?"heart":"peony"),i*250);
 }
@@ -2970,13 +3014,15 @@ const form={type:"banana",cat:"love",candle:"gold",photo:null,photoImg:null};
 const draft=lsGet("lk.draft",null);
 if(draft&&typeof draft==="object"){ if(TYPE_BY[draft.type]) form.type=draft.type; if(CAT_BY[draft.cat]) form.cat=draft.cat; if(CANDLE_BY[draft.candle]) form.candle=draft.candle; $("inName").value=clean(draft.name,30); $("inPartner").value=clean(draft.partner,30); $("inWish").value=clean(draft.wish,160); }
 const typeCanvases=[];
-TYPES.forEach(tp=>{ const b=document.createElement("button"); b.className="type"; b.type="button"; b.dataset.id=tp.id;
+function gangaKey(){ const id=lsGet("lk.gangaKey",null); return id&&tokens[id]?id:null; }
+TYPES.forEach(tp=>{ const b=document.createElement("button"); b.className="type"+(tp.special?" special":""); b.type="button"; b.dataset.id=tp.id;
   const cvs=document.createElement("canvas"); const bb=document.createElement("b"); bb.textContent=tp.name; const sm=document.createElement("small"); sm.textContent=tp.desc;
-  b.append(cvs,bb,sm); b.addEventListener("click",()=>{ form.type=tp.id; syncForm(); saveDraft(); }); $("types").appendChild(b); typeCanvases.push({cvs,id:tp.id}); });
+  b.append(cvs,bb,sm); b.addEventListener("click",()=>{ if(tp.special&&!gangaKey()){ toast("🔒 ปลดล็อกเมื่อพิชิตดันเจี้ยนชั้น 20 แล้วรับพรจากพระแม่คงคา"); return; } form.type=tp.id; syncForm(); saveDraft(); }); $("types").appendChild(b); typeCanvases.push({cvs,id:tp.id}); });
 CATS.forEach(ct=>{ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.dataset.id=ct.id; b.textContent=ct.name; b.addEventListener("click",()=>{ form.cat=ct.id; syncForm(); saveDraft(); }); $("cats").appendChild(b); });
 CANDLES.forEach(cd=>{ const b=document.createElement("button"); b.type="button"; b.className="sw"; b.dataset.id=cd.id; b.style.background=cd.c; b.style.color=cd.c; b.setAttribute("aria-label","เทียนสี"+cd.n); b.addEventListener("click",()=>{ form.candle=cd.id; syncForm(); saveDraft(); }); $("candles").appendChild(b); });
 function syncForm(){
-  for(const b of $("types").children) b.setAttribute("aria-pressed",String(b.dataset.id===form.type));
+  if(TYPE_BY[form.type]&&TYPE_BY[form.type].special&&!gangaKey()) form.type="banana";
+  for(const b of $("types").children){ b.setAttribute("aria-pressed",String(b.dataset.id===form.type)); if(b.classList.contains("special")) b.classList.toggle("locked",!gangaKey()); }
   for(const b of $("cats").children) b.setAttribute("aria-pressed",String(b.dataset.id===form.cat));
   for(const b of $("candles").children) b.setAttribute("aria-pressed",String(b.dataset.id===form.candle));
   $("wishCount").textContent=$("inWish").value.length+"/160";
@@ -3055,7 +3101,7 @@ $("btnGo").addEventListener("click", async ()=>{
   let id=null, savedShared=false;
   if(apiOK){
     try{
-      const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(photo?{...k,photo}:k)});
+      const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...(photo?{...k,photo}:k),...(TYPE_BY[k.type]&&TYPE_BY[k.type].special?{unlock:{id:gangaKey(),token:tokens[gangaKey()]}}:{})})});
       const j=await r.json().catch(()=>({}));
       if(r.ok && j.id){ id=j.id; savedShared=true; if(j.token){ tokens[id]=j.token; saveTokens(); } }
       else if(r.status===429||r.status===400||r.status===413){ $("err").textContent=j.error||"ลองใหม่อีกครั้งนะ"; $("btnGo").disabled=false; $("btnGo").textContent="อธิษฐานแล้ว ลอยเลย"; return; }

@@ -28,6 +28,7 @@ DESC = {
  'coconut': "krathong made of a half coconut shell with brown fibrous husk, a rim of folded green banana leaves, filled with marigolds and white jasmine",
  'pride':   "rainbow krathong with a banana-leaf base and pleated petals in rainbow colors red orange yellow green blue purple, white jasmine flowers",
  'cat':     "cute cat-shaped krathong made of green banana leaves with two pointy cat ears and a happy cat face with whiskers on the front, pink flowers",
+ 'ganga':   "divine celestial krathong blessed by the Thai river goddess, layered white lotus petals edged with shining gold leaf, a small golden Thai naga serpent coiled around the base with its crested head raised, glowing turquoise water droplets and tiny golden sparkles floating around it, a golden-cyan sacred candle flame, majestic and holy",
  'star':    "magical crystal krathong with translucent glowing cyan and violet star-shaped crystal petals on a deep indigo base studded with golden sequins, tiny sparkles",
 }
 if __name__ == '__main__':

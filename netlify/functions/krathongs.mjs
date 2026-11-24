@@ -15,7 +15,9 @@
 import { getStore } from "@netlify/blobs";
 import { createHash, randomBytes } from "node:crypto";
 
-const TYPES = ["banana", "lotus", "bread", "coconut", "pride", "cat", "star"];
+const TYPES = ["banana", "lotus", "bread", "coconut", "pride", "cat", "star", "ganga"];
+// special types: only floatable by someone holding the key of a krathong that earned them
+const SPECIAL = { ganga: (p) => !!p.deepClear || (p.bestDungeon || 0) >= 20 };
 const CATS = ["", "love", "work", "money", "health", "study", "sorry"];
 const CANDLES = ["white", "gold", "pink", "blue", "violet"];
 const LIMIT = 150;
@@ -328,6 +330,10 @@ export default async (req, context) => {
       photo = bytes;
     }
 
+    if (SPECIAL[d.type]) {
+      const u = d.unlock || {}; const up = ID_RE.test(String(u.id || "")) ? await store.get("prog/" + u.id, { type: "json" }) : null;
+      if (!up || up.tokenHash !== sha(u.token || "") || !SPECIAL[d.type](up)) return json({ error: "กระทงแบบนี้ปลดล็อกเมื่อพิชิตดันเจี้ยนชั้น 20" }, 400);
+    }
     const ipKey = "ip/" + ipOf(req, context);
     const lastRaw = await store.get(ipKey);
     const now = Date.now();
