@@ -1624,7 +1624,7 @@ function saveTokens(){ lsSet("lk.tokens",tokens); }
 let myProgs={};
 async function api(path,opts){ const r=await fetch(API+path,opts); const j=await r.json().catch(()=>({})); if(!r.ok){ const e=new Error(j.error||"เชื่อมต่อไม่สำเร็จ"); e.status=r.status; throw e; } return j; }
 function post(path,body){ return api(path,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body||{})}); }
-const STAT_INFO=[["hp","HP","+8% ต่อเลเวล"],["atk","ATK","+1.5 ต่อเลเวล"],["def","DEF","+1.5 ต่อเลเวล"],["spd","SPD","+3% ต่อเลเวล"],["sk","พลังสกิล","+10% ต่อเลเวล"]];
+const STAT_INFO=[["hp","HP","+8% ต่อเลเวล · ทนได้นานขึ้น"],["atk","ATK","+1.5 ต่อเลเวล · ชนศัตรูแรงขึ้น"],["def","DEF","+1.5 ต่อเลเวล · โดนชนแล้วเจ็บน้อยลง"],["spd","SPD","+3% ต่อเลเวล · ว่ายเร็ว พุ่งชนแรงขึ้น หลบง่าย"],["sk","พลังสกิล","+10% ต่อเลเวล · สกิลแรงและฟื้นเลือดมากขึ้น"]];
 const upCost=lv=>25+lv*15;
 function statsFor(type,prog){ const b=BSTATS[type]||BSTATS.banana, L=(prog&&prog.lv)||{};
   return {hp:Math.round(b.hp*1.6*(1+.08*(L.hp||0))),atk:+(b.atk+1.5*(L.atk||0)).toFixed(1),def:+(b.def+1.5*(L.def||0)).toFixed(1),spd:+(b.spd*(1+.03*(L.spd||0))).toFixed(2),sk:+(1+.1*(L.sk||0)).toFixed(2)}; }
