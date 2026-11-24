@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "58610fc5-57e9-4380-b936-c7663b0aab72",
+  "canvas": {
+   "h": 165,
+   "w": 134
+  },
+  "frames": 16,
+  "fps": 22,
+  "loop": false,
+  "anchor": {
+   "x": 98,
+   "y": 70,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-fish.gif": "https://api.pixellab.ai/mcp/pixel-tools/ee3275c5-5ef2-46ff-a69c-5fe68a3bf672/lk-fish.gif",
+  "lk-fish.png": "https://api.pixellab.ai/mcp/pixel-tools/ee3275c5-5ef2-46ff-a69c-5fe68a3bf672/lk-fish.png",
+  "lk-fish.json": "https://api.pixellab.ai/mcp/pixel-tools/ee3275c5-5ef2-46ff-a69c-5fe68a3bf672/lk-fish.json"
+ }
+}

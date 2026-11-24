@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "7cc3d095-6b74-4f0c-bd9c-7a6d52fdeccf",
+  "canvas": {
+   "h": 112,
+   "w": 96
+  },
+  "frames": 14,
+  "fps": 12,
+  "loop": false,
+  "anchor": {
+   "x": 48,
+   "y": 84,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-lotus.gif": "https://api.pixellab.ai/mcp/pixel-tools/d7fa329b-b2e1-4473-be21-dbaacee17423/lk-lotus.gif",
+  "lk-lotus.png": "https://api.pixellab.ai/mcp/pixel-tools/d7fa329b-b2e1-4473-be21-dbaacee17423/lk-lotus.png",
+  "lk-lotus.json": "https://api.pixellab.ai/mcp/pixel-tools/d7fa329b-b2e1-4473-be21-dbaacee17423/lk-lotus.json"
+ }
+}

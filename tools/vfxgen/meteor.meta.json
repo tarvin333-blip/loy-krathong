@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "3ba0eebd-680e-4bea-9aac-9cac3845125b",
+  "canvas": {
+   "h": 119,
+   "w": 118
+  },
+  "frames": 12,
+  "fps": 12,
+  "loop": false,
+  "anchor": {
+   "x": 106,
+   "y": 114,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-meteor.gif": "https://api.pixellab.ai/mcp/pixel-tools/f2fc8685-cf62-4004-83a5-8cdc4198345e/lk-meteor.gif",
+  "lk-meteor.png": "https://api.pixellab.ai/mcp/pixel-tools/f2fc8685-cf62-4004-83a5-8cdc4198345e/lk-meteor.png",
+  "lk-meteor.json": "https://api.pixellab.ai/mcp/pixel-tools/f2fc8685-cf62-4004-83a5-8cdc4198345e/lk-meteor.json"
+ }
+}

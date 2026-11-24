@@ -73,3 +73,9 @@ npx netlify-cli deploy --prod
 - ถ่ายภาพปกใหม่: รัน `node tools/og/ogserver.mjs` แล้วตามด้วย `node tools/og/shoot.js` (ต้องมี Playwright) ภาพจะออกมาเป็น og_raw.png ย่อเหลือ 1200×630 แล้ววางทับไฟล์เดิม
 - กระทงในภาพปกเป็นชื่อสมมติทั้งหมด
 - ถ้า Facebook ยังโชว์ภาพเก่า ให้เปิด https://developers.facebook.com/tools/debug/ วางลิงก์ แล้วกด "Scrape Again"
+
+## เอฟเฟกต์สกิล (VFX)
+- ภาพเอฟเฟกต์อยู่ที่ `public/img/vfx/*.png` ขนาดและจำนวนเฟรมอยู่ใน `vfx.json`
+- 14 แบบนำมาจากคลัง VFX ในเกม bara-duel ของเจ้าของเว็บ
+- 4 แบบ (lotus, fish, rainbow, meteor) แต่งใหม่ด้วย PixelLab ผ่าน `tools/vfx_gen.py`
+- รวบรวมไฟล์ใหม่ด้วย `python3 tools/vfx_pack.py <โฟลเดอร์คลัง VFX ของเกม>`

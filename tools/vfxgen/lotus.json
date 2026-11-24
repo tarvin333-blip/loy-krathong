@@ -1,0 +1,391 @@
+{
+ "frames": [
+  {
+   "filename": "lk-lotus 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 1.png",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 2.png",
+   "frame": {
+    "x": 192,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 3.png",
+   "frame": {
+    "x": 288,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 4.png",
+   "frame": {
+    "x": 0,
+    "y": 112,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 5.png",
+   "frame": {
+    "x": 96,
+    "y": 112,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 6.png",
+   "frame": {
+    "x": 192,
+    "y": 112,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 7.png",
+   "frame": {
+    "x": 288,
+    "y": 112,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 8.png",
+   "frame": {
+    "x": 0,
+    "y": 224,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 9.png",
+   "frame": {
+    "x": 96,
+    "y": 224,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 10.png",
+   "frame": {
+    "x": 192,
+    "y": 224,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 11.png",
+   "frame": {
+    "x": 288,
+    "y": 224,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 12.png",
+   "frame": {
+    "x": 0,
+    "y": 336,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-lotus 13.png",
+   "frame": {
+    "x": 96,
+    "y": 336,
+    "w": 96,
+    "h": 112
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 96,
+    "h": 112
+   },
+   "sourceSize": {
+    "w": 96,
+    "h": 112
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.75
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-lotus.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 384,
+   "h": 448
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 48,
+   "y": 84
+  },
+  "frameTags": [
+   {
+    "name": "lk-lotus",
+    "from": 0,
+    "to": 13,
+    "direction": "forward"
+   }
+  ]
+ }
+}

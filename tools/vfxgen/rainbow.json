@@ -1,0 +1,339 @@
+{
+ "frames": [
+  {
+   "filename": "lk-rainbow 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 1.png",
+   "frame": {
+    "x": 171,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 2.png",
+   "frame": {
+    "x": 342,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 3.png",
+   "frame": {
+    "x": 513,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 4.png",
+   "frame": {
+    "x": 0,
+    "y": 87,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 5.png",
+   "frame": {
+    "x": 171,
+    "y": 87,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 6.png",
+   "frame": {
+    "x": 342,
+    "y": 87,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 7.png",
+   "frame": {
+    "x": 513,
+    "y": 87,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 8.png",
+   "frame": {
+    "x": 0,
+    "y": 174,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 9.png",
+   "frame": {
+    "x": 171,
+    "y": 174,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 10.png",
+   "frame": {
+    "x": 342,
+    "y": 174,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-rainbow 11.png",
+   "frame": {
+    "x": 513,
+    "y": 174,
+    "w": 171,
+    "h": 87
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 171,
+    "h": 87
+   },
+   "sourceSize": {
+    "w": 171,
+    "h": 87
+   },
+   "pivot": {
+    "x": 0.9590643274853801,
+    "y": 0.8045977011494253
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-rainbow.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 684,
+   "h": 261
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 164,
+   "y": 70
+  },
+  "frameTags": [
+   {
+    "name": "lk-rainbow",
+    "from": 0,
+    "to": 11,
+    "direction": "forward"
+   }
+  ]
+ }
+}

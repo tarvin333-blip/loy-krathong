@@ -1,0 +1,339 @@
+{
+ "frames": [
+  {
+   "filename": "lk-meteor 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 1.png",
+   "frame": {
+    "x": 118,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 2.png",
+   "frame": {
+    "x": 236,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 3.png",
+   "frame": {
+    "x": 354,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 4.png",
+   "frame": {
+    "x": 0,
+    "y": 119,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 5.png",
+   "frame": {
+    "x": 118,
+    "y": 119,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 6.png",
+   "frame": {
+    "x": 236,
+    "y": 119,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 7.png",
+   "frame": {
+    "x": 354,
+    "y": 119,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 8.png",
+   "frame": {
+    "x": 0,
+    "y": 238,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 9.png",
+   "frame": {
+    "x": 118,
+    "y": 238,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 10.png",
+   "frame": {
+    "x": 236,
+    "y": 238,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-meteor 11.png",
+   "frame": {
+    "x": 354,
+    "y": 238,
+    "w": 118,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 118,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 118,
+    "h": 119
+   },
+   "pivot": {
+    "x": 0.8983050847457628,
+    "y": 0.957983193277311
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-meteor.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 472,
+   "h": 357
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 106,
+   "y": 114
+  },
+  "frameTags": [
+   {
+    "name": "lk-meteor",
+    "from": 0,
+    "to": 11,
+    "direction": "forward"
+   }
+  ]
+ }
+}

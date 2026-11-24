@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "d05e454b-2599-4d7e-aefe-e2fc6ced0845",
+  "canvas": {
+   "h": 87,
+   "w": 171
+  },
+  "frames": 12,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 164,
+   "y": 70,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-rainbow.gif": "https://api.pixellab.ai/mcp/pixel-tools/cbf15819-f879-4b0b-a1a8-10564a356830/lk-rainbow.gif",
+  "lk-rainbow.png": "https://api.pixellab.ai/mcp/pixel-tools/cbf15819-f879-4b0b-a1a8-10564a356830/lk-rainbow.png",
+  "lk-rainbow.json": "https://api.pixellab.ai/mcp/pixel-tools/cbf15819-f879-4b0b-a1a8-10564a356830/lk-rainbow.json"
+ }
+}
