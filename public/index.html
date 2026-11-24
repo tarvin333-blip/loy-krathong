@@ -685,17 +685,28 @@ function drawReflection(c,k,s,sp,t,rot,alpha){
   const wl=waterLine(k,s); c.save(); c.beginPath(); c.rect(-s*4,wl,s*8,s*5); c.clip();
   c.translate(Math.sin(t*1.7+k.seed*9)*1.2,wl); c.scale(1,-.62); c.translate(0,-wl); c.globalAlpha*=alpha; c.rotate(rot); blitSprite(c,sp,s); c.restore();
 }
-function drawContactShadow(c,k,s){ const wl=waterLine(k,s), rx=hullRx(k,s), ry=rx*.2; c.fillStyle="rgba(3,6,26,.38)"; c.beginPath(); c.ellipse(0,wl+ry*.25,rx*1.08,ry*1.15,0,0,TAU); c.fill(); }
-function drawHull(c,sp,s,k){
-  const wl=waterLine(k,s);
-  c.save(); c.beginPath(); c.rect(-s*4,-s*7,s*8,s*7+wl); c.clip(); blitSprite(c,sp,s); c.restore();
-  c.save(); c.beginPath(); c.rect(-s*4,wl,s*8,s*3); c.clip(); c.globalAlpha*=.22; blitSprite(c,sp,s); c.restore();
+function drawContactShadow(c,k,s){ const wl=waterLine(k,s), rx=hullRx(k,s);
+  c.save(); c.translate(0,wl+rx*.05); c.scale(1,.24); c.fillStyle=rg(c,0,0,0,rx*1.25,[[0,"rgba(3,6,26,.42)"],[.6,"rgba(3,6,26,.22)"],[1,"rgba(3,6,26,0)"]]); c.beginPath(); c.arc(0,0,rx*1.25,0,TAU); c.fill(); c.restore(); }
+function drawHull(c,sp,s,k,t){
+  // solid above the water, then thin strips that fade out and sway, so the hull melts into the river
+  const wl=waterLine(k,s), f=s/sp.sb, a0=c.globalAlpha, fs=wl-s*.07, fe=wl+s*.2, N=9, bh=(fe-fs)/N;
+  c.save(); c.beginPath(); c.rect(-s*4,-s*7,s*8,s*7+fs); c.clip(); blitSprite(c,sp,s); c.restore();
+  for(let i=0;i<N;i++){ const y0=fs+i*bh, u=(i+.5)/N, a=Math.pow(1-u,1.6)*(u<.35?1:.75);
+    const wob=Math.sin((t||0)*2.6+i*1.1+(k.seed||0)*9)*s*.025*u;
+    const sy=(y0/f+sp.oy)*DPR, sh=bh/f*DPR; if(sy<0||sy+sh>sp.cvs.height) continue;
+    c.globalAlpha=a0*a; c.drawImage(sp.cvs,0,sy,sp.cvs.width,sh,-sp.ox*f+wob,y0,sp.w*f,bh+.6); }
+  c.globalAlpha=a0;
 }
 function drawWaterRing(c,k,s,t){
-  const wl=waterLine(k,s), rx=hullRx(k,s), ry=rx*.2, ph=frac(t*.45+(k.seed||0)*3);
-  c.save(); c.lineWidth=Math.max(1,s*.05);
-  c.strokeStyle=`rgba(215,232,255,${.4+.12*Math.sin(t*2+(k.seed||0)*7)})`; c.beginPath(); c.ellipse(0,wl,rx,ry,0,Math.PI*.04,Math.PI*.96); c.stroke();
-  c.lineWidth=1; c.strokeStyle=`rgba(200,222,255,${.28*(1-ph)})`; c.beginPath(); c.ellipse(0,wl,rx*(1+ph*.9),ry*(1+ph*.9),0,0,TAU); c.stroke();
+  const wl=waterLine(k,s), rx=hullRx(k,s), sd=k.seed||0, br=.75+.25*Math.sin(t*2+sd*7);
+  c.save(); c.globalCompositeOperation="lighter";
+  // soft lit band where the hull meets the water (a blurred ellipse, no hard line)
+  c.save(); c.translate(0,wl); c.scale(1,.22);
+  c.fillStyle=rg(c,0,0,rx*.7,rx*1.22,[[0,"rgba(210,230,255,0)"],[.45,`rgba(210,230,255,${.16*br})`],[.7,`rgba(255,225,180,${.08*br})`],[1,"rgba(210,230,255,0)"]]);
+  c.beginPath(); c.arc(0,0,rx*1.22,0,TAU); c.fill(); c.restore();
+  // two slow expanding ripples, drawn as faint feathered rings
+  for(let j=0;j<2;j++){ const ph=frac(t*.35+sd*3+j*.5), R=rx*(1.05+ph*1.1), a=.13*(1-ph)*(ph<.1?ph*10:1);
+    c.save(); c.translate(0,wl); c.scale(1,.24); c.fillStyle=rg(c,0,0,R*.9,R*1.06,[[0,"rgba(200,222,255,0)"],[.5,`rgba(200,222,255,${a})`],[1,"rgba(200,222,255,0)"]]); c.beginPath(); c.arc(0,0,R*1.06,0,TAU); c.fill(); c.restore(); }
   c.restore();
 }
 /* ---- ambient particles: candle embers, water glints, bokeh, drifting light motes ---- */
@@ -1315,7 +1326,7 @@ function frame(nowP){
     if(k.type==="bread"&&!k.amb){ for(let i=0;i<3;i++){ const a=t*1.2+i*2.1+k.seed*9; c.fillStyle="rgba(255,140,60,.55)"; const fx=Math.cos(a)*p.s*1.6, fy=p.s*.5+Math.sin(a)*p.s*.35; c.save(); c.translate(fx,fy); c.rotate(a+Math.PI/2); c.beginPath(); c.ellipse(0,0,p.s*.16,p.s*.06,0,0,TAU); c.fill(); c.beginPath(); c.moveTo(-p.s*.14,0); c.lineTo(-p.s*.26,-p.s*.06); c.lineTo(-p.s*.26,p.s*.06); c.fill(); c.restore(); } }
     if(onWater) drawContactShadow(c,k,p.s);
     c.save(); c.rotate(p.rot);
-    if(onWater) drawHull(c,sp,p.s,k); else blitSprite(c,sp,p.s);
+    if(onWater) drawHull(c,sp,p.s,k,t); else blitSprite(c,sp,p.s);
     if(photo) drawPhoto(c,photo,p.s,k.type);
     krDynamic(c,k,p.s,t);
     c.restore();
@@ -1901,7 +1912,7 @@ function drawFighter(c,f,t){
   const tilt=Math.sin(t*.9+f.k.seed*7)*.05+Math.max(-.25,Math.min(.25,f.vx/(bU()*30)))+(f.hitT>0?Math.sin(f.hitT*45)*.18:0)+sk*1.2*(f.k.seed>.5?1:-1);
   c.save(); c.rotate(tilt);
   if(sk){ c.beginPath(); c.rect(-s*4,-s*4,s*8,s*4+waterLine(f.k,s)-sk*s*1.2); c.clip(); blitSprite(c,sp,s); }
-  else drawHull(c,sp,s,f.k);
+  else drawHull(c,sp,s,f.k,t);
   if(photo) drawPhoto(c,photo,s,f.k.type);
   if(!sk) krDynamic(c,f.k,s,t); else { const fp=flamePos(f.k,s); c.strokeStyle="rgba(200,200,220,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(fp.x,fp.y); for(let j=1;j<6;j++) c.lineTo(fp.x+Math.sin(t*2+j)*s*.15*j,fp.y-j*s*.25); c.stroke(); }
   c.restore();
