@@ -1917,7 +1917,7 @@ let dunRun=null;
 function inDungeon(){ return !!(battle&&battle.mode==="dungeon"); }
 /* dungeon scene: a painted cave (until a backdrop image is set) with dark mirrored water, fog and rising embers */
 // painted backdrops per depth: {from: first floor, src}. Floors with no image use the painted cave below.
-const DUNGEON_BGS=[{from:1,src:"img/dungeon1.webp",hor:.52},{from:4,src:"img/dungeon3.webp",hor:.43},{from:7,src:"img/dungeon2.webp",hor:.525,lava:true},{from:11,src:"img/dungeon3.webp",hor:.43},{from:16,src:"img/dungeon2.webp",hor:.525,lava:true}];
+const DUNGEON_BGS=[{from:1,src:"img/dungeon1.webp",hor:.52},{from:4,src:"img/dungeon3.webp",hor:.43},{from:7,src:"img/dungeon2.webp",hor:.525,lava:true},{from:11,src:"img/dungeon4.webp",hor:.55,ice:true},{from:16,src:"img/dungeon2.webp",hor:.525,lava:true}];
 let dunCv=null, dunKey="", dunImg=null, dunImgSrc="", DUNGEON_BG=null, dunFog=[], dunEmbers=[];
 function pickDungeonBg(floor){ let b=null; for(const d of DUNGEON_BGS) if(floor>=d.from) b=d; DUNGEON_BG=b; if(b&&dunImgSrc!==b.src){ dunImgSrc=b.src; dunImg=new Image(); dunImg.onload=()=>{ dunKey=""; }; dunImg.src=b.src; } if(!b){ dunImg=null; dunImgSrc=""; } dunKey=""; }
 function buildDungeonBg(){
@@ -1960,11 +1960,11 @@ function drawDungeon(c,t,dt){
   }
   // drifting fog
   if(!dunFog.length) for(let i=0;i<7;i++) dunFog.push({x:Math.random(),y:Math.random(),s:.6+Math.random(),v:(Math.random()-.5)*.02,c:"150,60,140"});
-  const fogC=DUNGEON_BG&&DUNGEON_BG.lava?"255,70,30":DUNGEON_BG?"90,200,190":null;
+  const fogC=DUNGEON_BG&&DUNGEON_BG.lava?"255,70,30":DUNGEON_BG&&DUNGEON_BG.ice?"110,150,255":DUNGEON_BG?"90,200,190":null;
   c.save(); c.globalCompositeOperation="lighter"; for(const f of dunFog){ if(fogC) f.c=fogC; f.x=(f.x+f.v*dt+1.2)%1.2; const fx=(f.x-.1)*W, fy=HOR+(f.y-.5)*H*.25, r=W*.18*f.s; c.fillStyle=rg(c,fx,fy,0,r,[[0,`rgba(${f.c},.10)`],[1,`rgba(${f.c},0)`]]); c.beginPath(); c.ellipse(fx,fy,r,r*.4,0,0,TAU); c.fill(); } c.restore();
 }
 function drawDungeonFront(c,t,dt){
-  if(dunEmbers.length<60&&Math.random()<dt*30) dunEmbers.push({x:Math.random()*W,y:H+5,vx:rnd(-10,10),vy:-rnd(20,60),life:0,dur:rnd(4,8),r:rnd(.8,2.2),c:Math.random()<(DUNGEON_BG&&DUNGEON_BG.lava?.97:.4)?"255,110,60":"120,255,200"});
+  if(dunEmbers.length<60&&Math.random()<dt*30) dunEmbers.push({x:Math.random()*W,y:H+5,vx:rnd(-10,10),vy:-rnd(20,60),life:0,dur:rnd(4,8),r:rnd(.8,2.2),c:DUNGEON_BG&&DUNGEON_BG.ice?(Math.random()<.6?"170,220,255":"200,160,255"):Math.random()<(DUNGEON_BG&&DUNGEON_BG.lava?.97:.4)?"255,110,60":"120,255,200"});
   c.save(); c.globalCompositeOperation="lighter";
   for(let i=dunEmbers.length-1;i>=0;i--){ const e=dunEmbers[i]; e.life+=dt; if(e.life>e.dur){ dunEmbers.splice(i,1); continue; } e.x+=(e.vx+Math.sin(t*1.3+i)*12)*dt; e.y+=e.vy*dt; const a=Math.sin(Math.PI*e.life/e.dur)*.8;
     c.fillStyle=`rgba(${e.c},${a})`; c.beginPath(); c.arc(e.x,e.y,e.r,0,TAU); c.fill(); c.fillStyle=`rgba(${e.c},${a*.12})`; c.beginPath(); c.arc(e.x,e.y,e.r*4,0,TAU); c.fill(); }
