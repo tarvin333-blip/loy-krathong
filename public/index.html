@@ -118,6 +118,16 @@ input::placeholder,textarea::placeholder{color:#8a86a3}
 /* list drawer */
 .drawer{position:fixed;z-index:9;right:max(12px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 92px);width:min(86vw,320px);max-height:52%;overflow-y:auto;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--glass-line);border-radius:18px;padding:12px}
 .drawer h4{margin:2px 4px 8px;font-size:14px;color:var(--gold)}
+.tabs{display:flex;gap:4px;margin-bottom:8px;background:rgba(255,255,255,.06);border-radius:10px;padding:3px}
+.tab{flex:1;border:0;background:transparent;border-radius:8px;padding:6px 4px;font-size:12px;font-weight:600;color:var(--ink-dim)}
+.tab.on{background:var(--gold);color:#2a1600}
+.feed-row{border-top:1px solid rgba(255,255,255,.07);padding:9px 6px}
+.feed-row b{display:block;font-size:13px;line-height:1.4;overflow-wrap:anywhere}
+.feed-row small{font-size:11px;color:var(--ink-dim)}
+.ticker{position:fixed;z-index:7;left:50%;top:calc(env(safe-area-inset-top,0px) + 92px);transform:translate(-50%,-14px);opacity:0;max-width:min(92vw,560px);border:1px solid rgba(255,140,170,.5);background:linear-gradient(90deg,rgba(60,14,40,.92),rgba(20,16,60,.92));color:#fff;border-radius:999px;padding:9px 18px;font-size:13px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 24px rgba(255,120,170,.25);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:transform .35s cubic-bezier(.2,.9,.3,1.2),opacity .3s}
+.ticker.in{transform:translate(-50%,0);opacity:1}
+.ticker.out{transform:translate(-50%,-14px);opacity:0}
+body.in-battle .ticker{display:none!important}
 .li{display:block;width:100%;text-align:left;background:transparent;border:0;border-top:1px solid rgba(255,255,255,.07);padding:9px 6px}
 .li b{display:block;font-size:14px;overflow-wrap:anywhere}
 .li span{display:block;font-family:var(--f-wish);font-size:16px;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -219,7 +229,7 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
     <button class="tool" id="btnFire"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>จุดพลุ</button>
     <button class="tool" id="btnLantern"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 4h10l2 13H5L7 4z"/><path d="M10 21h4"/></svg>ปล่อยโคม</button>
     <button class="tool" id="btnBattle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5 21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/></svg>ศึกกระทง</button>
-    <button class="tool" id="btnList" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>รายชื่อ</button>
+    <button class="tool" id="btnList" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>บอร์ด</button>
   </div>
 </header>
 
@@ -230,7 +240,8 @@ body.in-battle .scenes, body.in-battle .cta-wrap, body.in-battle .status, body.i
 
 <div class="cta-wrap"><button class="cta" id="btnOpen">ลอยกระทง</button></div>
 
-<aside class="drawer" id="drawer" hidden aria-label="กระทงในแม่น้ำ"><h4>กระทงที่ลอยอยู่</h4><div id="listBody"></div></aside>
+<aside class="drawer" id="drawer" hidden aria-label="บอร์ด"><div class="tabs" role="tablist"><button type="button" class="tab" data-tab="list" role="tab">กระทง</button><button type="button" class="tab" data-tab="board" role="tab">ทำเนียบนักชน</button><button type="button" class="tab" data-tab="feed" role="tab">ศึกล่าสุด</button></div><div id="listBody"></div></aside>
+<button type="button" class="ticker" id="ticker" hidden></button>
 
 <div class="veil" id="veil" hidden></div>
 
@@ -1620,7 +1631,7 @@ async function openBoard(){
     card.append(el("div","kind","ทำเนียบนักชน ⚔")); card.append(el("h3",null,"กระทงที่ kill มากที่สุด"));
     const list=el("div","board");
     if(!board.length) list.append(el("p","meta","ยังไม่มีใครลงศึก เป็นคนแรกเลย"));
-    board.forEach((p,i)=>{ const r=el("div","brow"+(tokens[p.id]?" mine":"")); r.append(el("span","rank",String(i+1))); const t=el("div"); t.style.minWidth="0"; t.append(el("b",null,p.name)); t.append(el("small",null,`${(TYPE_BY[p.type]||TYPES[0]).name} · Lv.${p.level} · ชนะ ${p.wins}`)); r.append(t); r.append(el("span","kills","⚔ "+p.kills)); list.append(r); });
+    if(board.length) drawBoardRows(list,board);
     card.append(list); const acts=el("div","acts"); backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
   });
 }
@@ -1661,7 +1672,7 @@ function startBattle(k,fortuneSkills,opts){
   document.body.classList.add("in-battle"); $("bhud").hidden=false; $("bskills").hidden=false;
   buildSkillBar(); updateHud(); sfx("bless");
 }
-function endBattle(){ battle=null; document.body.classList.remove("in-battle"); $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
+function endBattle(){ setTimeout(runTicker,800); battle=null; document.body.classList.remove("in-battle"); $("bhud").hidden=true; $("bskills").hidden=true; $("bskills").textContent=""; }
 function buildSkillBar(){
   const bar=$("bskills"); bar.textContent="";
   battle.P.skills.forEach((id,i)=>{ const sk=SKILLS[id]; const b=el("button","sk"+(sk.sig?" sig":"")); b.type="button";
@@ -1817,7 +1828,7 @@ async function showBattleResult(win){
   const B=battle, o=B.opts||{}, kills=B.foes.filter(f=>!f.alive).length;
   let gain=null, err=null;
   if((B.mode==="pve"||B.mode==="duel")&&o.id&&tokens[o.id]){
-    try{ const j=await post("?action=battle",{id:o.id,token:tokens[o.id],mode:B.mode,win,kills,level:B.level,defender:B.mode==="duel"?o.defK.id:null}); gain=j.gain; if(myProgs[o.id]) myProgs[o.id].prog=j.prog; }
+    try{ const j=await post("?action=battle",{id:o.id,token:tokens[o.id],mode:B.mode,win,kills,level:B.level,defender:B.mode==="duel"?o.defK.id:null}); gain=j.gain; if(myProgs[o.id]) myProgs[o.id].prog=j.prog; boardCache=null; setTimeout(loadFeed,1500); }
     catch(e){ err=e.message; }
     if(win&&B.mode==="pve"){ const pve=lsGet("lk.pve",{}); pve[o.id]=Math.max(pve[o.id]||1,B.level+1); lsSet("lk.pve",pve); }
   }
@@ -2131,12 +2142,45 @@ async function saveCard(k,fortune){
 }
 
 /* ================= list drawer ================= */
-$("btnList").addEventListener("click",()=>{ const d=$("drawer"); d.hidden=!d.hidden; $("btnList").setAttribute("aria-pressed",String(!d.hidden)); if(!d.hidden) renderList(); });
+let drawerTab=lsGet("lk.tab","list"); let boardCache=null, boardAt=0;
+let feed=[], feedSeenAt=Date.now()-120000; const tickQ=[]; let ticking=false;
+function openDrawer(tab){ const d=$("drawer"); if(tab){ drawerTab=tab; lsSet("lk.tab",tab); } d.hidden=false; $("btnList").setAttribute("aria-pressed","true"); renderList(); }
+$("btnList").addEventListener("click",()=>{ const d=$("drawer"); if(!d.hidden){ d.hidden=true; $("btnList").setAttribute("aria-pressed","false"); } else openDrawer(); });
+for(const t of document.querySelectorAll("#drawer .tab")) t.addEventListener("click",()=>openDrawer(t.dataset.tab));
+function feedText(f){ return f.kind==="duel" ? `⚔ ${f.a} (Lv.${f.aLv}) ท้าดวล ${f.d} (Lv.${f.dLv}) — ${f.attackerWon?f.a:f.d} ชนะ!` : `🏆 ${f.a} (Lv.${f.aLv}) ผ่านด่านฝึกที่ ${f.stage}`; }
+async function loadFeed(){
+  if(!apiOK) return; try{ feed=(await api("?feed")).feed||[]; }catch(e){ return; }
+  const fresh=feed.filter(f=>f.at>feedSeenAt).sort((a,b)=>a.at-b.at);
+  if(fresh.length){ feedSeenAt=fresh[fresh.length-1].at; for(const f of fresh.slice(-3)) tickQ.push(f); runTicker(); }
+  if(!$("drawer").hidden&&drawerTab==="feed") renderList();
+}
+function runTicker(){
+  if(ticking||!tickQ.length||battle) return; ticking=true; const f=tickQ.shift(), t=$("ticker");
+  t.textContent=feedText(f); t.hidden=false; t.classList.remove("out"); void t.offsetWidth; t.classList.add("in");
+  setTimeout(()=>{ t.classList.add("out"); setTimeout(()=>{ t.hidden=true; t.classList.remove("in","out"); ticking=false; runTicker(); },400); },5200);
+}
+$("ticker").addEventListener("click",()=>openDrawer("feed"));
 function renderList(){
+  for(const t of document.querySelectorAll("#drawer .tab")){ const on=t.dataset.tab===drawerTab; t.classList.toggle("on",on); t.setAttribute("aria-selected",String(on)); }
   const body=$("listBody"); body.textContent="";
+  if(drawerTab==="board"){
+    if(!apiOK){ body.append(el("div","meta","ต่อเซิร์ฟเวอร์ไม่ได้ตอนนี้")); return; }
+    if(boardCache&&Date.now()-boardAt<20000) drawBoardRows(body,boardCache);
+    else { body.append(el("div","meta","กำลังโหลด…")); api("?board").then(j=>{ boardCache=j.board||[]; boardAt=Date.now(); if(drawerTab==="board"){ body.textContent=""; drawBoardRows(body,boardCache); } }).catch(()=>{ body.textContent=""; body.append(el("div","meta","โหลดไม่สำเร็จ")); }); }
+    return;
+  }
+  if(drawerTab==="feed"){
+    if(!feed.length){ body.append(el("div","meta","ยังไม่มีศึกเกิดขึ้น ลองกดปุ่มศึกกระทงแล้วท้าดวลใครสักคนดูสิ")); return; }
+    for(const f of feed){ const r=el("div","feed-row"); r.append(el("b",null,feedText(f))); r.append(el("small",null,ago(f.at))); body.append(r); }
+    return;
+  }
   const real=cachedReal.slice().sort((a,b)=>b.createdAt-a.createdAt);
   if(!real.length){ body.append(el("div","meta","ยังไม่มีใครลอย เป็นคนแรกเลย")); return; }
-  for(const k of real.slice(0,80)){ const b=el("button","li"+(mine.has(k.id)?" mine":"")); const pe=photoEl(k); if(pe){ pe.className="li-photo"; pe.loading="lazy"; b.append(pe); } const tx=el("div","li-text"); tx.append(el("b",null,k.partner?k.name+" ♥ "+k.partner:k.name)); tx.append(el("span",null,k.wish)); b.append(tx); b.addEventListener("click",()=>{ highlight=k.id; highlightUntil=performance.now()+6000; openKCard(k); }); body.append(b); }
+  for(const k of real.slice(0,80)){ const b=el("button","li"+(mine.has(k.id)?" mine":"")); const pe=photoEl(k); if(pe){ pe.className="li-photo"; pe.loading="lazy"; b.append(pe); } const tx=el("div","li-text"); tx.append(el("b",null,(k.partner?k.name+" ♥ "+k.partner:k.name)+(k.lv>1?` · Lv.${k.lv}`:"")+(k.kills>0?` ⚔${k.kills}`:""))); tx.append(el("span",null,k.wish)); b.append(tx); b.addEventListener("click",()=>{ highlight=k.id; highlightUntil=performance.now()+6000; openKCard(k); }); body.append(b); }
+}
+function drawBoardRows(body,board){
+  if(!board.length){ body.append(el("div","meta","ยังไม่มีใครลงศึก เป็นคนแรกเลย")); return; }
+  board.forEach((p,i)=>{ const r=el("div","brow"+(tokens[p.id]?" mine":"")); r.append(el("span","rank",String(i+1))); const t=el("div"); t.style.minWidth="0"; t.append(el("b",null,p.name)); t.append(el("small",null,`${(TYPE_BY[p.type]||TYPES[0]).name} · Lv.${p.level} · ชนะ ${p.wins}`)); r.append(t); r.append(el("span","kills","⚔ "+p.kills)); body.append(r); });
 }
 
 /* ================= server sync ================= */
@@ -2158,7 +2202,7 @@ async function loadRiver(first){
     shared=fresh; apiOK=true; dbState="live";
     const ids=new Set(shared.map(x=>x.id)); localOnly=localOnly.filter(x=>!ids.has(x.id));
   }catch(e){ if(first||!apiOK){ dbState="off"; apiOK=false; } }
-  setStatus(); refreshUI();
+  setStatus(); refreshUI(); loadFeed();
 }
 loadRiver(true).then(async()=>{ if(apiOK&&Object.keys(tokens).length){ await refreshMyProgs(); setBattleBadge(); const n=newChallenges(); if(n) setTimeout(()=>toast(`มีคนมาท้าดวลกระทงของคุณ ${n} ครั้ง! ดูที่ปุ่มศึกกระทง`),3500); } });
 setInterval(()=>{ if(!document.hidden) loadRiver(false); },15000);

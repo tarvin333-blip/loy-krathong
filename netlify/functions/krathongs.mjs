@@ -9,6 +9,7 @@
 // GET    ?prog=<id>                  → ค่าพลังสาธารณะของกระทงใบนั้น
 // GET    ?board                      → ทำเนียบนักชน (kill มากสุด 20 อันดับ)
 // GET    ?inbox=<id,id,...>          → ค่าพลังและประวัติการถูกท้าของกระทงหลายใบ
+// GET    ?feed                       → ศึกล่าสุดของทั้งแม่น้ำ (ข้อความสด)
 // POST   ?claim=<id>                 → รับกุญแจให้กระทงเก่าที่ยังไม่มีเจ้าของ
 // POST   ?action=upgrade|sticks|battle  body {id, token, ...}
 import { getStore } from "@netlify/blobs";
@@ -92,6 +93,13 @@ export default async (req, context) => {
       all.sort((a, b) => (b.kills || 0) - (a.kills || 0) || level(b) - level(a));
       return json({ board: all.slice(0, 20).map(publicProg) }, 200, { "cache-control": "public, max-age=15" });
     }
+    if (url.searchParams.has("feed")) {
+      const { blobs: fb } = await store.list({ prefix: "feed/" });
+      const keys = fb.map((b) => b.key).sort().reverse();
+      const feed = (await Promise.all(keys.slice(0, 25).map((k) => store.get(k, { type: "json" })))).filter(Boolean);
+      if (keys.length > 300) await Promise.all(keys.slice(300).map((k) => store.delete(k)));   // keep the feed small
+      return json({ feed }, 200, { "cache-control": "public, max-age=5" });
+    }
     const inbox = url.searchParams.get("inbox");
     if (inbox !== null) {
       const ids = inbox.split(",").filter((x) => ID_RE.test(x)).slice(0, 12);
@@ -170,6 +178,9 @@ export default async (req, context) => {
           }
           await store.setJSON("ch/" + b.defender + "/" + String(now).padStart(15, "0"), { at: now, attackerId: p.id, attackerName: p.name, attackerType: p.type, attackerLevel: level(p), defenderWon: !win });
         }
+        const feedKey = "feed/" + String(now).padStart(15, "0") + "-" + Math.random().toString(36).slice(2, 7);
+        if (mode === "duel" && defender) await store.setJSON(feedKey, { at: now, kind: "duel", a: p.name, aType: p.type, aLv: level(p), d: defender.name, dType: defender.type, dLv: defender.level, attackerWon: win });
+        else if (mode === "pve" && win && stage >= 3) await store.setJSON(feedKey, { at: now, kind: "pve", a: p.name, aType: p.type, aLv: level(p), stage });
         return json({ gain, prog: publicProg(p), defender });
       }
       return json({ error: "ไม่รู้จักคำสั่งนี้" }, 400);
