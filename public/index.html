@@ -8,6 +8,7 @@
 <meta property="og:description" content="มาลอยกระทงด้วยกันคืนวันเพ็ญ">
 <title>ลอยกระทงออนไลน์</title>
 <link rel="preload" as="image" href="img/grand-palace.webp" type="image/webp">
+<link rel="preload" as="image" href="img/lake-pavilion.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@700&family=Bai+Jamjuree:wght@400;500;600;700&family=Charm:wght@400;700&display=swap">
 <style>
@@ -236,14 +237,16 @@ const CANDLES = [
   {id:"blue",c:"#9fdcff",d:"#4a8fc4",n:"ฟ้า"},{id:"violet",c:"#cfadff",d:"#7f56c9",n:"ม่วง"}
 ];
 const CANDLE_BY = Object.fromEntries(CANDLES.map(c=>[c.id,c]));
-const SCENES = ["เจ้าพระยาราตรี","สระบัวใต้จันทร์","ยี่เป็งกลางป่า","แม่น้ำทางช้างเผือก","พระบรมมหาราชวัง","ทะเลสาบเวทมนตร์"];
-const SCENE_ORDER = [4,0,1,2,3];
+const SCENES = ["เจ้าพระยาราตรี","ศาลาริมทะเลสาบ","ยี่เป็งกลางป่า","แม่น้ำทางช้างเผือก","พระบรมมหาราชวัง","ทะเลสาบเวทมนตร์"];
+const SCENE_ORDER = [0,1,2,3];
 const MAGIC_SCENE = 5;
 const YANT = "กขคฆงจฉชซญฎฏฐฑฒณดตถทธนบปผพภมยรลวศษสหฬอฮ";
-const PHOTO_SCENE = 4;
 /* painted backdrop: horizon row, moon centre/radius and the x focus to keep on narrow screens, in image pixels */
-const BACKDROP = {src:"img/grand-palace.webp", w:1672, h:941, hor:462, moon:[1357,140,56], fx:.36};
-const backdrop = new Image(); let backdropOK = false;
+const BACKDROPS = {
+  0:{src:"img/grand-palace.webp", w:1672, h:941, hor:462, moon:[1357,140,56], fx:.36, petals:["#ff9fbf","#ffd36a","#ffffff","#ff8a3a","#ffb3cf"], flies:0},
+  1:{src:"img/lake-pavilion.webp", w:1916, h:821, hor:398, moon:[463,142,70], fx:.62, fxWide:.45, petals:["#ffd36a","#ffe28a","#fff3c4","#f5b942"], flies:40}
+};
+for(const B of Object.values(BACKDROPS)){ B.img=new Image(); B.ok=false; }
 const FORTUNES = [
   ["ปังที่สุด","ดวงรักพุ่งแรงกว่าพลุ คนที่แอบมองคุณอยู่ จะทักมาก่อนสิ้นเดือนนี้"],
   ["ดีเลิศ","เงินไหลมาเหมือนน้ำหลาก ขอแค่อย่าเปิดแอปช้อปตอนตีสอง"],
@@ -575,8 +578,8 @@ function blitSprite(c,sp,s){ const f=s/sp.sb; c.drawImage(sp.cvs,-sp.ox*f,-sp.oy
 const cv=$("river"), ctx=cv.getContext("2d");
 const bg=document.createElement("canvas"), bctx=bg.getContext("2d");
 let magicUnlocked=!!lsGet("lk.magic",false);
-let W=0,H=0,DPR=1,HOR=0,scene=lsGet("lk.scene",4)|0;
-if(scene<0||scene>5||(scene===MAGIC_SCENE&&!magicUnlocked)) scene=4;
+let W=0,H=0,DPR=1,HOR=0,scene=lsGet("lk.scene",0)|0;
+if(scene===4||scene<0||scene>5||(scene===MAGIC_SCENE&&!magicUnlocked)) scene=0;
 let moonTaps=0, moonTapAt=0;
 const nagaBalls=[]; let naga=null, nextNagaBall=2, nextNaga=8;
 let bdFit=null;
@@ -586,9 +589,9 @@ let cloudSprite=null, mistSprite=null;
 const lanterns=[], rockets=[], sparks=[], ripples=[], jumps=[], meteors=[];
 let flash={a:0,x:0,y:0,c:"255,220,180"};
 const WATER=[[[14,26,74],[4,8,30]],[[10,40,56],[3,14,24]],[[24,18,52],[5,4,14]],[[22,12,58],[4,3,14]],[[16,22,80],[6,8,34]],[[18,24,78],[3,4,20]]];
-function coverFit(Wt,Ht,horFrac){
-  const B=BACKDROP, sc=Math.max(Wt/B.w,Ht/B.h), iw=B.w*sc, ih=B.h*sc;
-  const ox=Math.min(0,Math.max(Wt-iw, Wt*.5-B.fx*iw));
+function coverFit(B,Wt,Ht,horFrac){
+  const fx=(Wt>Ht&&B.fxWide!=null)?B.fxWide:B.fx, sc=Math.max(Wt/B.w,Ht/B.h), iw=B.w*sc, ih=B.h*sc;
+  const ox=Math.min(0,Math.max(Wt-iw, Wt*.5-fx*iw));
   const oy=Math.min(0,Math.max(Ht-ih, Ht*horFrac-B.hor*sc));
   return {sc,ox,oy,iw,ih};
 }
@@ -609,7 +612,7 @@ function makeSprites(){
 }
 function buildScene(){
   if(!cloudSprite) makeSprites();
-  if(scene===PHOTO_SCENE){ buildPhotoScene(); return; }
+  if(BACKDROPS[scene]){ buildPhotoScene(BACKDROPS[scene]); return; }
   if(scene===MAGIC_SCENE){ buildMagicScene(); return; }
   HOR = Math.round(H*(W<600?.42:.46));
   const R=mulberry(1000+scene*77);
@@ -700,20 +703,22 @@ function buildScene(){
   for(const b2 of document.querySelectorAll(".scene-chip")) b2.setAttribute("aria-pressed", String(+b2.dataset.i===scene));
 }
 
-function buildPhotoScene(){
-  const R=mulberry(4242), b=bctx; b.setTransform(DPR,0,0,DPR,0,0); b.clearRect(0,0,W,H);
-  const f=coverFit(W,H,W<600?.44:.47); bdFit=f;
-  HOR=Math.round(f.oy+BACKDROP.hor*f.sc);
-  const m=BACKDROP.moon; moon={x:f.ox+m[0]*f.sc,y:f.oy+m[1]*f.sc,r:m[2]*f.sc};
-  if(backdropOK) b.drawImage(backdrop,f.ox,f.oy,f.iw,f.ih);
-  else { b.fillStyle=lg(b,0,0,0,H,[[0,"#0c0f3a"],[.48,"#3a2d72"],[.5,"#141c5a"],[1,"#060a26"]]); b.fillRect(0,0,W,H); }
+function buildPhotoScene(B){
+  const R=mulberry(4242+scene), b=bctx; b.setTransform(DPR,0,0,DPR,0,0); b.clearRect(0,0,W,H);
+  const f=coverFit(B,W,H,W<600?.44:.47); bdFit=f;
+  HOR=Math.round(f.oy+B.hor*f.sc);
+  const m=B.moon; moon={x:f.ox+m[0]*f.sc,y:f.oy+m[1]*f.sc,r:m[2]*f.sc};
+  if(B.ok) b.drawImage(B.img,f.ox,f.oy,f.iw,f.ih);
+  else { b.fillStyle=lg(b,0,0,0,H,[[0,"#0c0f3a"],[.48,"#2b3a6e"],[.5,"#141c5a"],[1,"#060a26"]]); b.fillRect(0,0,W,H); }
   twinkles=[]; for(let i=0;i<45;i++) twinkles.push({x:R()*W,y:R()*HOR*.55,p:R()*7,big:R()<.15});
-  cityLights=[]; pads=[]; flies=[]; clouds=[];
-  petals=[]; const PC=["#ff9fbf","#ffd36a","#ffffff","#ff8a3a","#ffb3cf"];
-  for(let i=0;i<30;i++){ petals.push({x:R()*W,d:R(),r:R()*TAU,vr:(R()-.5)*.6,col:PC[i%5],vx:4+R()*6,p:R()*7}); }
+  cityLights=[]; pads=[]; clouds=[];
+  flies=[]; for(let i=0;i<B.flies;i++) flies.push({x:R()*W,y:HOR-50+R()*70,p:R()*7,sp:.3+R()*.7});
+  petals=[]; for(let i=0;i<30;i++){ petals.push({x:R()*W,d:R(),r:R()*TAU,vr:(R()-.5)*.6,col:B.petals[i%B.petals.length],vx:4+R()*6,p:R()*7}); }
   mists=[]; for(let i=0;i<3;i++) mists.push({x:R()*W,y:HOR-6+R()*20,s:.7+R()*.6,v:4+R()*5});
   for(const b2 of document.querySelectorAll(".scene-chip")) b2.setAttribute("aria-pressed", String(+b2.dataset.i===scene));
 }
+for(const [k,B] of Object.entries(BACKDROPS)){ B.img.onload=()=>{ B.ok=true; if(scene===+k) buildScene(); }; B.img.src=B.src; }
+
 function buildMagicScene(){
   HOR = Math.round(H*(W<600?.43:.47));
   const R=mulberry(5555), b=bctx; b.setTransform(DPR,0,0,DPR,0,0); b.clearRect(0,0,W,H);
@@ -936,8 +941,6 @@ function unlockMagic(){
   toast("ปลดล็อกฉากลับ: ทะเลสาบเวทมนตร์ ✦"); sfx("bless");
 }
 
-backdrop.onload=()=>{ backdropOK=true; if(scene===PHOTO_SCENE) buildScene(); };
-backdrop.src=BACKDROP.src;
 
 function laneY(l){ const top=HOR+Math.max(18,H*.04), bot=H-Math.max(150,H*.2); return top+l*Math.max(40,bot-top); }
 function unit(){ return Math.max(16,Math.min(46,Math.min(W,H)*.07)); }
@@ -1008,7 +1011,7 @@ function frame(nowP){
   for(const cl of clouds){ cl.x+=cl.v*dt; const w=520*cl.s; if(cl.x>W+w/2) cl.x=-w/2; c.globalAlpha=.9; c.drawImage(cloudSprite,cl.x-w/2,cl.y-75*cl.s,w,150*cl.s); c.globalAlpha=1; }
 
   // ---- water: mirrored sky with ripple distortion ----
-  const step=3, wc=WATER[scene], photo=scene===PHOTO_SCENE;
+  const step=3, wc=WATER[scene], photo=!!BACKDROPS[scene];
   if(photo){
     // animate the painted river in place: shift thin strips sideways like ripples
     for(let y=HOR; y<H; y+=step){ const d=y-HOR, amp=.5+d*.02; const off=Math.sin(y*.11-t*1.6)*amp+Math.sin(y*.037+t*.7)*amp*.7; c.drawImage(bg,0,y*DPR,W*DPR,step*DPR,off,y,W,step+.5); }
@@ -1419,7 +1422,8 @@ async function saveCard(k,fortune){
   const mx=840,my=200,mr=86; c.fillStyle=rg(c,mx,my,mr,mr*6,[[0,"rgba(255,240,200,.3)"],[1,"rgba(255,240,200,0)"]]); c.fillRect(0,0,Wc,Hc*.46);
   c.fillStyle=rg(c,mx-30,my-30,10,mr,[[0,"#fffdf0"],[1,"#f1c97a"]],mx,my); c.beginPath(); c.arc(mx,my,mr,0,TAU); c.fill();
   for(let i=0;i<44;i++){ const y=Hc*.46+i*16; const w=mr*(.7+i*.06)*(.6+.4*Math.sin(i*1.7)); c.fillStyle=`rgba(255,236,180,${.3*(1-i/48)})`; c.fillRect(mx-w/2+Math.sin(i)*10,y,w,3); }
-  if(backdropOK){ const f=coverFit(Wc,Hc,.5); c.drawImage(backdrop,f.ox,f.oy,f.iw,f.ih); c.fillStyle=lg(c,0,Hc*.55,0,Hc,[[0,"rgba(4,6,26,0)"],[.35,"rgba(4,6,26,.55)"],[1,"rgba(4,6,26,.92)"]]); c.fillRect(0,0,Wc,Hc); c.fillStyle=lg(c,0,0,0,260,[[0,"rgba(4,6,26,.6)"],[1,"rgba(4,6,26,0)"]]); c.fillRect(0,0,Wc,260); }
+  const CB=(BACKDROPS[scene]&&BACKDROPS[scene].ok)?BACKDROPS[scene]:BACKDROPS[0];
+  if(CB.ok){ const f=coverFit(CB,Wc,Hc,.5); c.drawImage(CB.img,f.ox,f.oy,f.iw,f.ih); c.fillStyle=lg(c,0,Hc*.55,0,Hc,[[0,"rgba(4,6,26,0)"],[.35,"rgba(4,6,26,.55)"],[1,"rgba(4,6,26,.92)"]]); c.fillRect(0,0,Wc,Hc); c.fillStyle=lg(c,0,0,0,260,[[0,"rgba(4,6,26,.6)"],[1,"rgba(4,6,26,0)"]]); c.fillRect(0,0,Wc,260); }
   for(let i=0;i<10;i++){ const x=80+R()*920, y=Hc*.18+R()*Hc*.25, s=10+R()*14; drawLantern(c,{x,y,s,p:R()*7,mine:false},1); }
   const photo=k.photoUrl?getImg(k.photoUrl):null;
   c.save(); c.translate(Wc/2,Hc*.6); const kk={...k,seed:.4}; c.save(); c.translate(0,45); c.scale(1,-.45); c.translate(0,-45); c.globalAlpha=.25; krStatic(c,kk,150,1); c.restore(); drawGlow(c,kk,150,1); krFull(c,kk,150,1.2,photo); c.restore();
