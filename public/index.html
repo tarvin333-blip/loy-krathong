@@ -1827,7 +1827,7 @@ let dunRun=null;
 function inDungeon(){ return !!(battle&&battle.mode==="dungeon"); }
 /* dungeon scene: a painted cave (until a backdrop image is set) with dark mirrored water, fog and rising embers */
 // painted backdrops per depth: {from: first floor, src}. Floors with no image use the painted cave below.
-const DUNGEON_BGS=[{from:1,src:"img/dungeon1.webp",hor:.52},{from:5,src:"img/dungeon2.webp",hor:.525,lava:true}];
+const DUNGEON_BGS=[{from:1,src:"img/dungeon1.webp",hor:.52},{from:4,src:"img/dungeon3.webp",hor:.43},{from:7,src:"img/dungeon2.webp",hor:.525,lava:true}];
 let dunCv=null, dunKey="", dunImg=null, dunImgSrc="", DUNGEON_BG=null, dunFog=[], dunEmbers=[];
 function pickDungeonBg(floor){ let b=null; for(const d of DUNGEON_BGS) if(floor>=d.from) b=d; DUNGEON_BG=b; if(b&&dunImgSrc!==b.src){ dunImgSrc=b.src; dunImg=new Image(); dunImg.onload=()=>{ dunKey=""; }; dunImg.src=b.src; } if(!b){ dunImg=null; dunImgSrc=""; } dunKey=""; }
 function buildDungeonBg(){
