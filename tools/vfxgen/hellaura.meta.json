@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "c9f8ba31-8158-4c7b-b654-6e42b12a5088",
+  "canvas": {
+   "h": 115,
+   "w": 73
+  },
+  "frames": 8,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 34,
+   "y": 100,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-hellaura.gif": "https://api.pixellab.ai/mcp/pixel-tools/a1947cde-1a6a-4d93-bce5-9d4c23aeea51/lk-hellaura.gif",
+  "lk-hellaura.png": "https://api.pixellab.ai/mcp/pixel-tools/a1947cde-1a6a-4d93-bce5-9d4c23aeea51/lk-hellaura.png",
+  "lk-hellaura.json": "https://api.pixellab.ai/mcp/pixel-tools/a1947cde-1a6a-4d93-bce5-9d4c23aeea51/lk-hellaura.json"
+ }
+}

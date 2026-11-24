@@ -1,0 +1,287 @@
+{
+ "frames": [
+  {
+   "filename": "lk-frost 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 1.png",
+   "frame": {
+    "x": 106,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 2.png",
+   "frame": {
+    "x": 212,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 3.png",
+   "frame": {
+    "x": 318,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 4.png",
+   "frame": {
+    "x": 0,
+    "y": 78,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 5.png",
+   "frame": {
+    "x": 106,
+    "y": 78,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 6.png",
+   "frame": {
+    "x": 212,
+    "y": 78,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 7.png",
+   "frame": {
+    "x": 318,
+    "y": 78,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 8.png",
+   "frame": {
+    "x": 0,
+    "y": 156,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-frost 9.png",
+   "frame": {
+    "x": 106,
+    "y": 156,
+    "w": 106,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 106,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 106,
+    "h": 78
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.3717948717948718
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-frost.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 424,
+   "h": 234
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 53,
+   "y": 29
+  },
+  "frameTags": [
+   {
+    "name": "lk-frost",
+    "from": 0,
+    "to": 9,
+    "direction": "forward"
+   }
+  ]
+ }
+}

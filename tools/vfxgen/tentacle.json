@@ -1,0 +1,443 @@
+{
+ "frames": [
+  {
+   "filename": "lk-tentacle 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 1.png",
+   "frame": {
+    "x": 116,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 2.png",
+   "frame": {
+    "x": 232,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 3.png",
+   "frame": {
+    "x": 348,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 4.png",
+   "frame": {
+    "x": 0,
+    "y": 255,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 5.png",
+   "frame": {
+    "x": 116,
+    "y": 255,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 6.png",
+   "frame": {
+    "x": 232,
+    "y": 255,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 7.png",
+   "frame": {
+    "x": 348,
+    "y": 255,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 8.png",
+   "frame": {
+    "x": 0,
+    "y": 510,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 9.png",
+   "frame": {
+    "x": 116,
+    "y": 510,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 10.png",
+   "frame": {
+    "x": 232,
+    "y": 510,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 11.png",
+   "frame": {
+    "x": 348,
+    "y": 510,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 12.png",
+   "frame": {
+    "x": 0,
+    "y": 765,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 13.png",
+   "frame": {
+    "x": 116,
+    "y": 765,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 14.png",
+   "frame": {
+    "x": 232,
+    "y": 765,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-tentacle 15.png",
+   "frame": {
+    "x": 348,
+    "y": 765,
+    "w": 116,
+    "h": 255
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 116,
+    "h": 255
+   },
+   "sourceSize": {
+    "w": 116,
+    "h": 255
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8941176470588236
+   },
+   "duration": 71
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-tentacle.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 464,
+   "h": 1020
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 58,
+   "y": 228
+  },
+  "frameTags": [
+   {
+    "name": "lk-tentacle",
+    "from": 0,
+    "to": 15,
+    "direction": "forward"
+   }
+  ]
+ }
+}

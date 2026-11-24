@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "9347c7dd-fee6-49b8-a26c-9e6d29d38427",
+  "canvas": {
+   "h": 212,
+   "w": 232
+  },
+  "frames": 32,
+  "fps": 10,
+  "loop": false,
+  "anchor": {
+   "x": 116,
+   "y": 106,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-voidhole.gif": "https://api.pixellab.ai/mcp/pixel-tools/f1d87948-65fb-45a8-8672-482a2b9e2604/lk-voidhole.gif",
+  "lk-voidhole.png": "https://api.pixellab.ai/mcp/pixel-tools/f1d87948-65fb-45a8-8672-482a2b9e2604/lk-voidhole.png",
+  "lk-voidhole.json": "https://api.pixellab.ai/mcp/pixel-tools/f1d87948-65fb-45a8-8672-482a2b9e2604/lk-voidhole.json"
+ }
+}

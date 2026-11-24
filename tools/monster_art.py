@@ -13,9 +13,14 @@ DESC = {
  'serpent':"black scaled petals with two small black cobra heads rising from it with glowing yellow eyes, a dark violet candle",
  'hell':   "built from cracked black obsidian and glowing molten lava seams, jagged red petals and a roaring red-orange demon fire in the center",
  'titan':  "a colossal ancient abyssal demon-god krathong, towering and terrifying, many layers of jagged black obsidian and blood-red petals like dragon scales and blades, huge curved ram horns and a black spiked crown, a giant demon face with glowing crimson eyes and fanged maw in the front, chains and skulls hanging from its rim, a towering pillar of black and crimson hellfire rising from the top, embers and dark aura swirling, awe-inspiring and majestic",
+ 'wraith': "a frozen ghost-ice krathong of jagged pale blue ice crystal petals covered in frost, a cold cyan spectral flame, icy mist and tiny snowflakes around it",
+ 'spider': "a cursed black widow krathong with dark purple petals wrapped in sticky silver spider webs, eight spindly black spider legs sticking out from under it, a sickly green candle and red eyes peeking out",
+ 'lich':   "a necromancer lich krathong of black and bone-grey petals with ancient purple runes, a floating cracked skull wearing a tattered hood above a violet soul flame, green necrotic wisps rising",
+ 'kraken': "a deep-sea kraken krathong of dark teal and barnacled petals with several thick purple octopus tentacles curling out from it, a bioluminescent cyan candle flame, dripping seawater",
+ 'void':   "a colossal cosmic void emperor krathong, terrifying and majestic, layers of black obsidian petals edged with glowing violet and cyan cracks, a swirling black hole with a burning purple ring at its center like an eye, floating shattered rock fragments and stars orbiting it, a crown of dark crystal spikes, a towering pillar of violet void-fire rising from the top",
  'boss':   "large demon king krathong of dark crimson and black petals with curved demon horns, a jagged black crown, glowing red eyes in the center and a tall black-red infernal flame",
 }
-SIZES = {'boss': (224, 192), 'titan': (256, 256)}
+SIZES = {'boss': (224, 192), 'titan': (256, 256), 'void': (256, 256)}
 if __name__ == '__main__':
     before = gens()
     for n in sys.argv[1:]:

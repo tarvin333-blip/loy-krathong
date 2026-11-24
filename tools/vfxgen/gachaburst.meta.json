@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "f6629c7a-8c31-4879-963e-504bb1e681c6",
+  "canvas": {
+   "h": 155,
+   "w": 150
+  },
+  "frames": 7,
+  "fps": 16,
+  "loop": false,
+  "anchor": {
+   "x": 74,
+   "y": 71,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-gachaburst.gif": "https://api.pixellab.ai/mcp/pixel-tools/273ac596-4942-4bfe-b9e6-41b677c74b50/lk-gachaburst.gif",
+  "lk-gachaburst.png": "https://api.pixellab.ai/mcp/pixel-tools/273ac596-4942-4bfe-b9e6-41b677c74b50/lk-gachaburst.png",
+  "lk-gachaburst.json": "https://api.pixellab.ai/mcp/pixel-tools/273ac596-4942-4bfe-b9e6-41b677c74b50/lk-gachaburst.json"
+ }
+}

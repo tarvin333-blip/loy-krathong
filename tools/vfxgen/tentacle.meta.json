@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "4219a233-2516-4ec3-9028-01133b279219",
+  "canvas": {
+   "h": 255,
+   "w": 116
+  },
+  "frames": 16,
+  "fps": 14,
+  "loop": false,
+  "anchor": {
+   "x": 58,
+   "y": 228,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-tentacle.gif": "https://api.pixellab.ai/mcp/pixel-tools/55ffd159-c2aa-4b20-b71f-69f5635af593/lk-tentacle.gif",
+  "lk-tentacle.png": "https://api.pixellab.ai/mcp/pixel-tools/55ffd159-c2aa-4b20-b71f-69f5635af593/lk-tentacle.png",
+  "lk-tentacle.json": "https://api.pixellab.ai/mcp/pixel-tools/55ffd159-c2aa-4b20-b71f-69f5635af593/lk-tentacle.json"
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "2df8ab0d-65a7-4e81-9650-5b0b4921d27d",
+  "canvas": {
+   "h": 112,
+   "w": 96
+  },
+  "frames": 12,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 48,
+   "y": 60,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-holyaura.gif": "https://api.pixellab.ai/mcp/pixel-tools/1aeea293-14dd-4595-9f01-78b6a0bfca86/lk-holyaura.gif",
+  "lk-holyaura.png": "https://api.pixellab.ai/mcp/pixel-tools/1aeea293-14dd-4595-9f01-78b6a0bfca86/lk-holyaura.png",
+  "lk-holyaura.json": "https://api.pixellab.ai/mcp/pixel-tools/1aeea293-14dd-4595-9f01-78b6a0bfca86/lk-holyaura.json"
+ }
+}

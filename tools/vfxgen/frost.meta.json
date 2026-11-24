@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "b37bd685-0931-4674-9254-50f0a0f6421b",
+  "canvas": {
+   "h": 78,
+   "w": 106
+  },
+  "frames": 10,
+  "fps": 12,
+  "loop": false,
+  "anchor": {
+   "x": 53,
+   "y": 29,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-frost.gif": "https://api.pixellab.ai/mcp/pixel-tools/f5056d34-8183-4895-8500-d65c83a1d33d/lk-frost.gif",
+  "lk-frost.png": "https://api.pixellab.ai/mcp/pixel-tools/f5056d34-8183-4895-8500-d65c83a1d33d/lk-frost.png",
+  "lk-frost.json": "https://api.pixellab.ai/mcp/pixel-tools/f5056d34-8183-4895-8500-d65c83a1d33d/lk-frost.json"
+ }
+}

@@ -37,10 +37,20 @@ const level = (p) => 1 + STATS.reduce((a, k) => a + (p.lv?.[k] || 0), 0);
 const CLASSES = ["warrior", "guardian", "mystic", "racer"];
 const capOf = (p) => MAX_LV + 5 * (p.stars || 0);                // each star lifts every stat cap by 5
 const ascendCost = (p) => 2500 * ((p.stars || 0) + 1);
-const DUNGEON_FLOORS = 10, DUNGEON_MIN_SEC_PER_FLOOR = 9, DUNGEON_CLEAR_BONUS = 500;
+const DUNGEON_FLOORS = 20, DUNGEON_MIN_SEC_PER_FLOOR = 9, DUNGEON_CLEAR_BONUS = 500, DEEP_CLEAR_BONUS = 1500;
+// gacha relics: 4 rarities x 2; duplicates level the relic up to 5
+const RELICS = { scale: "R", feather: "R", fang: "SR", shell: "SR", eye: "SSR", drop: "SSR", crown: "UR", lotus: "UR" };
+const RARITY_RATE = [["UR", 0.03], ["SSR", 0.12], ["SR", 0.30], ["R", 0.55]];
+const GACHA_COIN_COST = 3000, PITY = 40, RELIC_MAX = 5, DUP_REFUND = 500, RELIC_SLOTS = 2;
+function rollRelic(p) {
+  p.pity = (p.pity || 0) + 1; let rar = "R";
+  if (p.pity >= PITY) rar = "UR"; else { let x = Math.random(); for (const [r, w] of RARITY_RATE) { if (x < w) { rar = r; break; } x -= w; } }
+  if (rar === "UR") p.pity = 0;
+  const pool = Object.keys(RELICS).filter((k) => RELICS[k] === rar); return pool[Math.floor(Math.random() * pool.length)];
+}
 const floorReward = (f) => (15 + 12 * f) * (f % 5 === 0 ? 2 : 1);
 const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; out.push(pool[Math.floor(Math.random() * pool.length)]); return out; };
-const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
+const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, tickets: p.tickets || 0, inv: p.inv || {}, relics: p.relics || [], pity: p.pity || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
 function newProg(item, token) {
   return { id: item.id, key: item.key, name: item.name, type: item.type, tokenHash: sha(token), coins: START_COINS,
     lv: { hp: 0, atk: 0, def: 0, spd: 0, sk: 0 }, sticks: null, kills: 0, wins: 0, losses: 0, defWins: 0, defLosses: 0, lastBattle: 0 };
@@ -48,7 +58,7 @@ function newProg(item, token) {
 async function findKey(store, id) { const { blobs } = await store.list({ prefix: "k/" }); const hit = blobs.find((b) => b.key.endsWith("-" + id)); return hit ? hit.key : null; }
 async function syncSummary(store, p) {
   if (!p.key) return; const it = await store.get(p.key, { type: "json" }); if (!it) return;
-  it.lv = level(p); it.kills = p.kills || 0; it.stars = p.stars || 0; it.cls = p.cls || null; await store.setJSON(p.key, it);
+  it.lv = level(p); it.kills = p.kills || 0; it.stars = p.stars || 0; it.cls = p.cls || null; it.relics = (p.relics || []).map((r) => [r, p.inv?.[r] || 1]); await store.setJSON(p.key, it);
 }
 
 const json = (body, status = 200, extra = {}) =>
@@ -183,25 +193,52 @@ export default async (req, context) => {
         return json({ prog: publicProg(p) });
       }
       if (action === "dungeon_start") {
-        p.run = { id: Math.random().toString(36).slice(2, 10), t0: Date.now() };
+        const from = Number(b.from) === 11 && (p.bestDungeon || 0) >= 10 ? 11 : 1;
+        p.run = { id: Math.random().toString(36).slice(2, 10), t0: Date.now(), from };
         await store.setJSON("prog/" + p.id, p);
-        return json({ runId: p.run.id });
+        return json({ runId: p.run.id, from });
       }
       if (action === "dungeon_end") {
         const run = p.run; if (!run || run.id !== b.runId) return json({ error: "ไม่พบรอบดันเจี้ยนนี้" }, 400);
         const now = Date.now(), elapsed = (now - run.t0) / 1000;
         // a floor can't be cleared faster than the countdown plus a short fight
-        const floors = Math.max(0, Math.min(DUNGEON_FLOORS, Math.floor(Number(b.floors) || 0), Math.floor(elapsed / DUNGEON_MIN_SEC_PER_FLOOR)));
-        let gain = 0; for (let f = 1; f <= floors; f++) gain += floorReward(f);
-        let note = "";
-        if (floors >= DUNGEON_FLOORS && !p.dungeonClear) { gain += DUNGEON_CLEAR_BONUS; p.dungeonClear = true; note = `ผ่านดันเจี้ยนครั้งแรก! โบนัส +${DUNGEON_CLEAR_BONUS}`; }
+        // b.floors = the deepest floor cleared; a floor can't be cleared faster than the countdown plus a short fight
+        const from = run.from || 1;
+        const count = Math.max(0, Math.min(DUNGEON_FLOORS - from + 1, Math.floor(Number(b.floors) || 0) - from + 1, Math.floor(elapsed / DUNGEON_MIN_SEC_PER_FLOOR)));
+        const floors = from - 1 + count;
+        let gain = 0; for (let f = from; f <= floors; f++) gain += floorReward(f);
+        let note = "", tickets = 0; const notes = [];
+        if (from <= 10 && floors >= 10) { tickets += 1; if (!p.dungeonClear) { gain += DUNGEON_CLEAR_BONUS; tickets += 2; p.dungeonClear = true; notes.push(`พิชิตราชาปีศาจครั้งแรก! +${DUNGEON_CLEAR_BONUS} เหรียญ`); } }
+        if (from <= 15 && floors >= 15) tickets += 1;
+        if (floors >= 20) { tickets += 2; if (!p.deepClear) { gain += DEEP_CLEAR_BONUS; tickets += 3; p.deepClear = true; notes.push(`พิชิตนรกชั้นในครั้งแรก! +${DEEP_CLEAR_BONUS} เหรียญ`); } }
+        if (tickets) { p.tickets = (p.tickets || 0) + tickets; notes.push(`ได้ตั๋วหีบสมบัติ ${tickets} ใบ`); }
+        note = notes.join(" · ");
         if (!p.hour || now - p.hour.t0 > 3600_000) p.hour = { t0: now, earned: 0 };
-        if (p.hour.earned >= HOURLY_SOFT_CAP) { gain = Math.ceil(gain * 0.2); note = "ฟาร์มหนักแล้วชั่วโมงนี้ เหรียญลดเหลือ 20% (รีเซ็ตทุกชั่วโมง)"; }
-        p.hour.earned += gain; p.coins += gain; p.kills = (p.kills || 0) + Math.max(0, Math.min(30, Math.floor(Number(b.kills) || 0)));
+        if (p.hour.earned >= HOURLY_SOFT_CAP) { gain = Math.ceil(gain * 0.2); note = (note ? note + " · " : "") + "ฟาร์มหนักแล้วชั่วโมงนี้ เหรียญลดเหลือ 20% (รีเซ็ตทุกชั่วโมง)"; }
+        p.hour.earned += gain; p.coins += gain; p.kills = (p.kills || 0) + Math.max(0, Math.min(40, Math.floor(Number(b.kills) || 0)));
         p.bestDungeon = Math.max(p.bestDungeon || 0, floors); p.run = null;
         await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         if (floors >= 5) await store.setJSON("feed/" + String(now).padStart(15, "0") + "-" + Math.random().toString(36).slice(2, 7), { at: now, kind: "dungeon", a: p.name, aType: p.type, aLv: level(p), floor: floors });
-        return json({ gain, floors, note, prog: publicProg(p) });
+        return json({ gain, floors, note, tickets, prog: publicProg(p) });
+      }
+      if (action === "gacha") {
+        const n = Number(b.n) === 10 ? 10 : 1;
+        if (b.pay === "coins") { const cost = GACHA_COIN_COST * n; if (p.coins < cost) return json({ error: "เหรียญไม่พอ" }, 400); p.coins -= cost; }
+        else { if ((p.tickets || 0) < n) return json({ error: "ตั๋วไม่พอ" }, 400); p.tickets -= n; }
+        p.inv = p.inv || {}; const got = [];
+        for (let i = 0; i < n; i++) { const id = rollRelic(p), had = p.inv[id] || 0; let refund = 0;
+          if (had >= RELIC_MAX) { refund = DUP_REFUND; p.coins += refund; } else p.inv[id] = had + 1;
+          got.push({ id, rar: RELICS[id], lv: p.inv[id], dup: had > 0, refund }); }
+        p.relics = p.relics || []; if (p.relics.length < RELIC_SLOTS && !p.relics.includes(got[0].id)) p.relics.push(got[0].id);
+        await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        const now = Date.now(); for (const g of got) if (g.rar === "UR") await store.setJSON("feed/" + String(now).padStart(15, "0") + "-" + Math.random().toString(36).slice(2, 7), { at: now, kind: "gacha", a: p.name, aType: p.type, aLv: level(p), item: g.id });
+        return json({ got, prog: publicProg(p) });
+      }
+      if (action === "equip") {
+        const want = (Array.isArray(b.relics) ? b.relics : []).map(String).filter((r, i, a) => a.indexOf(r) === i).slice(0, RELIC_SLOTS);
+        if (want.some((r) => !(p.inv?.[r] > 0))) return json({ error: "ยังไม่มีเครื่องรางนี้" }, 400);
+        p.relics = want; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        return json({ prog: publicProg(p) });
       }
       if (action === "respec") {
         if (level(p) <= 1) return json({ error: "ยังไม่ได้อัปค่าพลัง" }, 400);

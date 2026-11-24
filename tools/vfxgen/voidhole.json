@@ -1,0 +1,859 @@
+{
+ "frames": [
+  {
+   "filename": "lk-voidhole 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 1.png",
+   "frame": {
+    "x": 232,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 2.png",
+   "frame": {
+    "x": 464,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 3.png",
+   "frame": {
+    "x": 696,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 4.png",
+   "frame": {
+    "x": 928,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 5.png",
+   "frame": {
+    "x": 1160,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 6.png",
+   "frame": {
+    "x": 0,
+    "y": 212,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 7.png",
+   "frame": {
+    "x": 232,
+    "y": 212,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 8.png",
+   "frame": {
+    "x": 464,
+    "y": 212,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 9.png",
+   "frame": {
+    "x": 696,
+    "y": 212,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 10.png",
+   "frame": {
+    "x": 928,
+    "y": 212,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 11.png",
+   "frame": {
+    "x": 1160,
+    "y": 212,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 12.png",
+   "frame": {
+    "x": 0,
+    "y": 424,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 13.png",
+   "frame": {
+    "x": 232,
+    "y": 424,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 14.png",
+   "frame": {
+    "x": 464,
+    "y": 424,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 15.png",
+   "frame": {
+    "x": 696,
+    "y": 424,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 16.png",
+   "frame": {
+    "x": 928,
+    "y": 424,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 17.png",
+   "frame": {
+    "x": 1160,
+    "y": 424,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 18.png",
+   "frame": {
+    "x": 0,
+    "y": 636,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 19.png",
+   "frame": {
+    "x": 232,
+    "y": 636,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 20.png",
+   "frame": {
+    "x": 464,
+    "y": 636,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 21.png",
+   "frame": {
+    "x": 696,
+    "y": 636,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 22.png",
+   "frame": {
+    "x": 928,
+    "y": 636,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 23.png",
+   "frame": {
+    "x": 1160,
+    "y": 636,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 24.png",
+   "frame": {
+    "x": 0,
+    "y": 848,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 25.png",
+   "frame": {
+    "x": 232,
+    "y": 848,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 26.png",
+   "frame": {
+    "x": 464,
+    "y": 848,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 27.png",
+   "frame": {
+    "x": 696,
+    "y": 848,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 28.png",
+   "frame": {
+    "x": 928,
+    "y": 848,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 29.png",
+   "frame": {
+    "x": 1160,
+    "y": 848,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 30.png",
+   "frame": {
+    "x": 0,
+    "y": 1060,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  },
+  {
+   "filename": "lk-voidhole 31.png",
+   "frame": {
+    "x": 232,
+    "y": 1060,
+    "w": 232,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 232,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 232,
+    "h": 212
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 100
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-voidhole.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 1392,
+   "h": 1272
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 116,
+   "y": 106
+  },
+  "frameTags": [
+   {
+    "name": "lk-voidhole",
+    "from": 0,
+    "to": 31,
+    "direction": "forward"
+   }
+  ]
+ }
+}

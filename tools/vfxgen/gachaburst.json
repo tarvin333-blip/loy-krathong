@@ -1,0 +1,209 @@
+{
+ "frames": [
+  {
+   "filename": "lk-gachaburst 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "sourceSize": {
+    "w": 150,
+    "h": 155
+   },
+   "pivot": {
+    "x": 0.49333333333333335,
+    "y": 0.45806451612903226
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-gachaburst 1.png",
+   "frame": {
+    "x": 150,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "sourceSize": {
+    "w": 150,
+    "h": 155
+   },
+   "pivot": {
+    "x": 0.49333333333333335,
+    "y": 0.45806451612903226
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-gachaburst 2.png",
+   "frame": {
+    "x": 300,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "sourceSize": {
+    "w": 150,
+    "h": 155
+   },
+   "pivot": {
+    "x": 0.49333333333333335,
+    "y": 0.45806451612903226
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-gachaburst 3.png",
+   "frame": {
+    "x": 0,
+    "y": 155,
+    "w": 150,
+    "h": 155
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "sourceSize": {
+    "w": 150,
+    "h": 155
+   },
+   "pivot": {
+    "x": 0.49333333333333335,
+    "y": 0.45806451612903226
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-gachaburst 4.png",
+   "frame": {
+    "x": 150,
+    "y": 155,
+    "w": 150,
+    "h": 155
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "sourceSize": {
+    "w": 150,
+    "h": 155
+   },
+   "pivot": {
+    "x": 0.49333333333333335,
+    "y": 0.45806451612903226
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-gachaburst 5.png",
+   "frame": {
+    "x": 300,
+    "y": 155,
+    "w": 150,
+    "h": 155
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "sourceSize": {
+    "w": 150,
+    "h": 155
+   },
+   "pivot": {
+    "x": 0.49333333333333335,
+    "y": 0.45806451612903226
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-gachaburst 6.png",
+   "frame": {
+    "x": 0,
+    "y": 310,
+    "w": 150,
+    "h": 155
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 150,
+    "h": 155
+   },
+   "sourceSize": {
+    "w": 150,
+    "h": 155
+   },
+   "pivot": {
+    "x": 0.49333333333333335,
+    "y": 0.45806451612903226
+   },
+   "duration": 63
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-gachaburst.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 450,
+   "h": 465
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 74,
+   "y": 71
+  },
+  "frameTags": [
+   {
+    "name": "lk-gachaburst",
+    "from": 0,
+    "to": 6,
+    "direction": "forward"
+   }
+  ]
+ }
+}
