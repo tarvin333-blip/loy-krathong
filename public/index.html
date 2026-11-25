@@ -2774,9 +2774,12 @@ function drawVfx(c,dt,back){
     let x=p.x, y=p.y; if(p.follow){ if(!p.follow.alive&&!p.keep){ vfxPlays.splice(i,1); continue; } x=p.follow.x; y=p.follow.y; }
     const s=fSize(p.follow||{y}), h=s*p.size*1.3, w=h*v.w/v.h, sx=(fi%v.cols)*v.w, sy=Math.floor(fi/v.cols)*v.h;
     c.save(); c.translate(x,y+(p.dy||0)*s); if(p.flip) c.scale(-1,1); if(p.flat) c.scale(1,p.flat); if(p.rot) c.rotate(p.rot);
-    if(p.add){ c.globalCompositeOperation="lighter"; c.shadowColor="rgba(255,230,180,.8)"; c.shadowBlur=16; } c.imageSmoothingEnabled=h/v.h<1.3;
+    c.imageSmoothingEnabled=h/v.h<1.3;
     const fade=fi>v.n-3?(v.n-fi)/3:1; c.globalAlpha=fade*(p.alpha||1);
-    c.drawImage(v.img,sx,sy,v.w,v.h,-w/2,-h/2,w,h); c.restore(); }
+    // draw the effect in its own colours first; "add" effects then get a light glow pass on top instead of being blown out to white
+    c.drawImage(v.img,sx,sy,v.w,v.h,-w/2,-h/2,w,h);
+    if(p.add){ c.globalCompositeOperation="lighter"; c.globalAlpha=fade*(p.alpha||1)*.3; c.drawImage(v.img,sx,sy,v.w,v.h,-w/2,-h/2,w,h); }
+    c.restore(); }
 }
 function skillVfx(id,f,tgt){
   const flip=tgt?tgt.x<f.x:false;
