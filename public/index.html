@@ -2375,6 +2375,7 @@ function drawEnding(c,t,dt){
 }
 /* ================= ประกาศอัปเดต: newest first; the newest id is remembered once read ================= */
 const UPDATES=[
+  {id:"2026-11-25c",t:"แก้บัคบอสติดมุม",items:["🐞 บอสที่โดนต้อนเข้ามุมจะเคลื่อนกลับเข้ากลางสนามเอง","🤝 ผู้เล่นทะลุผ่านเพื่อนร่วมทีมได้ ไม่โดนเพื่อนดันจนเข้าไปชนบอสไม่ได้ และเพื่อน AI จะเว้นทางให้","ขอบคุณผู้เล่นที่แจ้งมานะครับ 🙏"]},
   {id:"2026-11-25b",t:"แพรี่ & เพอร์เฟคดอดจ์",items:["🛡 นักรบ/ผู้พิทักษ์: ปุ่ม “สวน” กดตอนโดนชน = PARRY! ไม่เจ็บ ศัตรูมึนและโดนสวนกลับ","💨 จอมเวท/นักซิ่ง: ปุ่ม “หลบ” กดตอนกำลังจะโดน = PERFECT! เวลาศัตรูหน่วงลง 1 วินาที","⌨ คอมกด Space ได้เลย"]},
   {id:"2026-11-25",t:"สกินคลาส · ประกาศอัปเดต",items:["🎨 สกินกระทงประจำคลาส 4 แบบ (นักรบ / ผู้พิทักษ์ / จอมเวท / นักซิ่ง) เลือกใส่หรือถอดได้ในหน้าอัปเกรด ค่าพลังไม่เปลี่ยน","🪪 แตะกระทงในแม่น้ำ ดูการ์ดโปรไฟล์ ภาพขยับได้ ซูมได้ พร้อมเลเวล ค่าพลัง และเครื่องราง","🌊 เงาสะท้อนกระทงนุ่มขึ้น กระเพื่อมตามคลื่น","📢 ปุ่มประกาศ บอกว่ามีอะไรใหม่"]},
   {id:"2026-11-24c",t:"เพลงใหม่ · กระทงคงคาสวรรค์ · ฉากจบ",items:["🎵 เพลงต่อสู้และเพลงบอสใหม่ เพลงเปิดเป็นค่าเริ่มต้น","🙏 ฉากจบ: พระแม่คงคาเสด็จมาอวยพรเมื่อพิชิตชั้น 20","❓ กระทงปริศนา ปลดล็อกที่ปลายทางบาดาล"]},
@@ -2779,7 +2780,8 @@ function battleStep(dt,t){
     else if(f.buffs.stun>0){ tx=f.x; ty=f.y; }
     else {
       f.aiT-=dt; const tg=nearest(f);
-      if(tg){ if(f.buffs.charmed>0){ tx=f.x+(f.x-tg.x); ty=f.y+(f.y-tg.y); } else { tx=tg.x+tg.vx*.4; ty=tg.y+tg.vy*.4; } } else { tx=f.x; ty=f.y; }
+      if(tg){ if(f.buffs.charmed>0){ tx=f.x+(f.x-tg.x); ty=f.y+(f.y-tg.y); } else { tx=tg.x+tg.vx*.4; ty=tg.y+tg.vy*.4;
+          if(f.ally){ const P0=B.P, side=(B.allies.indexOf(f)%2?1:-1), off=fSize(tg)*1.3; if(P0.alive&&Math.hypot(P0.x-tg.x,(P0.y-tg.y)*1.8)<fSize(tg)*6){ const ax=tg.x-P0.x, ay=(tg.y-P0.y)*1.8, al=Math.hypot(ax,ay)||1; tx+=(-ay/al)*side*off+ax/al*off*.6; ty+=(ax/al)*side*off/1.8; } } } } else { tx=f.x; ty=f.y; }
       if(live&&f.aiT<=0&&!f.windup&&!f.casting&&!(B.calm&&!f.ally)){ f.aiT=f.duel||f.boss||f.ally?rnd(.4,.9):rnd(.6,1.3); const usable=f.skills.filter(id=>f.sp>=SKILLS[id].cost); if(usable.length&&Math.random()<(f.duel||f.boss||f.ally?.7:.45)) castSkill(f,usable[Math.random()*usable.length|0]); }
     }
     if(live){
@@ -2791,12 +2793,15 @@ function battleStep(dt,t){
     const vmax=u*(f.buffs.dash>0?12:6.5)*f.spd*(f.buffs.haste>0?1.6:1)*(f.buffs.slow>0?.5:1); const sp=Math.hypot(f.vx,f.vy*1.8); if(sp>vmax){ f.vx*=vmax/sp; f.vy*=vmax/sp; }
     f.x+=f.vx*dt; f.y+=f.vy*dt;
     const s=fSize(f);
-    if(f.x<s){ f.x=s; f.vx=Math.abs(f.vx)*.6; } if(f.x>W-s){ f.x=W-s; f.vx=-Math.abs(f.vx)*.6; }
+    const mx=f.big>1.2?s*1.15:s; if(f.x<mx){ f.x=mx; f.vx=Math.abs(f.vx)*.6; } if(f.x>W-mx){ f.x=W-mx; f.vx=-Math.abs(f.vx)*.6; }
+    if(f.boss&&live&&!f.isPlayer){ const cx=W/2, cy=laneY(.55), ex=Math.min(f.x,W-f.x), nearEdge=ex<s*2.2||f.y<laneY(.12)||f.y>laneY(.92);
+      if(nearEdge){ f.cornerT=(f.cornerT||0)+dt; const pull=u*(4+Math.min(8,f.cornerT*6)); const ddx=cx-f.x, ddy=(cy-f.y)*1.8, dd=Math.hypot(ddx,ddy)||1; f.vx+=ddx/dd*pull*dt; f.vy+=ddy/dd*pull*dt/1.8; } else f.cornerT=0; }
     if(f.y<top){ f.y=top; f.vy=Math.abs(f.vy)*.6; } if(f.y>bot){ f.y=bot; f.vy=-Math.abs(f.vy)*.6; }
   }
   // collisions
   for(let i=0;i<B.all.length;i++) for(let j=i+1;j<B.all.length;j++){
     const a=B.all[i], b=B.all[j]; if(!a.alive||!b.alive) continue;
+    if(a.isPlayer===b.isPlayer&&(a===B.P||b===B.P)) continue; // teammates never block the player
     const dx=b.x-a.x, dy=(b.y-a.y)*1.8, d=Math.hypot(dx,dy)||.01, R=(fSize(a)+fSize(b))*.95;
     if(d>=R) continue;
     const nx=dx/d, ny=dy/d, ov=(R-d)/2; a.x-=nx*ov; a.y-=ny*ov/1.8; b.x+=nx*ov; b.y+=ny*ov/1.8;
