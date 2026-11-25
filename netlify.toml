@@ -1,3 +1,13 @@
 [build]
   publish = "public"
   functions = "netlify/functions"
+
+# browsers keep pictures and music for a few days so returning players don't download them again
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=259200"
+[[headers]]
+  for = "/audio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

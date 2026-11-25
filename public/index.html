@@ -3568,12 +3568,14 @@ function setStatus(){
 }
 async function loadRiver(first){
   try{
-    const r=await fetch(API,{cache:"no-store"});
+    const r=await fetch(API); // the CDN keeps this for ~20 s so many visitors share one server run
     if(!r.ok) throw 0;
     const j=await r.json();
     const fresh=(j.items||[]).map(d=>sanitize(String(d.id),d));
     // keep the splash flag on items we already show
     const prev=new Map(shared.map(x=>[x.id,x])); for(const x of fresh){ const o=prev.get(x.id); if(o&&o._splashed) x._splashed=true; }
+    // a krathong I just floated may not be in the CDN copy yet: keep showing it for a couple of minutes
+    for(const o of shared) if(mine.has(o.id)&&!fresh.some(x=>x.id===o.id)&&Date.now()-(o.createdAt||0)<180000) fresh.push(o);
     shared=fresh; apiOK=true; dbState="live";
     const ids=new Set(shared.map(x=>x.id)); localOnly=localOnly.filter(x=>!ids.has(x.id));
   }catch(e){ if(first||!apiOK){ dbState="off"; apiOK=false; } }

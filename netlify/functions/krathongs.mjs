@@ -91,6 +91,8 @@ async function syncSummary(store, p) {
   it.lv = level(p); it.kills = p.kills || 0; it.stars = p.stars || 0; it.cls = p.cls || null; it.relics = (p.relics || []).map((r) => [r, p.inv?.[r] || 1]); it.skin = p.skin && p.cls ? (p.adv ? "adv_" + p.adv : "skin_" + p.cls) : null; it.adv = p.adv || null; await store.setJSON(p.key, it);
 }
 
+// shared, read-only answers are kept on Netlify's CDN for a few seconds, so many players share one function run
+const cdn = (sec) => ({ "cache-control": "public, max-age=0, must-revalidate", "netlify-cdn-cache-control": `public, durable, s-maxage=${sec}, stale-while-revalidate=${sec * 3}`, "netlify-vary": "query" });
 const json = (body, status = 200, extra = {}) =>
   new Response(JSON.stringify(body), {
     status,
@@ -125,29 +127,31 @@ export default async (req, context) => {
         headers: {
           "content-type": "image/jpeg",
           "cache-control": "public, max-age=31536000, immutable",
+          "netlify-cdn-cache-control": "public, durable, max-age=31536000, immutable",
+          "netlify-vary": "query",
           "x-content-type-options": "nosniff",
         },
       });
     }
-    if (url.searchParams.get("shop") !== null) return json(await shopView(store));
+    if (url.searchParams.get("shop") !== null) return json(await shopView(store), 200, cdn(15));
     const progId = url.searchParams.get("prog");
     if (progId !== null) {
       if (!ID_RE.test(progId)) return json({ error: "ไม่พบ" }, 404);
       const p = await store.get("prog/" + progId, { type: "json" });
-      return json({ prog: publicProg(p) || null });
+      return json({ prog: publicProg(p) || null }, 200, cdn(20));
     }
     if (url.searchParams.has("board")) {
       const { blobs: pb } = await store.list({ prefix: "prog/" });
       const all = (await Promise.all(pb.map((b) => store.get(b.key, { type: "json" })))).filter(Boolean);
       all.sort((a, b) => (b.kills || 0) - (a.kills || 0) || level(b) - level(a));
-      return json({ board: all.slice(0, 20).map(publicProg) }, 200, { "cache-control": "public, max-age=15" });
+      return json({ board: all.slice(0, 20).map(publicProg) }, 200, cdn(60));
     }
     if (url.searchParams.has("feed")) {
       const { blobs: fb } = await store.list({ prefix: "feed/" });
       const keys = fb.map((b) => b.key).sort().reverse();
       const feed = (await Promise.all(keys.slice(0, 25).map((k) => store.get(k, { type: "json" })))).filter(Boolean);
       if (keys.length > 300) await Promise.all(keys.slice(300).map((k) => store.delete(k)));   // keep the feed small
-      return json({ feed }, 200, { "cache-control": "public, max-age=5" });
+      return json({ feed }, 200, cdn(20));
     }
     const inbox = url.searchParams.get("inbox");
     if (inbox !== null) {
@@ -167,7 +171,7 @@ export default async (req, context) => {
     const items = (await Promise.all(keys.map((k) => store.get(k, { type: "json" }))))
       .filter((it) => it && (counts.get(it.id) || 0) < HIDE_AT_REPORTS)
       .slice(0, LIMIT);
-    return json({ items }, 200, { "cache-control": "public, max-age=5" });
+    return json({ items }, 200, cdn(20));
   }
 
   if (req.method === "POST") {
