@@ -517,7 +517,11 @@ const FORTUNES = [
   ["ดีมาก","เงินที่ให้คนอื่นยืมไป จะได้คืน (อย่างน้อยครึ่งหนึ่ง)"],
   ["ดีเลิศ","ใจสงบเหมือนผิวน้ำคืนเดือนเพ็ญ เรื่องที่กังวลอยู่จะคลี่คลายเอง"],
   ["ปังที่สุด","จะมีคนใจดีเข้ามาช่วยในเรื่องที่คุณกำลังเหนื่อย"],
-  ["ดีมาก","แมวข้างบ้านจะยอมให้ลูบหัวในที่สุด ถือเป็นนิมิตหมายอันดี"]
+  ["ดีมาก","แมวข้างบ้านจะยอมให้ลูบหัวในที่สุด ถือเป็นนิมิตหมายอันดี"],
+  ["ฟ้าประทาน","แสงสว่างจากฟ้าส่องทางให้ เรื่องที่มืดมนจะคลี่คลายในไม่ช้า"],
+  ["ฟ้าลั่น","ไอเดียดีๆ จะผ่าลงมากลางหัวแบบไม่ทันตั้งตัว จดไว้ให้ทัน"],
+  ["ดวงดาวเรียงตัว","จังหวะชีวิตกำลังลงล็อก ทุกอย่างเชื่อมกันเหมือนกลุ่มดาว"],
+  ["จันทร์เต็มดวง","ใจที่สงบจะส่องให้เห็นทางชัดเจน เหมือนแสงจันทร์บนผิวน้ำ"]
 ];
 
 /* ================= helpers ================= */
@@ -1850,6 +1854,10 @@ const SKILLS={
   vortex:{n:"น้ำวนลืมแฟนเก่า",d:"น้ำวนดูดศัตรู ดาเมจ 12/วิ 3 วิ",cost:55,c:"120,170,255"},
   bolt:{n:"ไอเดียฟ้าผ่า",d:"ฟ้าผ่าศัตรูใกล้สุด ดาเมจ 32",cost:45,c:"255,255,170"},
   fish:{n:"ฝูงปลาเพื่อนซี้",d:"ปลา 3 ตัวไปงับศัตรู",cost:50,c:"255,170,90"},
+  heavenlight:{n:"แสงสวรรค์",d:"ลำแสงศักดิ์สิทธิ์ฟาดลงจากฟ้า ดาเมจ 45 และฟื้น HP 15",cost:55,c:"255,235,160"},
+  thunderstorm:{n:"อสนีบาตพันสาย",d:"สายฟ้าผ่าลงทั่วสนาม 6 สาย สายละ 20",cost:60,c:"170,210,255"},
+  cosmiccircle:{n:"วงเวทจักรวาล",d:"วงเวทผุดใต้ศัตรูทุกตัว แล้วระเบิด ตัวละ 34",cost:60,c:"190,150,255"},
+  moonbeam:{n:"ลำแสงจันทรา",d:"เลเซอร์แสงจันทร์กวาดเป็นแนวยาว ดาเมจ 48",cost:55,c:"210,225,255"},
   calm:{n:"ใจสงบ",d:"ฟื้น HP 6/วิ 5 วิ และ SP มาไว",cost:25,c:"200,200,255"},
   spin:{n:"บายศรีพันกลีบ",d:"หมุนฟาดรอบตัว ดาเมจ 22 กระเด็น",cost:40,c:"140,230,120",sig:1},
   bloom:{n:"บัวบานสะพรั่ง",d:"ฟื้น HP 30 และเกราะ 2 วินาที",cost:45,c:"255,170,210",sig:1},
@@ -1913,7 +1921,7 @@ const ADV_INFO={
 const ADV_OF={warrior:["tidelord","stormblade"],guardian:["paladin","yaksha"],mystic:["chrono","solar"],racer:["phantom","comet"]};
 function clsName(P){ return P&&P.adv&&ADV_INFO[P.adv]?ADV_INFO[P.adv].n:P&&P.cls&&CLASS_INFO[P.cls]?CLASS_INFO[P.cls].n:""; }
 function advOpen(P){ return !!P&&!!P.cls&&(P.stars||0)>=1&&(P.bestDungeon||0)>=10; }
-const FORTUNE_SKILL=["dash","gold","shield","heal","haste","charm","vortex","dash","gold","vortex","fish","bolt","gold","calm","heal","fish"];
+const FORTUNE_SKILL=["dash","gold","shield","heal","haste","charm","vortex","dash","gold","vortex","fish","bolt","gold","calm","heal","fish","heavenlight","thunderstorm","cosmiccircle","moonbeam"];
 const NPCS=[{name:"กระทงลุงแดง",type:"coconut",candle:"gold"},{name:"แม่ค้าขนมปัง",type:"bread",candle:"white"},{name:"เจ้าแมวส้ม",type:"cat",candle:"pink"},{name:"บัวหลวงแสนงอน",type:"lotus",candle:"pink"},{name:"ดาวตกตัวป่วน",type:"star",candle:"violet"},{name:"สายรุ้งซิ่ง",type:"pride",candle:"blue"},{name:"ใบตองสายบู๊",type:"banana",candle:"gold"}];
 let battle=null;
 const bKeys=new Set();
@@ -2426,6 +2434,7 @@ function drawEnding(c,t,dt){
 }
 /* ================= ประกาศอัปเดต: newest first; the newest id is remembered once read ================= */
 const UPDATES=[
+  {id:"2026-11-26d",t:"สกิลอลังการใหม่ 4 ท่า",items:["☀️ แสงสวรรค์ · ⚡ อสนีบาตพันสาย · 🌌 วงเวทจักรวาล · 🌙 ลำแสงจันทรา — สุ่มได้จากเซียมซี และมีขายเป็นตำราในร้าน","⚡ ไอเดียฟ้าผ่ากับสายฟ้าลูกโซ่ ได้ VFX สายฟ้าฟาดจากฟ้าแบบใหม่"]},
   {id:"2026-11-26c",t:"กระทงหันซ้าย-ขวาได้",items:["↔ กระทงหันตามทิศที่กำลังไป ทั้งในแม่น้ำและในศึก กลับตัวแบบนุ่มๆ (สกินที่ไม่สมมาตรอย่างนักซิ่ง/ดาวหาง/เงาวายุ จะหันหัวไปทางที่วิ่ง)","🖼 รูปถ่ายบนกระทงไม่กลับด้าน"]},
   {id:"2026-11-26b",t:"ร้านค้าบาดาล 🏪",items:["🛒 ร้านสุ่มของใหม่ทุก 30 นาที ทุกคนเห็นชุดเดียวกัน ของมีจำกัด: เครื่องราง, ตำราสกิล (เลือกสกิลเซียมซีได้), ตั๋วหีบ","💰 ขายเครื่องรางให้ร้านได้ทีละเลเวล","🤝 ของที่ผู้เล่นขาย ไปวางใน “ตลาดผู้เล่น” ให้คนอื่นซื้อต่อในราคาถูกกว่าร้าน"]},
   {id:"2026-11-26",t:"คลาสขั้นสูง ขยักที่ 2 (8 สาย)",items:["🌟 ได้ ★1 + ผ่านดันเจี้ยนชั้น 10 แล้ว เลื่อนขั้นคลาสได้ในหน้าอัปเกรด","⚔ นักรบ → ขุนพลวารี / นักดาบพายุ · 🛡 ผู้พิทักษ์ → อัศวินบัวสวรรค์ / ยักษ์ทวารบาล","🔮 จอมเวท → จอมเวทกาลเวลา (หยุดกาล!) / จอมขมังเวทสุริยะ · 🌈 นักซิ่ง → เงาวายุ / ดาวหางสายรุ้ง","แต่ละสายมีสกิลใหม่ อัปเกรดปุ่มสวน/หลบ และสกินขั้นสูง"]},
@@ -2753,7 +2762,7 @@ function hurt(f,dmg,src,opts){
   return dmg;
 }
 /* ---- pixel VFX (PixelLab): sheets in img/vfx, frames left-to-right then top-to-bottom ---- */
-const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12},"frost":{"w":106,"h":78,"n":10,"fps":12},"voidhole":{"w":232,"h":212,"n":32,"fps":10},"tentacle":{"w":116,"h":255,"n":16,"fps":14},"hellaura":{"w":73,"h":115,"n":8,"fps":12},"holyaura":{"w":96,"h":112,"n":12,"fps":12},"gachaburst":{"w":150,"h":155,"n":7,"fps":16},"webshot":{"w":96,"h":96,"n":14,"fps":14},"necro":{"w":172,"h":70,"n":12,"fps":12},"shadowclone":{"w":69,"h":120,"n":16,"fps":12},"eclipse":{"w":128,"h":128,"n":16,"fps":12},"starimpact":{"w":146,"h":184,"n":18,"fps":18},"crystalbreak":{"w":60,"h":79,"n":12,"fps":12},"spiritpop":{"w":57,"h":45,"n":8,"fps":12},"bossportal":{"w":288,"h":412,"n":22,"fps":14},"lootdrop":{"w":83,"h":154,"n":14,"fps":15},"nagawave":{"w":187,"h":375,"n":10,"fps":14},"moonlight":{"w":96,"h":112,"n":16,"fps":12},"fireslash":{"w":164,"h":90,"n":8,"fps":16},"garudastorm":{"w":128,"h":136,"n":16,"fps":12},"tsunami":{"w":240,"h":168,"n":16,"fps":12},"stormslash":{"w":55,"h":58,"n":6,"fps":8},"holylotus":{"w":72,"h":136,"n":14,"fps":14},"groundslam":{"w":130,"h":128,"n":14,"fps":16},"timestop":{"w":160,"h":128,"n":12,"fps":12},"solarnova":{"w":128,"h":128,"n":12,"fps":14},"comettrail":{"w":128,"h":40,"n":12,"fps":16}};
+const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12},"frost":{"w":106,"h":78,"n":10,"fps":12},"voidhole":{"w":232,"h":212,"n":32,"fps":10},"tentacle":{"w":116,"h":255,"n":16,"fps":14},"hellaura":{"w":73,"h":115,"n":8,"fps":12},"holyaura":{"w":96,"h":112,"n":12,"fps":12},"gachaburst":{"w":150,"h":155,"n":7,"fps":16},"webshot":{"w":96,"h":96,"n":14,"fps":14},"necro":{"w":172,"h":70,"n":12,"fps":12},"shadowclone":{"w":69,"h":120,"n":16,"fps":12},"eclipse":{"w":128,"h":128,"n":16,"fps":12},"starimpact":{"w":146,"h":184,"n":18,"fps":18},"crystalbreak":{"w":60,"h":79,"n":12,"fps":12},"spiritpop":{"w":57,"h":45,"n":8,"fps":12},"bossportal":{"w":288,"h":412,"n":22,"fps":14},"lootdrop":{"w":83,"h":154,"n":14,"fps":15},"nagawave":{"w":187,"h":375,"n":10,"fps":14},"moonlight":{"w":96,"h":112,"n":16,"fps":12},"fireslash":{"w":164,"h":90,"n":8,"fps":16},"garudastorm":{"w":128,"h":136,"n":16,"fps":12},"tsunami":{"w":240,"h":168,"n":16,"fps":12},"stormslash":{"w":55,"h":58,"n":6,"fps":8},"holylotus":{"w":72,"h":136,"n":14,"fps":14},"groundslam":{"w":130,"h":128,"n":14,"fps":16},"timestop":{"w":160,"h":128,"n":12,"fps":12},"solarnova":{"w":128,"h":128,"n":12,"fps":14},"comettrail":{"w":128,"h":40,"n":12,"fps":16},"thunderstrike":{"w":402,"h":516,"n":14,"fps":20},"heavenlight":{"w":211,"h":564,"n":32,"fps":9},"cosmiccircle":{"w":166,"h":139,"n":24,"fps":14},"moonbeam":{"w":240,"h":96,"n":16,"fps":14}};
 const VFX={}; for(const [n,m] of Object.entries(VFX_META)){ const im=new Image(); VFX[n]={...m,img:im,ok:false}; im.onload=()=>{ VFX[n].ok=true; VFX[n].cols=Math.max(1,Math.floor(im.width/m.w)); }; im.src="img/vfx/"+n+".png"; }
 const vfxPlays=[];
 // size = drawn height in multiples of the fighter size; opts: follow (fighter), flip, flat (squash y), add (glow blend), dy (offset in sizes), back (draw behind fighters)
@@ -2783,7 +2792,7 @@ function skillVfx(id,f,tgt){
     case "haste": playVfx("evade",f.x,f.y,2.8,{follow:f,dy:-.5,flip,add:true}); break;
     case "calm": playVfx("holyhand",f.x,f.y,3.2,{follow:f,dy:-1,add:true}); break;
     case "charm": for(const o of foesOf(f)) playVfx("comfort",o.x,o.y,3,{follow:o,dy:-1}); break;
-    case "bolt": if(tgt){ playVfx("toxic",tgt.x,tgt.y,3.6,{follow:tgt,dy:-1.2,add:true}); playVfx("crit",tgt.x,tgt.y,2.6,{follow:tgt,dy:-.4,add:true}); } break;
+    case "bolt": if(tgt){ playVfx(vfxOr("thunderstrike","toxic"),tgt.x,tgt.y,5,{dy:-1.9,add:true}); playVfx("crit",tgt.x,tgt.y,2.6,{follow:tgt,dy:-.4,add:true}); } break;
     case "fish": case "school": playVfx("fish",f.x,f.y,3.6,{follow:f,dy:-.9}); break;
     case "wall": playVfx("barrier",f.x,f.y,4,{follow:f,dy:-.7,add:true}); playVfx("formation",f.x,f.y,4.4,{flat:.55,add:true,back:true}); break;
     case "phantom": playVfx("evade",f.x,f.y,3,{follow:f,dy:-.5,add:true}); break;
@@ -2815,7 +2824,7 @@ function castSkill(f,id){
     case "calm": f.buffs.calm=5; break;
     case "tide": for(const o of foesOf(f)){ const dx=o.x-f.x||1; hurt(o,28*m,f); o.vx+=Math.sign(dx)*u*14; o.vy+=rnd(-1,1)*u*3; playVfx("impact",o.x,o.y,3,{dy:-.4,add:true}); } playVfx("crescent",f.x+(tgt&&tgt.x<f.x?-1:1)*s*1.4,f.y-s*.3,3.4,{flip:tgt&&tgt.x<f.x,add:true}); battle.shake=10; break;
     case "wall": f.buffs.shield=3; f.buffs.reflect=3; f.hp=Math.min(f.max,f.hp+25*m); floater(f.x,f.y-s*2,"+"+Math.round(25*m),"120,255,160","heal"); break;
-    case "chain": foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; hurt(o,24*m,f); battle.bolts.push({x:o.x,y:o.y-fSize(o),life:0}); playVfx("toxic",o.x,o.y,3.6,{follow:o,dy:-1.2,add:true}); sfx("bonk"); },i*140)); flash={a:.7,x:f.x,y:f.y,c:"200,180,255"}; break;
+    case "chain": foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; hurt(o,24*m,f); battle.bolts.push({x:o.x,y:o.y-fSize(o),life:0}); playVfx(vfxOr("thunderstrike","toxic"),o.x,o.y,4.6,{dy:-1.8,add:true}); sfx("bonk"); },i*140)); flash={a:.7,x:f.x,y:f.y,c:"200,180,255"}; break;
     case "phantom": for(let i=0;i<3;i++) setTimeout(()=>{ if(!battle||!f.alive) return; const t2=nearest(f); if(!t2) return; const dx=t2.x-f.x, dy=(t2.y-f.y)*1.8, d=Math.hypot(dx,dy)||1; f.vx=dx/d*u*12; f.vy=dy/d*u*12/1.8; f.buffs.dash=.5; playVfx("rainbow",f.x,f.y-fSize(f)*.3,2.2,{flip:dx>0,add:true}); },i*380); break;
     case "haunt": for(let i=0;i<3;i++) battle.minions.push({x:f.x+rnd(-20,20),y:f.y,owner:f,life:0,dur:8,bite:0,p:Math.random()*7,ghost:true}); break;
     case "curse": if(tgt){ const n=f.boss?3:1; for(let i=0;i<n;i++){ const a=Math.atan2((tgt.y-f.y)*1.8,tgt.x-f.x)+(i-(n-1)/2)*.35; battle.shots.push({x:f.x,y:f.y-s*.6,vx:Math.cos(a)*u*4.2,vy:Math.sin(a)*u*4.2/1.8,owner:f,life:0,dur:4,m}); } } break;
@@ -2844,6 +2853,13 @@ function castSkill(f,id){
     case "gangablessing": { battle.banner={text:sk.n,col:sk.c,t:0}; flash={a:.8,x:f.x,y:f.y,c:"255,230,170"}; playVfx(vfxOr("holyaura","holyhand"),f.x,f.y,4.4,{follow:f,dy:-.4,add:true});
       for(const al of battle.all.filter(o=>o.alive&&o.isPlayer===f.isPlayer)){ al.hp=Math.min(al.max,al.hp+al.max*.2); for(const b of ["poison","cursed","slow"]) al.buffs[b]=0; floater(al.x,al.y-fSize(al)*2.2,"+"+Math.round(al.max*.2),"120,255,160","heal"); playVfx(vfxOr("moonlight","firstaid"),al.x,al.y,3,{follow:al,dy:-1,add:true}); }
       foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; playVfx(vfxOr("nagawave","fish"),o.x,o.y,4.6,{dy:-1.3}); hurt(o,30*m,f); o.vx+=Math.sign(o.x-f.x||1)*u*9; },120+i*130)); break; }
+    case "heavenlight": if(tgt){ const o=tgt; flash={a:.8,x:o.x,y:o.y,c:"255,240,190"}; playVfx(vfxOr("heavenlight","holyhand"),o.x,o.y,7,{dy:-2.6}); setTimeout(()=>{ if(!battle) return; if(o.alive){ hurt(o,45*m,f); battle.shake=10; ripples.push({x:o.x,y:o.y,r:u*2.6,life:0,dur:1.3,c:"255,240,190"}); } f.hp=Math.min(f.max,f.hp+15*m); floater(f.x,f.y-s*2,"+"+Math.round(15*m),"120,255,160","heal"); },350); } break;
+    case "thunderstorm": { battle.banner={text:sk.n,col:sk.c,t:0}; for(let q=0;q<6;q++) setTimeout(()=>{ if(!battle) return; const fs=foesOf(f); const o=fs.length&&Math.random()<.75?fs[Math.random()*fs.length|0]:null; const x=o?o.x:rnd(.1,.9)*W, y=o?o.y:laneY(Math.random());
+        playVfx(vfxOr("thunderstrike","toxic"),x,y,6,{dy:-2.2,add:true}); flash={a:.6,x,y,c:"200,225,255"}; battle.shake=7; sfx("bonk"); if(o&&o.alive) hurt(o,20*m,f); ripples.push({x,y,r:u*1.8,life:0,dur:1,c:"200,225,255"}); },q*190); break; }
+    case "cosmiccircle": { const fs=foesOf(f); battle.banner={text:sk.n,col:sk.c,t:0}; for(const o of fs){ playVfx(vfxOr("cosmiccircle","formation"),o.x,o.y,3.8,{follow:o,dy:-.3}); } setTimeout(()=>{ if(!battle) return; for(const o of fs) if(o.alive){ hurt(o,34*m,f); playVfx("impact",o.x,o.y,2.6,{dy:-.4,add:true}); } battle.shake=12; flash={a:.6,x:f.x,y:f.y,c:"190,150,255"}; },700); break; }
+    case "moonbeam": { const t2=tgt||{x:f.x+u*10,y:f.y}; const a=Math.atan2((t2.y-f.y)*1.8,t2.x-f.x), L=Math.max(W,H); const fl=Math.cos(a)<0;
+      for(let q=0;q<4;q++) playVfx(vfxOr("moonbeam","crescent"),f.x+Math.cos(a)*u*(2+q*3.6),f.y+Math.sin(a)*u*(2+q*3.6)/1.8-s*.4,2.6,{flip:fl,rot:Math.sin(a)*.5,add:true});
+      for(const o of foesOf(f)){ const dx=o.x-f.x, dy=(o.y-f.y)*1.8, along=dx*Math.cos(a)+dy*Math.sin(a), off=Math.abs(-dx*Math.sin(a)+dy*Math.cos(a)); if(along>0&&along<L&&off<fSize(o)*1.6+u) setTimeout(()=>{ if(battle&&o.alive) hurt(o,48*m,f); },250); } battle.shake=8; break; }
     case "nagawrath": { battle.banner={text:sk.n,col:sk.c,t:0}; battle.shake=12; foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; playVfx(vfxOr("nagawave","fish"),o.x,o.y,5.6,{dy:-1.6}); hurt(o,34*m,f); o.vx+=Math.sign(o.x-f.x||1)*u*12; ripples.push({x:o.x,y:o.y,r:u*2.4,life:0,dur:1.3,c:"120,240,220"}); },150+i*160)); break; }
     case "moonward": { f.hp=Math.min(f.max,f.hp+f.max*.25*m/skillMul(f)*Math.min(1.4,skillMul(f))); f.buffs.shield=3; for(const b of ["poison","cursed","slow"]) f.buffs[b]=0; playVfx(vfxOr("moonlight","holyhand"),f.x,f.y,4,{follow:f,dy:-1.2,add:true}); floater(f.x,f.y-s*2.2,"ล้างคำสาป!","220,230,255","skill"); break; }
     case "asuraslash": if(tgt){ const a=Math.atan2((tgt.y-f.y)*1.8,tgt.x-f.x), L=Math.max(W,H)*.6; for(let q=0;q<3;q++) playVfx(vfxOr("fireslash","crescent"),f.x+Math.cos(a)*u*(3+q*3.2),f.y+Math.sin(a)*u*(3+q*3.2)/1.8-s*.4,4.6,{flip:Math.cos(a)<0,speed:.7,rot:Math.sin(a)*.6}); battle.shake=10;

@@ -28,7 +28,7 @@ const HIDE_AT_REPORTS = 3;
 const BANNED = ["http://", "https://", "www."];
 const ID_RE = /^[a-z0-9-]{1,40}$/;
 const STATS = ["hp", "atk", "def", "spd", "sk"];
-const MAX_LV = 20, MAX_STARS = 5, START_COINS = 60, HOURLY_SOFT_CAP = 2500, DUEL_REPEAT_MS = 15 * 60_000, CLASS_CHANGE_COST = 200, CLASS_UNLOCK_LV = 20, REROLL_COST = 40, BATTLE_COOLDOWN_MS = 12_000, N_FORTUNES = 16;
+const MAX_LV = 20, MAX_STARS = 5, START_COINS = 60, HOURLY_SOFT_CAP = 2500, DUEL_REPEAT_MS = 15 * 60_000, CLASS_CHANGE_COST = 200, CLASS_UNLOCK_LV = 20, REROLL_COST = 40, BATTLE_COOLDOWN_MS = 12_000, N_FORTUNES = 20;
 const upCost = (lv) => 25 + lv * 15;
 const spentOn = (p) => STATS.reduce((a, k) => { let t = 0; for (let l = 0; l < (p.lv?.[k] || 0); l++) t += upCost(l); return a + t; }, 0);
 const respecRefund = (p) => { const spent = spentOn(p); return (p.respecs || 0) === 0 ? spent : Math.floor(spent * 0.8); };

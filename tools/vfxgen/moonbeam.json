@@ -1,0 +1,443 @@
+{
+ "frames": [
+  {
+   "filename": "lk-moonbeam 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 1.png",
+   "frame": {
+    "x": 240,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 2.png",
+   "frame": {
+    "x": 480,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 3.png",
+   "frame": {
+    "x": 720,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 4.png",
+   "frame": {
+    "x": 0,
+    "y": 96,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 5.png",
+   "frame": {
+    "x": 240,
+    "y": 96,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 6.png",
+   "frame": {
+    "x": 480,
+    "y": 96,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 7.png",
+   "frame": {
+    "x": 720,
+    "y": 96,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 8.png",
+   "frame": {
+    "x": 0,
+    "y": 192,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 9.png",
+   "frame": {
+    "x": 240,
+    "y": 192,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 10.png",
+   "frame": {
+    "x": 480,
+    "y": 192,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 11.png",
+   "frame": {
+    "x": 720,
+    "y": 192,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 12.png",
+   "frame": {
+    "x": 0,
+    "y": 288,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 13.png",
+   "frame": {
+    "x": 240,
+    "y": 288,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 14.png",
+   "frame": {
+    "x": 480,
+    "y": 288,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-moonbeam 15.png",
+   "frame": {
+    "x": 720,
+    "y": 288,
+    "w": 240,
+    "h": 96
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 96
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 96
+   },
+   "pivot": {
+    "x": 0.16666666666666666,
+    "y": 0.5
+   },
+   "duration": 71
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-moonbeam.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 960,
+   "h": 384
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 40,
+   "y": 48
+  },
+  "frameTags": [
+   {
+    "name": "lk-moonbeam",
+    "from": 0,
+    "to": 15,
+    "direction": "forward"
+   }
+  ]
+ }
+}

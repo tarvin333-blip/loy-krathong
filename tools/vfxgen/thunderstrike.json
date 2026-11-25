@@ -1,0 +1,391 @@
+{
+ "frames": [
+  {
+   "filename": "lk-thunderstrike 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 1.png",
+   "frame": {
+    "x": 402,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 2.png",
+   "frame": {
+    "x": 804,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 3.png",
+   "frame": {
+    "x": 1206,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 4.png",
+   "frame": {
+    "x": 0,
+    "y": 516,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 5.png",
+   "frame": {
+    "x": 402,
+    "y": 516,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 6.png",
+   "frame": {
+    "x": 804,
+    "y": 516,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 7.png",
+   "frame": {
+    "x": 1206,
+    "y": 516,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 8.png",
+   "frame": {
+    "x": 0,
+    "y": 1032,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 9.png",
+   "frame": {
+    "x": 402,
+    "y": 1032,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 10.png",
+   "frame": {
+    "x": 804,
+    "y": 1032,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 11.png",
+   "frame": {
+    "x": 1206,
+    "y": 1032,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 12.png",
+   "frame": {
+    "x": 0,
+    "y": 1548,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  },
+  {
+   "filename": "lk-thunderstrike 13.png",
+   "frame": {
+    "x": 402,
+    "y": 1548,
+    "w": 402,
+    "h": 516
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 402,
+    "h": 516
+   },
+   "sourceSize": {
+    "w": 402,
+    "h": 516
+   },
+   "pivot": {
+    "x": 0.49502487562189057,
+    "y": 0.8410852713178295
+   },
+   "duration": 50
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-thunderstrike.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 1608,
+   "h": 2064
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 199,
+   "y": 434
+  },
+  "frameTags": [
+   {
+    "name": "lk-thunderstrike",
+    "from": 0,
+    "to": 13,
+    "direction": "forward"
+   }
+  ]
+ }
+}

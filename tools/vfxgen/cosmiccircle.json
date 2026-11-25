@@ -1,0 +1,651 @@
+{
+ "frames": [
+  {
+   "filename": "lk-cosmiccircle 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 1.png",
+   "frame": {
+    "x": 166,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 2.png",
+   "frame": {
+    "x": 332,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 3.png",
+   "frame": {
+    "x": 498,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 4.png",
+   "frame": {
+    "x": 664,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 5.png",
+   "frame": {
+    "x": 0,
+    "y": 139,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 6.png",
+   "frame": {
+    "x": 166,
+    "y": 139,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 7.png",
+   "frame": {
+    "x": 332,
+    "y": 139,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 8.png",
+   "frame": {
+    "x": 498,
+    "y": 139,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 9.png",
+   "frame": {
+    "x": 664,
+    "y": 139,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 10.png",
+   "frame": {
+    "x": 0,
+    "y": 278,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 11.png",
+   "frame": {
+    "x": 166,
+    "y": 278,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 12.png",
+   "frame": {
+    "x": 332,
+    "y": 278,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 13.png",
+   "frame": {
+    "x": 498,
+    "y": 278,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 14.png",
+   "frame": {
+    "x": 664,
+    "y": 278,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 15.png",
+   "frame": {
+    "x": 0,
+    "y": 417,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 16.png",
+   "frame": {
+    "x": 166,
+    "y": 417,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 17.png",
+   "frame": {
+    "x": 332,
+    "y": 417,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 18.png",
+   "frame": {
+    "x": 498,
+    "y": 417,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 19.png",
+   "frame": {
+    "x": 664,
+    "y": 417,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 20.png",
+   "frame": {
+    "x": 0,
+    "y": 556,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 21.png",
+   "frame": {
+    "x": 166,
+    "y": 556,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 22.png",
+   "frame": {
+    "x": 332,
+    "y": 556,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-cosmiccircle 23.png",
+   "frame": {
+    "x": 498,
+    "y": 556,
+    "w": 166,
+    "h": 139
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 166,
+    "h": 139
+   },
+   "sourceSize": {
+    "w": 166,
+    "h": 139
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.34532374100719426
+   },
+   "duration": 71
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-cosmiccircle.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 830,
+   "h": 695
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 83,
+   "y": 48
+  },
+  "frameTags": [
+   {
+    "name": "lk-cosmiccircle",
+    "from": 0,
+    "to": 23,
+    "direction": "forward"
+   }
+  ]
+ }
+}

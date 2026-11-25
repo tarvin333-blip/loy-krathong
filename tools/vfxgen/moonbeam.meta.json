@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "5e1c50af-27da-4708-8414-bdcedd8af424",
+  "canvas": {
+   "h": 96,
+   "w": 240
+  },
+  "frames": 16,
+  "fps": 14,
+  "loop": true,
+  "anchor": {
+   "x": 40,
+   "y": 48,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-moonbeam.gif": "https://api.pixellab.ai/mcp/pixel-tools/2d4e670f-3697-47c1-85fa-4449ff273fb3/lk-moonbeam.gif",
+  "lk-moonbeam.png": "https://api.pixellab.ai/mcp/pixel-tools/2d4e670f-3697-47c1-85fa-4449ff273fb3/lk-moonbeam.png",
+  "lk-moonbeam.json": "https://api.pixellab.ai/mcp/pixel-tools/2d4e670f-3697-47c1-85fa-4449ff273fb3/lk-moonbeam.json"
+ }
+}

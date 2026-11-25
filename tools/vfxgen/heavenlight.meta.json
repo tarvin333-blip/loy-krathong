@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "ae271c69-7815-4ca5-8a1f-9bad8e5bef27",
+  "canvas": {
+   "h": 564,
+   "w": 211
+  },
+  "frames": 32,
+  "fps": 9,
+  "loop": false,
+  "anchor": {
+   "x": 105,
+   "y": 545,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-heavenlight.gif": "https://api.pixellab.ai/mcp/pixel-tools/2ec7b9cb-5f93-428d-8102-4d34578f00c0/lk-heavenlight.gif",
+  "lk-heavenlight.png": "https://api.pixellab.ai/mcp/pixel-tools/2ec7b9cb-5f93-428d-8102-4d34578f00c0/lk-heavenlight.png",
+  "lk-heavenlight.json": "https://api.pixellab.ai/mcp/pixel-tools/2ec7b9cb-5f93-428d-8102-4d34578f00c0/lk-heavenlight.json"
+ }
+}

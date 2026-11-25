@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "e2e6faf2-a3b8-4c74-b586-b337cf2c55d3",
+  "canvas": {
+   "h": 516,
+   "w": 402
+  },
+  "frames": 14,
+  "fps": 20,
+  "loop": false,
+  "anchor": {
+   "x": 199,
+   "y": 434,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-thunderstrike.gif": "https://api.pixellab.ai/mcp/pixel-tools/8906877f-79a1-4856-be7b-78972a040447/lk-thunderstrike.gif",
+  "lk-thunderstrike.png": "https://api.pixellab.ai/mcp/pixel-tools/8906877f-79a1-4856-be7b-78972a040447/lk-thunderstrike.png",
+  "lk-thunderstrike.json": "https://api.pixellab.ai/mcp/pixel-tools/8906877f-79a1-4856-be7b-78972a040447/lk-thunderstrike.json"
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "612cd2a1-e3be-45e3-b404-358d1ec51128",
+  "canvas": {
+   "h": 139,
+   "w": 166
+  },
+  "frames": 24,
+  "fps": 14,
+  "loop": false,
+  "anchor": {
+   "x": 83,
+   "y": 48,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-cosmiccircle.gif": "https://api.pixellab.ai/mcp/pixel-tools/ddaec979-5171-493b-bf6e-75d390ce8c89/lk-cosmiccircle.gif",
+  "lk-cosmiccircle.png": "https://api.pixellab.ai/mcp/pixel-tools/ddaec979-5171-493b-bf6e-75d390ce8c89/lk-cosmiccircle.png",
+  "lk-cosmiccircle.json": "https://api.pixellab.ai/mcp/pixel-tools/ddaec979-5171-493b-bf6e-75d390ce8c89/lk-cosmiccircle.json"
+ }
+}

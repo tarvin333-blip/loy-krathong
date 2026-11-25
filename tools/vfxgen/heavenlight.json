@@ -1,0 +1,859 @@
+{
+ "frames": [
+  {
+   "filename": "lk-heavenlight 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 1.png",
+   "frame": {
+    "x": 211,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 2.png",
+   "frame": {
+    "x": 422,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 3.png",
+   "frame": {
+    "x": 633,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 4.png",
+   "frame": {
+    "x": 844,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 5.png",
+   "frame": {
+    "x": 1055,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 6.png",
+   "frame": {
+    "x": 0,
+    "y": 564,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 7.png",
+   "frame": {
+    "x": 211,
+    "y": 564,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 8.png",
+   "frame": {
+    "x": 422,
+    "y": 564,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 9.png",
+   "frame": {
+    "x": 633,
+    "y": 564,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 10.png",
+   "frame": {
+    "x": 844,
+    "y": 564,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 11.png",
+   "frame": {
+    "x": 1055,
+    "y": 564,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 12.png",
+   "frame": {
+    "x": 0,
+    "y": 1128,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 13.png",
+   "frame": {
+    "x": 211,
+    "y": 1128,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 14.png",
+   "frame": {
+    "x": 422,
+    "y": 1128,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 15.png",
+   "frame": {
+    "x": 633,
+    "y": 1128,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 16.png",
+   "frame": {
+    "x": 844,
+    "y": 1128,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 17.png",
+   "frame": {
+    "x": 1055,
+    "y": 1128,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 18.png",
+   "frame": {
+    "x": 0,
+    "y": 1692,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 19.png",
+   "frame": {
+    "x": 211,
+    "y": 1692,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 20.png",
+   "frame": {
+    "x": 422,
+    "y": 1692,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 21.png",
+   "frame": {
+    "x": 633,
+    "y": 1692,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 22.png",
+   "frame": {
+    "x": 844,
+    "y": 1692,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 23.png",
+   "frame": {
+    "x": 1055,
+    "y": 1692,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 24.png",
+   "frame": {
+    "x": 0,
+    "y": 2256,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 25.png",
+   "frame": {
+    "x": 211,
+    "y": 2256,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 26.png",
+   "frame": {
+    "x": 422,
+    "y": 2256,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 27.png",
+   "frame": {
+    "x": 633,
+    "y": 2256,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 28.png",
+   "frame": {
+    "x": 844,
+    "y": 2256,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 29.png",
+   "frame": {
+    "x": 1055,
+    "y": 2256,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 30.png",
+   "frame": {
+    "x": 0,
+    "y": 2820,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  },
+  {
+   "filename": "lk-heavenlight 31.png",
+   "frame": {
+    "x": 211,
+    "y": 2820,
+    "w": 211,
+    "h": 564
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 211,
+    "h": 564
+   },
+   "sourceSize": {
+    "w": 211,
+    "h": 564
+   },
+   "pivot": {
+    "x": 0.4976303317535545,
+    "y": 0.9663120567375887
+   },
+   "duration": 111
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-heavenlight.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 1266,
+   "h": 3384
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 105,
+   "y": 545
+  },
+  "frameTags": [
+   {
+    "name": "lk-heavenlight",
+    "from": 0,
+    "to": 31,
+    "direction": "forward"
+   }
+  ]
+ }
+}
