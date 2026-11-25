@@ -337,6 +337,15 @@ body.in-ending .top,body.in-ending .scenes,body.in-ending .cta-wrap,body.in-endi
 .krelic{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;border:1px solid rgba(var(--rc),.5);background:rgba(var(--rc),.08)}
 .krelic img{width:34px;height:34px;image-rendering:pixelated} .krelic b{font-size:12px;display:block} .krelic small{font-size:10.5px;color:var(--ink-dim)}
 .kset{color:#9fe8ff;font-size:12px}
+.skin-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin:-2px 0 8px;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04)}
+.skin-row img{width:52px;height:52px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(255,220,150,.4))}
+.skin-row b{font-size:13px;display:block} .skin-row small{font-size:11px;color:var(--ink-dim)} .skin-row .btn{padding:7px 12px;font-size:13px}
+#btnNews.has-news::after{content:"";position:absolute;top:2px;right:4px;width:9px;height:9px;border-radius:50%;background:#ff5f6d;box-shadow:0 0 0 2px var(--night)}
+#btnNews{position:relative}
+.news-item{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);margin:8px 0}
+.news-item.new{border-color:var(--gold);background:rgba(255,200,97,.08)}
+.news-item h4{margin:0 0 4px;font-size:15px;color:var(--gold)} .news-item small{color:var(--ink-dim);font-size:11px}
+.news-item ul{margin:6px 0 0;padding-left:18px} .news-item li{font-size:13px;margin:3px 0;line-height:1.5}
 .cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
 .cls-box b{color:#bcd4ff}
 .tut-ic{font-size:44px;line-height:1;text-align:center;margin:6px 0 2px;filter:drop-shadow(0 0 14px rgba(255,200,97,.55))}
@@ -369,6 +378,7 @@ body.in-ending .top,body.in-ending .scenes,body.in-ending .cta-wrap,body.in-endi
     <button class="tool" id="btnFire"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>จุดพลุ</button>
     <button class="tool" id="btnLantern"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 4h10l2 13H5L7 4z"/><path d="M10 21h4"/></svg>ปล่อยโคม</button>
     <button class="tool" id="btnBattle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5 21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/></svg>ศึกกระทง</button>
+    <button class="tool" id="btnNews"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></svg>ประกาศ</button>
     <button class="tool" id="btnList" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>บอร์ด</button>
   </div>
 </header>
@@ -738,7 +748,7 @@ function drawStarAura(c,k,s,t){ const st=k.stars|0; if(!st) return; const wl=wat
   if(st>=3){ c.save(); c.globalCompositeOperation="lighter"; for(let i=0;i<st-1;i++){ const a=t*.9+i*TAU/(st-1)+sd*5, x=Math.cos(a)*rx, y=wl-s*.15+Math.sin(a)*rx*.22-s*.25*(.5+.5*Math.sin(t*2+i)); const r=Math.max(1,s*.04);
     c.fillStyle=`rgba(${col},.85)`; c.fillRect(x-r*2,y-.5,r*4,1); c.fillRect(x-.5,y-r*2,1,r*4); } c.restore(); } }
 function drawAccessory(c,k,s,t,layer,hasPhoto){
-  const cl=k.cls; if(!cl) return; const P=PROP["cls_"+cl]; if(!P||!P.ok) return; const a=artOf(k.type); const b=a?artBox(a,s):{w:s*2.2,h:s*2.4,top:-s*1.95}; const base=ART_BASE*s, sd=k.seed||0;
+  const cl=k.cls; if(!cl||k.skin) return; const P=PROP["cls_"+cl]; if(!P||!P.ok) return; const a=artOf(artKey(k)); const b=a?artBox(a,s):{w:s*2.2,h:s*2.4,top:-s*1.95}; const base=ART_BASE*s, sd=k.seed||0;
   c.save(); c.imageSmoothingEnabled=false;
   if(layer==="back"&&cl==="warrior"){ const h=b.h*.82, w=h*P.img.width/P.img.height; c.translate(b.w*.34,base-b.h*.2); c.rotate(.08+Math.sin(t*1.6+sd*9)*.04); c.drawImage(P.img,-w*.25,-h,w,h); }
   if(layer==="back"&&cl==="racer"){ const w=b.w*1.32*(1+Math.sin(t*3.2+sd*9)*.035), h=w*P.img.height/P.img.width; c.globalAlpha=.92; c.drawImage(P.img,-w/2,base-b.h*.52-h/2,w,h); }
@@ -752,15 +762,18 @@ function drawAccessory(c,k,s,t,layer,hasPhoto){
 function propDraw(c,n,cx,bottom,w,smooth){ const P=PROP[n]; const h=w*P.img.height/P.img.width; c.save(); c.imageSmoothingEnabled=!!smooth; c.drawImage(P.img,cx-w/2,bottom-h,w,h); c.restore(); return h; }
 /* PixelLab sprites (tools/krathong_art.py); fx/fy = candle flame centre as a fraction of the sprite */
 const KR_ART={banana:{fx:.47,fy:.15},lotus:{fx:.49,fy:.13},bread:{fx:.465,fy:.26},coconut:{fx:.5,fy:.13},pride:{fx:.48,fy:.3},cat:{fx:.44,fy:.15},star:{fx:.47,fy:.26},ganga:{fx:.51,fy:.17,glow:"255,225,150"},
+  skin_warrior:{fx:.45,fy:.22,glow:"140,200,255"},skin_guardian:{fx:.5,fy:.13,glow:"255,215,120"},skin_mystic:{fx:.48,fy:.34,glow:"200,150,255"},skin_racer:{fx:.44,fy:.17,glow:"255,170,240"},
   m_ghost:{fx:.45,fy:.19,glow:"120,170,255"},m_skull:{fx:.38,fy:.15,glow:"150,255,110"},m_swamp:{fx:.51,fy:.21,glow:"200,110,255"},m_serpent:{fx:.49,fy:.16,glow:"210,120,255"},m_hell:{fx:.5,fy:.29,glow:"255,90,50"},m_boss:{fx:.5,fy:.19,glow:"255,50,60"},m_titan:{fx:.5,fy:.33,glow:"255,40,50"},m_wraith:{fx:.48,fy:.2,glow:"120,230,255"},m_spider:{fx:.5,fy:.14,glow:"190,255,90"},m_lich:{fx:.52,fy:.42,glow:"190,110,255"},m_kraken:{fx:.5,fy:.12,glow:"90,230,255"},m_void:{fx:.5,fy:.4,glow:"170,90,255"}};
 for(const [t,a] of Object.entries(KR_ART)){ a.img=new Image(); a.ok=false; a.img.onload=()=>{ a.ok=true; spriteCache.clear(); }; a.img.src="img/kr/"+t+".png"; }
 const ART_W=2.3, ART_BASE=.45;
+// which picture to draw: a class skin (cosmetic) when the owner turned it on, else the krathong's own type
+function artKey(k){ return k.skin&&KR_ART["skin_"+k.skin]?"skin_"+k.skin:k.type; }
 function artOf(type){ const a=KR_ART[type]; return a&&a.ok?a:null; }
 function artBox(a,s){ const w=ART_W*s, h=w*a.img.height/a.img.width; return {w,h,top:ART_BASE*s-h}; }
-function krTop(k,s){ const a=artOf(k.type); return a?-artBox(a,s).top:1.6*s; }
-function flamePos(k,s){ const a=artOf(k.type); if(!a) return {x:0,y:-.71*s}; const b=artBox(a,s); return {x:-b.w/2+a.fx*b.w,y:b.top+a.fy*b.h}; }
+function krTop(k,s){ const a=artOf(artKey(k)); return a?-artBox(a,s).top:1.6*s; }
+function flamePos(k,s){ const a=artOf(artKey(k)); if(!a) return {x:0,y:-.71*s}; const b=artBox(a,s); return {x:-b.w/2+a.fx*b.w,y:b.top+a.fy*b.h}; }
 function krStatic(c,k,s,variant){
-  const a=artOf(k.type);
+  const a=artOf(artKey(k));
   if(a){ const b=artBox(a,s), up=b.w/a.img.width*(c.getTransform?c.getTransform().a:1); c.save(); c.imageSmoothingEnabled=up<1.4; c.drawImage(a.img,-b.w/2,b.top,b.w,b.h); c.restore(); return; }
   const rings=ringsFor(k.type);
   krBase(c,k,s);
@@ -818,8 +831,8 @@ function gangaFx(c,k,s,t,seed){ const a=artOf("ganga"); if(!a) return; const b=a
   const f=flamePos(k,s); for(let i=0;i<5;i++){ const ph=(t*.45+i/5+seed)%1, x=f.x+Math.sin(t*1.7+i*2.1)*s*.25*ph, y=f.y-ph*s*1.6, r=s*.035*(1-ph); c.fillStyle=`rgba(255,225,150,${.85*(1-ph)})`; c.beginPath(); c.arc(x,y,r+.4,0,TAU); c.fill(); }
   c.restore(); }
 function krDynamic(c,k,s,t){
-  if(artOf(k.type)){ const f=flamePos(k,s), seed=k.seed||.3, fl=1+Math.sin(t*17+seed*40)*.12+Math.sin(t*7.3+seed*9)*.08;
-    const cd=CANDLE_BY[k.candle]||CANDLES[0], gc=(KR_ART[k.type]||{}).glow;
+  if(artOf(artKey(k))){ const f=flamePos(k,s), seed=k.seed||.3, fl=1+Math.sin(t*17+seed*40)*.12+Math.sin(t*7.3+seed*9)*.08;
+    const cd=CANDLE_BY[k.candle]||CANDLES[0], gc=(KR_ART[artKey(k)]||{}).glow;
     c.save(); c.globalCompositeOperation="lighter";
     if(gc){ c.fillStyle=rg(c,f.x,f.y,0,s*.6*fl,[[0,`rgba(255,255,255,.4)`],[.3,`rgba(${gc},.3)`],[1,`rgba(${gc},0)`]]); c.beginPath(); c.arc(f.x,f.y,s*.6*fl,0,TAU); c.fill(); c.restore(); return; }
     c.fillStyle=rg(c,f.x,f.y,0,s*.55*fl,[[0,"rgba(255,245,200,.55)"],[.35,"rgba(255,190,90,.22)"],[1,"rgba(255,140,40,0)"]]); c.beginPath(); c.arc(f.x,f.y,s*.55*fl,0,TAU); c.fill();
@@ -849,13 +862,13 @@ function krDynamic(c,k,s,t){
 /* full draw (preview, cards): no cache */
 function krFull(c,k,s,t,photo){
   krStatic(c,k,s,Math.floor((k.seed||0)*4));
-  if(photo) drawPhoto(c,photo,s,k.type);
+  if(photo) drawPhoto(c,photo,s,artKey(k));
   krDynamic(c,k,s,t);
 }
 
 function drawGlow(c,k,s,amp){
   c.save(); c.globalCompositeOperation="lighter";
-  const a=amp||1, gc=(KR_ART[k.type]||{}).glow;
+  const a=amp||1, gc=(KR_ART[artKey(k)]||{}).glow;
   const fp=flamePos(k,s);
   if(gc) c.fillStyle=rg(c,fp.x,fp.y,0,3*s,[[0,`rgba(${gc},${.42*a})`],[.4,`rgba(${gc},${.13*a})`],[1,`rgba(${gc},0)`]]);
   else c.fillStyle=rg(c,fp.x,fp.y,0,2.8*s,[[0,`rgba(255,200,110,${.36*a})`],[.4,`rgba(255,160,60,${.11*a})`],[1,"rgba(255,140,40,0)"]]);
@@ -868,11 +881,11 @@ function drawGlow(c,k,s,amp){
 const spriteCache=new Map();
 function sprite(k,s){
   const sb=Math.max(6,Math.round(s/2)*2), variant=Math.floor((k.seed||0)*4);
-  const key=k.type+"|"+k.candle+"|"+sb+"|"+variant+"|"+DPR+"|"+(artOf(k.type)?"a":"p");
+  const key=artKey(k)+"|"+k.candle+"|"+sb+"|"+variant+"|"+DPR+"|"+(artOf(artKey(k))?"a":"p");
   let sp=spriteCache.get(key);
   if(!sp){
     if(spriteCache.size>360) spriteCache.clear();
-    const a=artOf(k.type), ab=a?artBox(a,sb):null;
+    const a=artOf(artKey(k)), ab=a?artBox(a,sb):null;
     const oy=Math.max(sb*1.35,ab?-ab.top+2:0), w=Math.ceil(Math.max(sb*2.9,ab?ab.w+4:0)), h=Math.ceil(oy+sb*.95), ox=w/2;
     const cvs=document.createElement("canvas"); cvs.width=Math.ceil(w*DPR); cvs.height=Math.ceil(h*DPR);
     const x=cvs.getContext("2d"); x.setTransform(DPR,0,0,DPR,ox*DPR,oy*DPR);
@@ -882,8 +895,8 @@ function sprite(k,s){
   return sp;
 }
 /* sitting in the water: the bottom of the krathong dips below a water line, with its reflection and a ring of ripples */
-function waterLine(k,s){ const a=artOf(k.type); return a?ART_BASE*s-artBox(a,s).h*.14:.3*s; }
-function hullRx(k,s){ const a=artOf(k.type); return a?artBox(a,s).w*.44:s*.95; }
+function waterLine(k,s){ const a=artOf(artKey(k)); return a?ART_BASE*s-artBox(a,s).h*.14:.3*s; }
+function hullRx(k,s){ const a=artOf(artKey(k)); return a?artBox(a,s).w*.44:s*.95; }
 // a soft, blurred copy of each cached sprite, made once, for reflections
 function spriteBlur(sp){ if(sp.bl) return sp.bl; const cv2=document.createElement("canvas"); cv2.width=sp.cvs.width; cv2.height=sp.cvs.height; const x=cv2.getContext("2d");
   try{ x.filter=`blur(${Math.max(1.2,sp.sb*.09)*DPR}px)`; }catch(e){} x.drawImage(sp.cvs,0,0); if(!x.filter||x.filter==="none"){ x.globalAlpha=.5; x.drawImage(sp.cvs,DPR,0); x.drawImage(sp.cvs,-DPR,0); } sp.bl={cvs:cv2,w:sp.w,h:sp.h,ox:sp.ox,oy:sp.oy,sb:sp.sb}; return sp.bl; }
@@ -1424,7 +1437,7 @@ for(let i=0;i<6;i++){ ambient.push({id:"amb"+i,amb:true,type:AMB_TYPES[i],candle
 function sanitize(id,d){
   const k={id, name:clean(d.name,30)||"ไม่ประสงค์ออกนาม", partner:clean(d.partner,30), wish:clean(d.wish,160),
     type:TYPE_BY[d.type]?d.type:"banana", cat:CAT_BY[d.cat]?d.cat:"", candle:CANDLE_BY[d.candle]?d.candle:"white",
-    lv:Math.max(1,+d.lv|0), kills:Math.max(0,+d.kills|0), stars:Math.max(0,Math.min(5,+d.stars|0)), cls:["warrior","guardian","mystic","racer"].includes(d.cls)?d.cls:null,
+    lv:Math.max(1,+d.lv|0), kills:Math.max(0,+d.kills|0), stars:Math.max(0,Math.min(5,+d.stars|0)), cls:["warrior","guardian","mystic","racer"].includes(d.cls)?d.cls:null, skin:["warrior","guardian","mystic","racer"].includes(d.skin)?d.skin:null,
     relics:Array.isArray(d.relics)?d.relics.filter(x=>Array.isArray(x)&&RELICS[x[0]]).slice(0,2).map(x=>[x[0],Math.max(1,Math.min(5,+x[1]|0))]):[],
     lane:Math.min(1,Math.max(0,+d.lane||.5)), seed:Math.min(1,Math.max(0,+d.seed||.5)), createdAt:+d.createdAt||Date.now()};
   if(d.img===true && /^[a-z0-9-]{1,40}$/.test(id)) k.photoUrl=API_IMG(id);
@@ -1540,7 +1553,7 @@ function frame(nowP){
     c.save(); c.rotate(p.rot);
     drawAccessory(c,k,p.s,t,"back",!!photo);
     if(onWater) drawHull(c,sp,p.s,k,t); else blitSprite(c,sp,p.s);
-    if(photo) drawPhoto(c,photo,p.s,k.type);
+    if(photo) drawPhoto(c,photo,p.s,artKey(k));
     drawAccessory(c,k,p.s,t,"front",!!photo);
     krDynamic(c,k,p.s,t);
     if(onWater) drawRelicCharms(c,k,p.s,t);
@@ -1936,7 +1949,7 @@ function starStr(n){ return n?"★".repeat(n):""; }
 function makeFighter(k,isPlayer,o){
   o=o||{}; const st=BSTATS[k.type]||BSTATS.banana, S=statsFor(k.type,o.prog), hs=o.hpS||1, as=o.atkS||1;
   const hp=Math.round(S.hp*hs);
-  return {k:{...k,seed:k.seed??Math.random(),cls:(o.prog&&o.prog.cls)||k.cls||null,stars:(o.prog&&o.prog.stars)||k.stars||0,relics:o.prog?relicsOf(o.prog):(k.relics||[])},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,ramMul:S.ramMul,spMul:S.spMul,critC:S.critC,critM:S.critM,regen:S.regen,hellBurst:S.hellBurst,revive:S.revive,dashMul:S.dashMul,big:o.big||1,boss:!!o.boss,duel:!!o.duel,
+  return {k:{...k,seed:k.seed??Math.random(),cls:(o.prog&&o.prog.cls)||k.cls||null,stars:(o.prog&&o.prog.stars)||k.stars||0,relics:o.prog?relicsOf(o.prog):(k.relics||[]),skin:o.prog?(o.prog.skin&&o.prog.cls?o.prog.cls:null):(k.skin||null)},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,ramMul:S.ramMul,spMul:S.spMul,critC:S.critC,critM:S.critM,regen:S.regen,hellBurst:S.hellBurst,revive:S.revive,dashMul:S.dashMul,big:o.big||1,boss:!!o.boss,duel:!!o.duel,
     x:0,y:0,vx:0,vy:0,alive:true,sinkT:0,buffs:{},hitT:0,aiT:0,skills:[],bump:new Map()};
 }
 function skillsFromSticks(st){ return (st||[]).slice(0,1).map(i=>FORTUNE_SKILL[i]).filter(Boolean); }
@@ -2358,6 +2371,28 @@ function drawEnding(c,t,dt){
   const tx=$("endText"); const nodes=tx.children; const due=Math.floor((k-3.2)/1.8); while(E.shown<nodes.length&&E.shown<=due){ nodes[E.shown].classList.add("show"); E.shown++; sfx("chime"); const ty=H-($("endText").getBoundingClientRect().height)-H*.05+E.shown*22; for(let q=0;q<26;q++){ const a=-Math.PI*Math.random(), sp=rnd(40,160); E.burst.push({x:W/2+rnd(-.3,.3)*Math.min(W,700),y:ty,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,g:40,drag:1.6,life:0,dur:rnd(.7,1.4),r:rnd(1,2.4),c:"255,225,150",star:Math.random()<.4}); } }
   if(E.shown>=nodes.length&&k>3.2+nodes.length*1.8+.8) $("endBtn").hidden=false;
 }
+/* ================= ประกาศอัปเดต: newest first; the newest id is remembered once read ================= */
+const UPDATES=[
+  {id:"2026-11-25",t:"สกินคลาส · ประกาศอัปเดต",items:["🎨 สกินกระทงประจำคลาส 4 แบบ (นักรบ / ผู้พิทักษ์ / จอมเวท / นักซิ่ง) เลือกใส่หรือถอดได้ในหน้าอัปเกรด ค่าพลังไม่เปลี่ยน","🪪 แตะกระทงในแม่น้ำ ดูการ์ดโปรไฟล์ ภาพขยับได้ ซูมได้ พร้อมเลเวล ค่าพลัง และเครื่องราง","🌊 เงาสะท้อนกระทงนุ่มขึ้น กระเพื่อมตามคลื่น","📢 ปุ่มประกาศ บอกว่ามีอะไรใหม่"]},
+  {id:"2026-11-24c",t:"เพลงใหม่ · กระทงคงคาสวรรค์ · ฉากจบ",items:["🎵 เพลงต่อสู้และเพลงบอสใหม่ เพลงเปิดเป็นค่าเริ่มต้น","🙏 ฉากจบ: พระแม่คงคาเสด็จมาอวยพรเมื่อพิชิตชั้น 20","❓ กระทงปริศนา ปลดล็อกที่ปลายทางบาดาล"]},
+  {id:"2026-11-24b",t:"ปาร์ตี้ · เครื่องราง · นรกชั้นใน",items:["🤝 ชวนเพื่อน 2 ลำลงดันเจี้ยน สู้ด้วย AI เจ้าของได้ส่วนแบ่ง 20%","🎁 หีบสมบัติกาชา 4 แรร์ + เครื่องรางเซ็ต 4 เซ็ต ใส่ครบได้สกิลเซ็ต","🔥 ดันเจี้ยนชั้น 11–20 ปีศาจใหม่ บอสดรอปของ"]},
+  {id:"2026-11-24a",t:"ดันเจี้ยนบาดาล",items:["🏰 ดันเจี้ยน 10 ชั้น กระทงปีศาจ ราชาปีศาจยักษ์","🛡 คลาสปลดที่ Lv.20 · 📖 หน้าวิธีเล่น"]}
+];
+function newsUnseen(){ return lsGet("lk.news","")!==UPDATES[0].id; }
+function setNewsBadge(){ $("btnNews").classList.toggle("has-news",newsUnseen()); }
+function openNews(){
+  const seen=lsGet("lk.news","");
+  showCard(card=>{
+    card.append(el("div","kind","📢 ประกาศอัปเดต")); card.append(el("h3",null,"มีอะไรใหม่ในลอยกระทงออนไลน์"));
+    let isNew=true; for(const u of UPDATES){ if(u.id===seen) isNew=false; const d=el("div","news-item"+(isNew?" new":"")); d.append(el("h4",null,(isNew?"🆕 ":"")+u.t)); d.append(el("small",null,u.id.slice(0,10))); const ul=el("ul"); for(const it of u.items) ul.append(el("li",null,it)); d.append(ul); card.append(d); }
+    const acts=el("div","acts"); backBtn(acts,"รับทราบ",closeCard); card.append(acts);
+  });
+  lsSet("lk.news",UPDATES[0].id); setNewsBadge();
+}
+$("btnNews").addEventListener("click",()=>{ unlockAudio(); openNews(); });
+setNewsBadge();
+// show the newest update once to returning visitors (first-time visitors just get the badge)
+setTimeout(()=>{ if(newsUnseen()&&lsGet("lk.visited",0)&&$("card").hidden&&!battle) openNews(); lsSet("lk.visited",1); },2500);
 function openPractice(){
   showCard(card=>{
     card.append(el("div","kind","ฝึกซ้อม"));
@@ -2397,7 +2432,9 @@ function openUpgrade(id){
       box.append(ab); }
     { const cb=el("div","ascend cls-box"), can=classOpen(P); cb.append(el("b",null,P.cls?`คลาส: ${CLASS_INFO[P.cls].n}`:can?"ปลดล็อกคลาสแล้ว! เลือกได้เลย":`คลาส · ปลดล็อกที่ Lv.${CLASS_LV}`));
       cb.append(el("small",null,P.cls?CLASS_INFO[P.cls].d:can?"เลือกครั้งแรกฟรี ได้โบนัสค่าพลังและสกิลคลาสเพิ่มอีก 1 สกิล":`กด + อัปค่าพลังอีก ${CLASS_LV-P.level} ครั้ง (ค่าไหนก็ได้) ก็เลือกคลาสได้`));
-      const cbt=el("button","btn"+(P.cls||!can?"":" primary"),P.cls?`เปลี่ยนคลาส (${CLASS_COST})`:"เลือกคลาส"); cbt.disabled=!can; cbt.addEventListener("click",()=>openClassPicker(id)); cb.append(cbt); card.insertBefore(cb,tbl); }
+      const cbt=el("button","btn"+(P.cls||!can?"":" primary"),P.cls?`เปลี่ยนคลาส (${CLASS_COST})`:"เลือกคลาส"); cbt.disabled=!can; cbt.addEventListener("click",()=>openClassPicker(id)); cb.append(cbt); card.insertBefore(cb,tbl);
+      if(P.cls){ const sk=el("div","skin-row"); const im=document.createElement("img"); im.src="img/kr/skin_"+P.cls+".png"; im.alt=""; sk.append(im); const tx=el("div"); tx.append(el("b",null,`สกินคลาส: ${CLASS_INFO[P.cls].n}`)); tx.append(el("small",null,P.skin?"กำลังใช้อยู่ · คนอื่นเห็นในแม่น้ำด้วย (ค่าพลังไม่เปลี่ยน)":"เปลี่ยนหน้าตากระทงเป็นแบบประจำคลาส ค่าพลังไม่เปลี่ยน")); sk.append(tx);
+        const tg=el("button","btn"+(P.skin?"":" primary"),P.skin?"ถอดสกิน":"ใส่สกิน"); tg.addEventListener("click",async()=>{ tg.disabled=true; try{ const j=await post("?action=skin",{id,token:tokens[id],on:!P.skin}); myProgs[id].prog=j.prog; const kk=kOf(id); if(kk) kk.skin=j.prog.skin?j.prog.cls:null; spriteCache.clear(); sfx("bless"); toast(j.prog.skin?"ใส่สกินแล้ว!":"ถอดสกินแล้ว"); openUpgrade(id); }catch(e){ toast(e.message); tg.disabled=false; } }); sk.append(tg); cb.after(sk); } }
     if(box) card.append(box);
     card.append(el("b",null,"เครื่องราง (แตะเพื่อเปลี่ยน)")); card.append(relicSlots(P,id));
     card.append(el("div","meta","ติดตัว: "+st.pas));
@@ -2796,7 +2833,7 @@ function drawFighter(c,f,t){
   if(sk){ c.beginPath(); c.rect(-s*4,-s*4,s*8,s*4+waterLine(f.k,s)-sk*s*1.2); c.clip(); blitSprite(c,sp,s); }
   else drawHull(c,sp,s,f.k,t);
   if(!sk&&f.flashT>0){ f.flashT=Math.max(0,f.flashT-1/60); c.save(); c.globalCompositeOperation="lighter"; c.globalAlpha=f.flashT/.18*.8; blitSprite(c,sp,s); c.restore(); }
-  if(photo) drawPhoto(c,photo,s,f.k.type);
+  if(photo) drawPhoto(c,photo,s,artKey(f.k));
   if(!sk) drawAccessory(c,f.k,s,t,"front",!!photo);
   if(!sk){ krDynamic(c,f.k,s,t); drawRelicCharms(c,f.k,s,t); } else { const fp=flamePos(f.k,s); c.strokeStyle="rgba(200,200,220,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(fp.x,fp.y); for(let j=1;j<6;j++) c.lineTo(fp.x+Math.sin(t*2+j)*s*.15*j,fp.y-j*s*.25); c.stroke(); }
   c.restore();
@@ -3183,7 +3220,7 @@ function kshowStage(k,tier){
     c.save(); c.translate(x,y);
     for(let i=ripples2.length-1;i>=0;i--){ const q=ripples2[i]; q.life+=1/60; if(q.life>2.2){ ripples2.splice(i,1); continue; } const rr=sz*(1+q.life*1.2); c.strokeStyle=`rgba(210,230,255,${.3*(1-q.life/2.2)})`; c.lineWidth=1.2; c.beginPath(); c.ellipse(0,waterLine(kk,sz),rr,rr*.22,0,0,TAU); c.stroke(); }
     drawReflection(c,kk,sz,sp,t,0,.32); drawStarAura(c,kk,sz,t); drawRelicAura(c,kk,sz,t); drawContactShadow(c,kk,sz); drawGlow(c,kk,sz,1);
-    c.save(); c.rotate(rot); drawAccessory(c,kk,sz,t,"back",!!photo); drawHull(c,sp,sz,kk,t); if(photo) drawPhoto(c,photo,sz,kk.type); drawAccessory(c,kk,sz,t,"front",!!photo); krDynamic(c,kk,sz,t); drawRelicCharms(c,kk,sz,t); c.restore();
+    c.save(); c.rotate(rot); drawAccessory(c,kk,sz,t,"back",!!photo); drawHull(c,sp,sz,kk,t); if(photo) drawPhoto(c,photo,sz,artKey(kk)); drawAccessory(c,kk,sz,t,"front",!!photo); krDynamic(c,kk,sz,t); drawRelicCharms(c,kk,sz,t); c.restore();
     drawWaterRing(c,kk,sz,t); c.restore();
     // fireflies
     c.save(); c.globalCompositeOperation="lighter"; for(let i=0;i<8;i++){ const fx=W2*(.1+.8*((i*.37+t*.02)%1)), fy=hor2+H2*.1+Math.sin(t*.8+i*2)*H2*.08, a=Math.max(0,Math.sin(t*2+i)); c.fillStyle=`rgba(210,255,140,${a*.8})`; c.beginPath(); c.arc(fx,fy,1.6,0,TAU); c.fill(); } c.restore(); };

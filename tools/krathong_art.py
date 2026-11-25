@@ -29,6 +29,10 @@ DESC = {
  'pride':   "rainbow krathong with a banana-leaf base and pleated petals in rainbow colors red orange yellow green blue purple, white jasmine flowers",
  'cat':     "cute cat-shaped krathong made of green banana leaves with two pointy cat ears and a happy cat face with whiskers on the front, pink flowers",
  'ganga':   "divine celestial krathong blessed by the Thai river goddess, layered white lotus petals edged with shining gold leaf, a small golden Thai naga serpent coiled around the base with its crested head raised, glowing turquoise water droplets and tiny golden sparkles floating around it, a golden-cyan sacred candle flame, majestic and holy",
+ 'skin_warrior':  "a fierce war krathong for a water warrior class, petals shaped like polished silver sword blades and spearheads layered in a ring, a round bronze war-shield base with a blue wave emblem, small blue battle banners on thin poles, a deep blue and silver color scheme",
+ 'skin_guardian': "a heavy fortress krathong for a guardian class, thick golden lotus petals shaped like armored plates with rivets, a sturdy round tower-like base with tiny crenellations, a large golden shield crest with a lotus emblem on the front, gold and ivory color scheme",
+ 'skin_mystic':   "an arcane krathong for a moon mage class, translucent violet crystal lotus petals with glowing silver rune engravings, a small floating crescent moon and orbiting tiny magic orbs above, a dark indigo base with a glowing magic circle, violet silver and midnight blue color scheme",
+ 'skin_racer':    "a sleek speed krathong for a rainbow racer class, a streamlined aerodynamic boat-like hull with swept-back fin petals like wings, rainbow light streaks along its sides, a pointed prow, white and rainbow gradient color scheme with motion lines",
  'star':    "magical crystal krathong with translucent glowing cyan and violet star-shaped crystal petals on a deep indigo base studded with golden sequins, tiny sparkles",
 }
 if __name__ == '__main__':

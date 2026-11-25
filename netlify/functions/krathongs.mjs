@@ -58,7 +58,7 @@ function rollRelic(p) {
 }
 const floorReward = (f) => (15 + 12 * f) * (f % 5 === 0 ? 2 : 1);
 const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; out.push(pool[Math.floor(Math.random() * pool.length)]); return out; };
-const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, tickets: p.tickets || 0, inv: p.inv || {}, relics: p.relics || [], pity: p.pity || 0, assists: p.assists || 0, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
+const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, tickets: p.tickets || 0, inv: p.inv || {}, relics: p.relics || [], pity: p.pity || 0, assists: p.assists || 0, skin: !!p.skin, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
 function newProg(item, token) {
   return { id: item.id, key: item.key, name: item.name, type: item.type, tokenHash: sha(token), coins: START_COINS,
     lv: { hp: 0, atk: 0, def: 0, spd: 0, sk: 0 }, sticks: null, kills: 0, wins: 0, losses: 0, defWins: 0, defLosses: 0, lastBattle: 0 };
@@ -66,7 +66,7 @@ function newProg(item, token) {
 async function findKey(store, id) { const { blobs } = await store.list({ prefix: "k/" }); const hit = blobs.find((b) => b.key.endsWith("-" + id)); return hit ? hit.key : null; }
 async function syncSummary(store, p) {
   if (!p.key) return; const it = await store.get(p.key, { type: "json" }); if (!it) return;
-  it.lv = level(p); it.kills = p.kills || 0; it.stars = p.stars || 0; it.cls = p.cls || null; it.relics = (p.relics || []).map((r) => [r, p.inv?.[r] || 1]); await store.setJSON(p.key, it);
+  it.lv = level(p); it.kills = p.kills || 0; it.stars = p.stars || 0; it.cls = p.cls || null; it.relics = (p.relics || []).map((r) => [r, p.inv?.[r] || 1]); it.skin = p.skin && p.cls ? p.cls : null; await store.setJSON(p.key, it);
 }
 
 const json = (body, status = 200, extra = {}) =>
@@ -190,6 +190,11 @@ export default async (req, context) => {
         const cost = ascendCost(p); if (p.coins < cost) return json({ error: "เหรียญไม่พอ" }, 400);
         p.coins -= cost; p.stars = (p.stars || 0) + 1;
         await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        return json({ prog: publicProg(p) });
+      }
+      if (action === "skin") {                          // cosmetic: show the class skin instead of the krathong's own look
+        if (!p.cls) return json({ error: "เลือกคลาสก่อนจึงจะใช้สกินคลาสได้" }, 400);
+        p.skin = !!b.on; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         return json({ prog: publicProg(p) });
       }
       if (action === "class") {
