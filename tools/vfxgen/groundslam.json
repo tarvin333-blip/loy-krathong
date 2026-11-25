@@ -1,0 +1,391 @@
+{
+ "frames": [
+  {
+   "filename": "lk-groundslam 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 1.png",
+   "frame": {
+    "x": 130,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 2.png",
+   "frame": {
+    "x": 260,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 3.png",
+   "frame": {
+    "x": 390,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 4.png",
+   "frame": {
+    "x": 0,
+    "y": 128,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 5.png",
+   "frame": {
+    "x": 130,
+    "y": 128,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 6.png",
+   "frame": {
+    "x": 260,
+    "y": 128,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 7.png",
+   "frame": {
+    "x": 390,
+    "y": 128,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 8.png",
+   "frame": {
+    "x": 0,
+    "y": 256,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 9.png",
+   "frame": {
+    "x": 130,
+    "y": 256,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 10.png",
+   "frame": {
+    "x": 260,
+    "y": 256,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 11.png",
+   "frame": {
+    "x": 390,
+    "y": 256,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 12.png",
+   "frame": {
+    "x": 0,
+    "y": 384,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-groundslam 13.png",
+   "frame": {
+    "x": 130,
+    "y": 384,
+    "w": 130,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 130,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 130,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4461538461538462,
+    "y": 0.6171875
+   },
+   "duration": 63
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-groundslam.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 520,
+   "h": 512
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 58,
+   "y": 79
+  },
+  "frameTags": [
+   {
+    "name": "lk-groundslam",
+    "from": 0,
+    "to": 13,
+    "direction": "forward"
+   }
+  ]
+ }
+}

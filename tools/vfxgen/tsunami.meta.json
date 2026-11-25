@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "304e1e8a-ac10-451a-b02d-b0b65aefdb2a",
+  "canvas": {
+   "h": 168,
+   "w": 240
+  },
+  "frames": 16,
+  "fps": 12,
+  "loop": false,
+  "anchor": {
+   "x": 100,
+   "y": 152,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-tsunami.gif": "https://api.pixellab.ai/mcp/pixel-tools/64c968ba-b9c7-43ca-9bfd-13ebb15977ff/lk-tsunami.gif",
+  "lk-tsunami.png": "https://api.pixellab.ai/mcp/pixel-tools/64c968ba-b9c7-43ca-9bfd-13ebb15977ff/lk-tsunami.png",
+  "lk-tsunami.json": "https://api.pixellab.ai/mcp/pixel-tools/64c968ba-b9c7-43ca-9bfd-13ebb15977ff/lk-tsunami.json"
+ }
+}

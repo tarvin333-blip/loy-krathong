@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "bca1b792-1503-4846-9883-32d0e0341479",
+  "canvas": {
+   "h": 40,
+   "w": 128
+  },
+  "frames": 12,
+  "fps": 16,
+  "loop": false,
+  "anchor": {
+   "x": 64,
+   "y": 20,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-comettrail.gif": "https://api.pixellab.ai/mcp/pixel-tools/3e89e7b0-8fc4-47d0-ba42-78afca4273e4/lk-comettrail.gif",
+  "lk-comettrail.png": "https://api.pixellab.ai/mcp/pixel-tools/3e89e7b0-8fc4-47d0-ba42-78afca4273e4/lk-comettrail.png",
+  "lk-comettrail.json": "https://api.pixellab.ai/mcp/pixel-tools/3e89e7b0-8fc4-47d0-ba42-78afca4273e4/lk-comettrail.json"
+ }
+}

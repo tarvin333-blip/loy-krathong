@@ -1,0 +1,391 @@
+{
+ "frames": [
+  {
+   "filename": "lk-holylotus 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 1.png",
+   "frame": {
+    "x": 72,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 2.png",
+   "frame": {
+    "x": 144,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 3.png",
+   "frame": {
+    "x": 216,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 4.png",
+   "frame": {
+    "x": 0,
+    "y": 136,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 5.png",
+   "frame": {
+    "x": 72,
+    "y": 136,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 6.png",
+   "frame": {
+    "x": 144,
+    "y": 136,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 7.png",
+   "frame": {
+    "x": 216,
+    "y": 136,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 8.png",
+   "frame": {
+    "x": 0,
+    "y": 272,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 9.png",
+   "frame": {
+    "x": 72,
+    "y": 272,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 10.png",
+   "frame": {
+    "x": 144,
+    "y": 272,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 11.png",
+   "frame": {
+    "x": 216,
+    "y": 272,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 12.png",
+   "frame": {
+    "x": 0,
+    "y": 408,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  },
+  {
+   "filename": "lk-holylotus 13.png",
+   "frame": {
+    "x": 72,
+    "y": 408,
+    "w": 72,
+    "h": 136
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 72,
+    "h": 136
+   },
+   "sourceSize": {
+    "w": 72,
+    "h": 136
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.7794117647058824
+   },
+   "duration": 71
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-holylotus.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 288,
+   "h": 544
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 36,
+   "y": 106
+  },
+  "frameTags": [
+   {
+    "name": "lk-holylotus",
+    "from": 0,
+    "to": 13,
+    "direction": "forward"
+   }
+  ]
+ }
+}

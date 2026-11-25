@@ -1,0 +1,339 @@
+{
+ "frames": [
+  {
+   "filename": "lk-comettrail 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 1.png",
+   "frame": {
+    "x": 128,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 2.png",
+   "frame": {
+    "x": 256,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 3.png",
+   "frame": {
+    "x": 384,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 4.png",
+   "frame": {
+    "x": 0,
+    "y": 40,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 5.png",
+   "frame": {
+    "x": 128,
+    "y": 40,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 6.png",
+   "frame": {
+    "x": 256,
+    "y": 40,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 7.png",
+   "frame": {
+    "x": 384,
+    "y": 40,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 8.png",
+   "frame": {
+    "x": 0,
+    "y": 80,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 9.png",
+   "frame": {
+    "x": 128,
+    "y": 80,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 10.png",
+   "frame": {
+    "x": 256,
+    "y": 80,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  },
+  {
+   "filename": "lk-comettrail 11.png",
+   "frame": {
+    "x": 384,
+    "y": 80,
+    "w": 128,
+    "h": 40
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 40
+   },
+   "sourceSize": {
+    "w": 128,
+    "h": 40
+   },
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "duration": 63
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-comettrail.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 512,
+   "h": 120
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 64,
+   "y": 20
+  },
+  "frameTags": [
+   {
+    "name": "lk-comettrail",
+    "from": 0,
+    "to": 11,
+    "direction": "forward"
+   }
+  ]
+ }
+}

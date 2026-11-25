@@ -37,6 +37,9 @@ const sha = (t) => createHash("sha256").update(String(t)).digest("hex");
 const newToken = () => randomBytes(18).toString("base64url");
 const level = (p) => 1 + STATS.reduce((a, k) => a + (p.lv?.[k] || 0), 0);
 const CLASSES = ["warrior", "guardian", "mystic", "racer"];
+// class tier 2: each class branches into two advanced classes (needs ★1 and dungeon floor 10)
+const ADV = { warrior: ["tidelord", "stormblade"], guardian: ["paladin", "yaksha"], mystic: ["chrono", "solar"], racer: ["phantom", "comet"] };
+const ADV_COST = 1000, ADV_SWITCH = 300;
 const capOf = (p) => MAX_LV + 5 * (p.stars || 0);                // each star lifts every stat cap by 5
 const ascendCost = (p) => 2500 * ((p.stars || 0) + 1);
 const DUNGEON_FLOORS = 20, DUNGEON_MIN_SEC_PER_FLOOR = 9, DUNGEON_CLEAR_BONUS = 500, DEEP_CLEAR_BONUS = 1500;
@@ -58,7 +61,7 @@ function rollRelic(p) {
 }
 const floorReward = (f) => (15 + 12 * f) * (f % 5 === 0 ? 2 : 1);
 const drawSticks = () => { const pool = [...Array(N_FORTUNES).keys()], out = []; out.push(pool[Math.floor(Math.random() * pool.length)]); return out; };
-const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, tickets: p.tickets || 0, inv: p.inv || {}, relics: p.relics || [], pity: p.pity || 0, assists: p.assists || 0, skin: !!p.skin, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
+const publicProg = (p) => p && ({ id: p.id, name: p.name, type: p.type, lv: p.lv, level: level(p), coins: p.coins, kills: p.kills || 0, respecs: p.respecs || 0, stars: p.stars || 0, cls: p.cls || null, cap: capOf(p), pve: p.pve || 1, bestPve: p.bestPve || 0, bestDungeon: p.bestDungeon || 0, tickets: p.tickets || 0, inv: p.inv || {}, relics: p.relics || [], pity: p.pity || 0, assists: p.assists || 0, skin: !!p.skin, adv: p.adv || null, wins: p.wins || 0, losses: p.losses || 0, defWins: p.defWins || 0, defLosses: p.defLosses || 0, sticks: p.sticks || null });
 function newProg(item, token) {
   return { id: item.id, key: item.key, name: item.name, type: item.type, tokenHash: sha(token), coins: START_COINS,
     lv: { hp: 0, atk: 0, def: 0, spd: 0, sk: 0 }, sticks: null, kills: 0, wins: 0, losses: 0, defWins: 0, defLosses: 0, lastBattle: 0 };
@@ -66,7 +69,7 @@ function newProg(item, token) {
 async function findKey(store, id) { const { blobs } = await store.list({ prefix: "k/" }); const hit = blobs.find((b) => b.key.endsWith("-" + id)); return hit ? hit.key : null; }
 async function syncSummary(store, p) {
   if (!p.key) return; const it = await store.get(p.key, { type: "json" }); if (!it) return;
-  it.lv = level(p); it.kills = p.kills || 0; it.stars = p.stars || 0; it.cls = p.cls || null; it.relics = (p.relics || []).map((r) => [r, p.inv?.[r] || 1]); it.skin = p.skin && p.cls ? p.cls : null; await store.setJSON(p.key, it);
+  it.lv = level(p); it.kills = p.kills || 0; it.stars = p.stars || 0; it.cls = p.cls || null; it.relics = (p.relics || []).map((r) => [r, p.inv?.[r] || 1]); it.skin = p.skin && p.cls ? (p.adv ? "adv_" + p.adv : "skin_" + p.cls) : null; it.adv = p.adv || null; await store.setJSON(p.key, it);
 }
 
 const json = (body, status = 200, extra = {}) =>
@@ -197,12 +200,20 @@ export default async (req, context) => {
         p.skin = !!b.on; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         return json({ prog: publicProg(p) });
       }
+      if (action === "advance") {
+        const a = String(b.adv || ""); if (!p.cls || !ADV[p.cls].includes(a)) return json({ error: "สายนี้ไม่ใช่ของคลาสคุณ" }, 400);
+        if (!((p.stars || 0) >= 1 && (p.bestDungeon || 0) >= 10)) return json({ error: "เลื่อนขั้นคลาสได้เมื่อได้ ★1 และผ่านดันเจี้ยนชั้น 10" }, 400);
+        if (p.adv === a) return json({ prog: publicProg(p) });
+        const cost = p.adv ? ADV_SWITCH : ADV_COST; if (p.coins < cost) return json({ error: "เหรียญไม่พอ" }, 400);
+        p.coins -= cost; p.adv = a; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        return json({ prog: publicProg(p) });
+      }
       if (action === "class") {
         const c = String(b.cls || ""); if (!CLASSES.includes(c)) return json({ error: "ไม่มีคลาสนี้" }, 400);
         if (level(p) < CLASS_UNLOCK_LV && !(p.stars >= 1)) return json({ error: `ปลดล็อกคลาสเมื่อกระทงถึง Lv.${CLASS_UNLOCK_LV}` }, 400);
         if (p.cls === c) return json({ prog: publicProg(p) });
         if (p.cls) { if (p.coins < CLASS_CHANGE_COST) return json({ error: "เหรียญไม่พอ" }, 400); p.coins -= CLASS_CHANGE_COST; }
-        p.cls = c; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        p.cls = c; p.adv = null; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         return json({ prog: publicProg(p) });
       }
       if (action === "dungeon_start") {

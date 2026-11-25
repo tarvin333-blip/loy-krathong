@@ -347,6 +347,14 @@ body.in-ending .top,body.in-ending .scenes,body.in-ending .cta-wrap,body.in-endi
 .news-item h4{margin:0 0 4px;font-size:15px;color:var(--gold)} .news-item small{color:var(--ink-dim);font-size:11px}
 .news-item ul{margin:6px 0 0;padding-left:18px} .news-item li{font-size:13px;margin:3px 0;line-height:1.5}
 .bskills .sk.act{border-style:double;border-width:3px}
+.adv-box{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;margin:-2px 0 8px;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,190,240,.4);background:linear-gradient(90deg,rgba(255,150,230,.12),rgba(140,200,255,.08))}
+.adv-box b{font-size:13px;color:#ffd0f2} .adv-box small{grid-column:1;font-size:11px;color:var(--ink-dim)} .adv-box .btn{grid-row:1/3;grid-column:2;padding:7px 12px;font-size:13px}
+.adv-list{display:grid;gap:8px;margin:10px 0}
+.adv-card{display:flex;gap:10px;align-items:center;text-align:left;width:100%;padding:10px;border-radius:14px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:var(--ink);font:inherit;cursor:pointer}
+.adv-card.on{border-color:var(--gold);background:rgba(255,200,97,.12)}
+.adv-card img{width:84px;height:84px;object-fit:contain;image-rendering:pixelated;flex:none;filter:drop-shadow(0 0 10px rgba(255,220,160,.4))}
+.adv-card b{display:block;font-size:15px;color:#ffe2a0} .adv-card small{display:block;font-size:11.5px;color:var(--ink-dim);margin-top:2px}
+.adv-card .adv-sk{color:#bfe3ff} .adv-card .adv-act{color:#ffd0f2}
 .cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
 .cls-box b{color:#bcd4ff}
 .tut-ic{font-size:44px;line-height:1;text-align:center;margin:6px 0 2px;filter:drop-shadow(0 0 14px rgba(255,200,97,.55))}
@@ -763,12 +771,14 @@ function drawAccessory(c,k,s,t,layer,hasPhoto){
 function propDraw(c,n,cx,bottom,w,smooth){ const P=PROP[n]; const h=w*P.img.height/P.img.width; c.save(); c.imageSmoothingEnabled=!!smooth; c.drawImage(P.img,cx-w/2,bottom-h,w,h); c.restore(); return h; }
 /* PixelLab sprites (tools/krathong_art.py); fx/fy = candle flame centre as a fraction of the sprite */
 const KR_ART={banana:{fx:.47,fy:.15},lotus:{fx:.49,fy:.13},bread:{fx:.465,fy:.26},coconut:{fx:.5,fy:.13},pride:{fx:.48,fy:.3},cat:{fx:.44,fy:.15},star:{fx:.47,fy:.26},ganga:{fx:.51,fy:.17,glow:"255,225,150"},
+  adv_tidelord:{fx:.42,fy:.1,glow:"120,200,255"},adv_stormblade:{fx:.52,fy:.25,glow:"120,230,255"},adv_paladin:{fx:.51,fy:.2,glow:"255,235,170"},adv_yaksha:{fx:.46,fy:.55,glow:"255,180,90"},
+  adv_chrono:{fx:.45,fy:.22,glow:"255,220,140"},adv_solar:{fx:.5,fy:.33,glow:"255,160,60"},adv_phantom:{fx:.45,fy:.4,glow:"200,150,255"},adv_comet:{fx:.2,fy:.35,glow:"255,230,200"},
   skin_warrior:{fx:.45,fy:.22,glow:"140,200,255"},skin_guardian:{fx:.5,fy:.13,glow:"255,215,120"},skin_mystic:{fx:.48,fy:.34,glow:"200,150,255"},skin_racer:{fx:.44,fy:.17,glow:"255,170,240"},
   m_ghost:{fx:.45,fy:.19,glow:"120,170,255"},m_skull:{fx:.38,fy:.15,glow:"150,255,110"},m_swamp:{fx:.51,fy:.21,glow:"200,110,255"},m_serpent:{fx:.49,fy:.16,glow:"210,120,255"},m_hell:{fx:.5,fy:.29,glow:"255,90,50"},m_boss:{fx:.5,fy:.19,glow:"255,50,60"},m_titan:{fx:.5,fy:.33,glow:"255,40,50"},m_wraith:{fx:.48,fy:.2,glow:"120,230,255"},m_spider:{fx:.5,fy:.14,glow:"190,255,90"},m_lich:{fx:.52,fy:.42,glow:"190,110,255"},m_kraken:{fx:.5,fy:.12,glow:"90,230,255"},m_void:{fx:.5,fy:.4,glow:"170,90,255"}};
 for(const [t,a] of Object.entries(KR_ART)){ a.img=new Image(); a.ok=false; a.img.onload=()=>{ a.ok=true; spriteCache.clear(); }; a.img.src="img/kr/"+t+".png"; }
 const ART_W=2.3, ART_BASE=.45;
 // which picture to draw: a class skin (cosmetic) when the owner turned it on, else the krathong's own type
-function artKey(k){ return k.skin&&KR_ART["skin_"+k.skin]?"skin_"+k.skin:k.type; }
+function artKey(k){ return !k.skin?k.type:KR_ART[k.skin]?k.skin:KR_ART["skin_"+k.skin]?"skin_"+k.skin:k.type; }
 function artOf(type){ const a=KR_ART[type]; return a&&a.ok?a:null; }
 function artBox(a,s){ const w=ART_W*s, h=w*a.img.height/a.img.width; return {w,h,top:ART_BASE*s-h}; }
 function krTop(k,s){ const a=artOf(artKey(k)); return a?-artBox(a,s).top:1.6*s; }
@@ -1438,7 +1448,7 @@ for(let i=0;i<6;i++){ ambient.push({id:"amb"+i,amb:true,type:AMB_TYPES[i],candle
 function sanitize(id,d){
   const k={id, name:clean(d.name,30)||"ไม่ประสงค์ออกนาม", partner:clean(d.partner,30), wish:clean(d.wish,160),
     type:TYPE_BY[d.type]?d.type:"banana", cat:CAT_BY[d.cat]?d.cat:"", candle:CANDLE_BY[d.candle]?d.candle:"white",
-    lv:Math.max(1,+d.lv|0), kills:Math.max(0,+d.kills|0), stars:Math.max(0,Math.min(5,+d.stars|0)), cls:["warrior","guardian","mystic","racer"].includes(d.cls)?d.cls:null, skin:["warrior","guardian","mystic","racer"].includes(d.skin)?d.skin:null,
+    lv:Math.max(1,+d.lv|0), kills:Math.max(0,+d.kills|0), stars:Math.max(0,Math.min(5,+d.stars|0)), cls:["warrior","guardian","mystic","racer"].includes(d.cls)?d.cls:null, skin:typeof d.skin==="string"&&/^(skin|adv)_[a-z]+$/.test(d.skin)?d.skin:null, adv:typeof d.adv==="string"&&/^[a-z]+$/.test(d.adv)?d.adv:null,
     relics:Array.isArray(d.relics)?d.relics.filter(x=>Array.isArray(x)&&RELICS[x[0]]).slice(0,2).map(x=>[x[0],Math.max(1,Math.min(5,+x[1]|0))]):[],
     lane:Math.min(1,Math.max(0,+d.lane||.5)), seed:Math.min(1,Math.max(0,+d.seed||.5)), createdAt:+d.createdAt||Date.now()};
   if(d.img===true && /^[a-z0-9-]{1,40}$/.test(id)) k.photoUrl=API_IMG(id);
@@ -1847,6 +1857,14 @@ const SKILLS={
   hellfire:{n:"เสาเพลิงนรก",d:"เสาไฟผุดใต้ศัตรู ดาเมจ 30",cost:50,c:"255,90,60",sig:1,mon:1},
   abyss:{n:"เพลิงบาดาลปะทุ",d:"ไฟนรกปะทุใต้ศัตรู ดาเมจ 40 กระเด็น",cost:45,c:"255,60,60",sig:1,mon:1},
   doom:{n:"วงแหวนวันสิ้นโลก",d:"คลื่นปีศาจแผ่ทั้งสนาม ดาเมจ 26 และสาป",cost:60,c:"255,40,80",sig:1,mon:1},
+  tsunami:{n:"สึนามิพิโรธ",d:"คลื่นยักษ์กวาดทั้งสนาม ลำละ 38 กระเด็นไกล",cost:60,c:"110,190,255",sig:1,cls:1},
+  stormslash:{n:"ฟันพายุสามจังหวะ",d:"พุ่งฟันสายฟ้า 3 ครั้ง ครั้งละ 30 ติดคริ",cost:55,c:"140,230,255",sig:1,cls:1},
+  holylotus:{n:"บัวศักดิ์สิทธิ์",d:"ฟื้น HP ทั้งทีม 25% และเกราะ 3 วิ",cost:55,c:"255,235,170",sig:1,cls:1},
+  yakshaclub:{n:"กระบองยักษ์",d:"ทุบพื้น ศัตรูรอบตัวดาเมจ 32 และมึน 1.5 วิ",cost:55,c:"255,190,90",sig:1,cls:1},
+  timestop:{n:"หยุดกาล",d:"หยุดเวลาศัตรูทั้งสนาม 1.5 วิ (บอส 0.8 วิ)",cost:65,c:"255,220,140",sig:1,cls:1},
+  solarnova:{n:"อาทิตย์ดับ",d:"ระเบิดสุริยะรอบตัว ดาเมจ 55 (ไกลลดลง)",cost:60,c:"255,160,60",sig:1,cls:1},
+  stormclones:{n:"ร่างแยกพายุ",d:"เรียกร่างเงา 2 ร่างมาช่วยสู้ 5 วิ",cost:55,c:"200,150,255",sig:1,cls:1},
+  cometdash:{n:"พุ่งดาวหาง",d:"พุ่งทะลุข้ามจอ ศัตรูที่ขวางโดน 42 · อมตะระหว่างพุ่ง",cost:50,c:"255,230,200",sig:1,cls:1},
   gangablessing:{n:"คงคาประทานพร",d:"คลื่นศักดิ์สิทธิ์ซัดศัตรูทุกตัว 30 · ฟื้น HP ทั้งทีม 20% · ล้างสถานะร้าย",cost:55,c:"255,225,150",sig:1},
   nagawrath:{n:"นาคาพิโรธ",d:"พญานาคซัดคลื่นใส่ศัตรูทุกตัว ลำละ 34 กระเด็น",cost:60,c:"80,230,210",sig:1,set:1},
   moonward:{n:"แสงจันทร์คุ้มภัย",d:"ฟื้น HP 25% · เกราะ 3 วิ · ล้างพิษ/สาป/ช้า",cost:55,c:"220,230,255",sig:1,set:1},
@@ -1869,6 +1887,20 @@ const CLASS_INFO={
   mystic:{n:"จอมเวทจันทรา",d:"พลังสกิล +25% และ SP มาไว +30% · ความสามารถ: เพอร์เฟคดอดจ์ (หน่วงเวลา)",skill:"chain"},
   racer:{n:"นักซิ่งสายรุ้ง",d:"SPD +12% และชนติดคริ +15% · ความสามารถ: เพอร์เฟคดอดจ์ (หน่วงเวลา)",skill:"phantom"}
 };
+// class tier 2 (needs ★1 + dungeon floor 10): two branches per class, each with its own skill, action upgrade and skin
+const ADV_INFO={
+  tidelord:{base:"warrior",n:"ขุนพลวารี",d:"ATK/HP +10% · สายตีหมู่",skill:"tsunami",act:"แพรี่สำเร็จ: ปล่อยคลื่นกระแทกโดนศัตรูรอบตัว"},
+  stormblade:{base:"warrior",n:"นักดาบพายุ",d:"ATK +15% · คริ +10% · สายเจาะเดี่ยว",skill:"stormslash",act:"แพรี่สำเร็จ: ฟันสวนทันทีอีกดาบ ติดคริ"},
+  paladin:{base:"guardian",n:"อัศวินบัวสวรรค์",d:"HP +15% · DEF +10% · ฟื้น HP 1.5/วิ · สายซัพพอร์ต",skill:"holylotus",act:"แพรี่สำเร็จ: ฟื้น HP 8%"},
+  yaksha:{base:"guardian",n:"ยักษ์ทวารบาล",d:"HP +25% · DEF +15% · สายแทงก์",skill:"yakshaclub",act:"แพรี่สำเร็จ: ศัตรูมึน 2 วินาที"},
+  chrono:{base:"mystic",n:"จอมเวทกาลเวลา",d:"พลังสกิล +15% · SP มาไว +15% · สายควบคุม",skill:"timestop",act:"เพอร์เฟคดอดจ์: หน่วงเวลานาน 1.6 วินาที"},
+  solar:{base:"mystic",n:"จอมขมังเวทสุริยะ",d:"พลังสกิล +25% · สายดาเมจ",skill:"solarnova",act:"เพอร์เฟคดอดจ์: เงาที่ทิ้งไว้ระเบิดเปลวสุริยะ"},
+  phantom:{base:"racer",n:"เงาวายุ",d:"SPD +8% · คริ +8% · สายร่างแยก",skill:"stormclones",act:"เพอร์เฟคดอดจ์: ทิ้งร่างแยกไว้ช่วยสู้ 3 วินาที"},
+  comet:{base:"racer",n:"ดาวหางสายรุ้ง",d:"SPD +12% · แรงชน +10% · สายความเร็ว",skill:"cometdash",act:"หลบ: อมตะนานขึ้น และเร็วขึ้น 2 วินาที"}
+};
+const ADV_OF={warrior:["tidelord","stormblade"],guardian:["paladin","yaksha"],mystic:["chrono","solar"],racer:["phantom","comet"]};
+function clsName(P){ return P&&P.adv&&ADV_INFO[P.adv]?ADV_INFO[P.adv].n:P&&P.cls&&CLASS_INFO[P.cls]?CLASS_INFO[P.cls].n:""; }
+function advOpen(P){ return !!P&&!!P.cls&&(P.stars||0)>=1&&(P.bestDungeon||0)>=10; }
 const FORTUNE_SKILL=["dash","gold","shield","heal","haste","charm","vortex","dash","gold","vortex","fish","bolt","gold","calm","heal","fish"];
 const NPCS=[{name:"กระทงลุงแดง",type:"coconut",candle:"gold"},{name:"แม่ค้าขนมปัง",type:"bread",candle:"white"},{name:"เจ้าแมวส้ม",type:"cat",candle:"pink"},{name:"บัวหลวงแสนงอน",type:"lotus",candle:"pink"},{name:"ดาวตกตัวป่วน",type:"star",candle:"violet"},{name:"สายรุ้งซิ่ง",type:"pride",candle:"blue"},{name:"ใบตองสายบู๊",type:"banana",candle:"gold"}];
 let battle=null;
@@ -1935,7 +1967,10 @@ function statsFor(type,prog){ const b=BSTATS[type]||BSTATS.banana, L=(prog&&prog
   let hp=b.hp*1.6*(1+.08*(L.hp||0))*sm, atk=(b.atk+1.5*(L.atk||0))*sm, def=(b.def+1.5*(L.def||0))*sm, spd=b.spd*(1+.03*(L.spd||0))*(1+.02*st), sk=1+.1*(L.sk||0);
   let ramMul=1, spMul=1, critC=0;
   if(cl==="warrior"){ atk*=1.15; ramMul=1.15; } if(cl==="guardian"){ hp*=1.2; def*=1.2; } if(cl==="mystic"){ sk*=1.25; spMul=1.3; } if(cl==="racer"){ spd*=1.12; critC=.15; }
-  let critM=1.8, regen=0, hellBurst=0, revive=0, dashMul=1;
+  const av=prog&&prog.adv; let advRegen=0;
+  if(av==="tidelord"){ atk*=1.1; hp*=1.1; } if(av==="stormblade"){ atk*=1.15; critC+=.1; } if(av==="paladin"){ hp*=1.15; def*=1.1; advRegen=1.5; } if(av==="yaksha"){ hp*=1.25; def*=1.15; }
+  if(av==="chrono"){ sk*=1.15; spMul*=1.15; } if(av==="solar") sk*=1.25; if(av==="phantom"){ spd*=1.08; critC+=.08; } if(av==="comet"){ spd*=1.12; ramMul*=1.1; }
+  let critM=1.8, regen=advRegen, hellBurst=0, revive=0, dashMul=1;
   for(const [r,L] of relicsOf(prog)){ const m=rs(L);
     if(r==="scale") hp*=1+.08*m; if(r==="feather") spd*=1+.05*m; if(r==="fang") atk*=1+.10*m; if(r==="shell") def*=1+.12*m;
     if(r==="eye"){ critC+=.12*m; critM=2.2; } if(r==="drop"){ regen+=3*m; spMul*=1.2; }
@@ -1945,12 +1980,12 @@ function statsFor(type,prog){ const b=BSTATS[type]||BSTATS.banana, L=(prog&&prog
   return {hp:Math.round(hp),atk:+atk.toFixed(1),def:+def.toFixed(1),spd:+spd.toFixed(2),sk:+sk.toFixed(2),ramMul,spMul,critC,critM,regen,hellBurst,revive,dashMul}; }
 const CLASS_LV=20, CLASS_COST=200;
 function classOpen(P){ return !!P&&((P.level||1)>=CLASS_LV||(P.stars||0)>=1); }
-function classSkills(prog){ const c=prog&&prog.cls&&CLASS_INFO[prog.cls]; return c?[c.skill]:[]; }
+function classSkills(prog){ if(prog&&prog.adv&&ADV_INFO[prog.adv]) return [ADV_INFO[prog.adv].skill]; const c=prog&&prog.cls&&CLASS_INFO[prog.cls]; return c?[c.skill]:[]; }
 function starStr(n){ return n?"★".repeat(n):""; }
 function makeFighter(k,isPlayer,o){
   o=o||{}; const st=BSTATS[k.type]||BSTATS.banana, S=statsFor(k.type,o.prog), hs=o.hpS||1, as=o.atkS||1;
   const hp=Math.round(S.hp*hs);
-  return {k:{...k,seed:k.seed??Math.random(),cls:(o.prog&&o.prog.cls)||k.cls||null,stars:(o.prog&&o.prog.stars)||k.stars||0,relics:o.prog?relicsOf(o.prog):(k.relics||[]),skin:o.prog?(o.prog.skin&&o.prog.cls?o.prog.cls:null):(k.skin||null)},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,ramMul:S.ramMul,spMul:S.spMul,critC:S.critC,critM:S.critM,regen:S.regen,hellBurst:S.hellBurst,revive:S.revive,dashMul:S.dashMul,big:o.big||1,boss:!!o.boss,duel:!!o.duel,
+  return {k:{...k,seed:k.seed??Math.random(),cls:(o.prog&&o.prog.cls)||k.cls||null,stars:(o.prog&&o.prog.stars)||k.stars||0,relics:o.prog?relicsOf(o.prog):(k.relics||[]),skin:o.prog?(o.prog.skin&&o.prog.cls?(o.prog.adv?"adv_"+o.prog.adv:"skin_"+o.prog.cls):null):(k.skin||null),adv:(o.prog&&o.prog.adv)||k.adv||null},name:k.name,isPlayer,st,hp,max:hp,sp:isPlayer?45:15,atk:S.atk*as,def:S.def,spd:S.spd,skm:S.sk,ramMul:S.ramMul,spMul:S.spMul,critC:S.critC,critM:S.critM,regen:S.regen,hellBurst:S.hellBurst,revive:S.revive,dashMul:S.dashMul,big:o.big||1,boss:!!o.boss,duel:!!o.duel,
     x:0,y:0,vx:0,vy:0,alive:true,sinkT:0,buffs:{},hitT:0,aiT:0,skills:[],bump:new Map()};
 }
 function skillsFromSticks(st){ return (st||[]).slice(0,1).map(i=>FORTUNE_SKILL[i]).filter(Boolean); }
@@ -1984,7 +2019,7 @@ async function openBattleMenu(){
     for(const id of ids){ const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P) continue;
       const row=el("div","myk"); const tx=el("div"); tx.style.minWidth="0";
       tx.append(el("b",null,k.name+" · "+(TYPE_BY[k.type]||TYPES[0]).name));
-      tx.append(el("small",null,`${P.stars?starStr(P.stars)+" ":""}${P.cls?CLASS_INFO[P.cls].n+" · ":""}Lv.${P.level} · ด่าน ${P.pve||1} · ดันเจี้ยน ${P.bestDungeon||0}/10 · 💰 ${P.coins} · ⚔ kill ${P.kills} · ชนะ ${P.wins} แพ้ ${P.losses}`));
+      tx.append(el("small",null,`${P.stars?starStr(P.stars)+" ":""}${P.cls?clsName(P)+" · ":""}Lv.${P.level} · ด่าน ${P.pve||1} · ดันเจี้ยน ${P.bestDungeon||0}/10 · 💰 ${P.coins} · ⚔ kill ${P.kills} · ชนะ ${P.wins} แพ้ ${P.losses}`));
       tx.append(el("small","goal","➜ "+nextGoal(P)));
       row.append(tx); const bt=el("div","myk-acts");
       const a=el("button","btn"+((!P.sticks||(classOpen(P)&&!P.cls))?" glow":""),"อัปเกรด"); a.addEventListener("click",()=>openUpgrade(id)); bt.append(a);
@@ -2010,6 +2045,7 @@ const TUTORIAL=[
   ["🎋","เซียมซีสกิล","เขย่าเซียมซีครั้งแรกฟรี ได้สกิลเสริม 1 สกิล ไม่ชอบเขย่าใหม่ได้ (40 เหรียญ)"],
   ["🛡","คลาส (ปลดที่ Lv."+CLASS_LV+")","อัปค่าพลังครบ "+(CLASS_LV-1)+" ครั้ง กระทงถึง Lv."+CLASS_LV+" ก็เลือกคลาสได้เลย ฟรีครั้งแรก มี นักรบ / ผู้พิทักษ์ / จอมเวท / นักซิ่ง ได้โบนัส + สกิลคลาส เปลี่ยนได้ทีหลัง ("+CLASS_COST+" เหรียญ)"],
   ["🛡","แพรี่ & เพอร์เฟคดอดจ์ (ความสามารถคลาส)","นักรบ/ผู้พิทักษ์ได้ปุ่ม “🛡 สวน”: กดตอนศัตรูกำลังพุ่งชน = ไม่เจ็บ ศัตรูกระเด็นมึน และโดนสวนกลับ · จอมเวท/นักซิ่งได้ปุ่ม “💨 หลบ”: กดพุ่งหลบตอนสกิล วงเตือน กระสุน หรือการชนกำลังจะโดน = PERFECT! เวลาศัตรูหน่วงลง 1 วินาที SP +25 และชนครั้งถัดไปคริ · คอมกด Space"],
+  ["🌟","คลาสขั้นสูง (ขยักที่ 2)","ได้ ★1 และผ่านดันเจี้ยนชั้น 10 แล้ว เลื่อนขั้นคลาสได้ (1,000 เหรียญ) แต่ละคลาสแยก 2 สาย มีสกิลใหม่ อัปเกรดปุ่มสวน/หลบ และสกินขั้นสูง"],
   ["🏰","ดันเจี้ยน","ลงไปปราบกระทงปีศาจ 10 ชั้น เลือดไม่รีเซ็ต (ฟื้น 30% ทุกชั้น) ผ่านแต่ละชั้นจะเลือกลงต่อหรือถอยกลับพร้อมเหรียญก็ได้ ชั้น 5 มีขุนพลปีศาจ ชั้น 10 คือราชาปีศาจยักษ์"],
   ["🎁","หีบสมบัติ & เครื่องราง","ผ่านดันเจี้ยนชั้น 10 / 15 / 20 ได้ตั๋วหีบสมบัติ (หรือซื้อด้วยเหรียญ) สุ่มเครื่องราง 4 แรร์ R / SR / SSR / UR ใส่ได้ 2 ช่อง ได้ซ้ำเลเวลขึ้น UR มีออร่าสวยๆ ติดกระทงด้วย · ใส่ 2 ชิ้นของเซ็ตเดียวกัน (พญานาค / จันทรา / อสูรเพลิง / ครุฑวายุ) ได้สกิลเซ็ตเพิ่มอีก 1 ปุ่ม"],
   ["🤺","ท้าดวล","ท้ากระทงของคนอื่นได้ ระบบจะใช้ค่าพลังที่เขาอัปไว้สู้แทน ใครมาท้าคุณ ดูได้ที่ “ใครมาท้าฉัน”"],
@@ -2193,9 +2229,9 @@ let devOn=!!lsGet("lk.dev",0), devPick={type:"star",cls:null,full:true,relics:[]
 async function sha256hex(t){ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
 function setDev(on){ devOn=on; lsSet("lk.dev",on?1:0); $("devfab").hidden=!on; }
 async function askDevCode(){ const code=prompt("รหัสลับ"); if(!code) return; try{ if(await sha256hex(code.trim())===DEV_HASH){ lsSet("lk.devcode",code.trim()); setDev(true); sfx("win"); toast("เปิด Dev mode แล้ว"); openDev(); } else toast("รหัสไม่ถูกต้อง"); }catch(e){ toast("เบราว์เซอร์นี้ใช้ Dev mode ไม่ได้"); } }
-function devProg(){ const L=devPick.full?20:0; return {level:1+L*5,lv:{hp:L,atk:L,def:L,spd:L,sk:L},stars:0,cls:devPick.cls,sticks:[11],bestDungeon:0,coins:0,relics:devPick.relics.slice(),inv:Object.fromEntries(Object.keys(RELICS).map(r=>[r,5]))}; }
+function devProg(){ const L=devPick.full?20:0; return {level:1+L*5,lv:{hp:L,atk:L,def:L,spd:L,sk:L},stars:0,cls:devPick.cls,adv:devPick.cls?devPick.adv||null:null,sticks:[11],bestDungeon:0,coins:0,relics:devPick.relics.slice(),inv:Object.fromEntries(Object.keys(RELICS).map(r=>[r,5]))}; }
 function devStart(floor){ const tp=TYPE_BY[devPick.type]||TYPES[0], k={id:"dev",name:"DEV · "+tp.name,type:tp.id,candle:"gold",seed:Math.random()};
-  dunRun={id:"dev",runId:"dev",from:segOf(floor),floor,hp:null,kills:0,k,prog:devProg(),dev:true}; startDungeonFloor(); }
+  const dp=devProg(); k.cls=dp.cls; k.adv=dp.adv; dunRun={id:"dev",runId:"dev",from:segOf(floor),floor,hp:null,kills:0,k,prog:dp,dev:true}; startDungeonFloor(); }
 function openDev(){
   if(!devOn){ return; }
   showCard(card=>{
@@ -2204,6 +2240,7 @@ function openDev(){
     const mkSel=(label,items,key)=>{ card.append(el("b",null,label)); const row=el("div","dev-sel"); for(const [v,n] of items){ const b=el("button","btn"+(devPick[key]===v?" on":""),n); b.addEventListener("click",()=>{ devPick[key]=v; openDev(); }); row.append(b); } card.append(row); };
     mkSel("กระทง",TYPES.map(t=>[t.id,t.name]),"type");
     mkSel("คลาส",[[null,"ไม่มี"],...Object.entries(CLASS_INFO).map(([id,c])=>[id,c.n])],"cls");
+    if(devPick.cls){ if(devPick.adv&&!ADV_OF[devPick.cls].includes(devPick.adv)) devPick.adv=null; mkSel("คลาสขั้นสูง",[[null,"ไม่มี"],...ADV_OF[devPick.cls].map(a=>[a,ADV_INFO[a].n])],"adv"); }
     mkSel("ค่าพลัง",[[true,"ตันทุกค่า (Lv.101)"],[false,"เริ่มต้น (Lv.1)"]],"full");
     card.append(el("b",null,"เครื่องราง (เลือกได้ 2 · Lv.5)")); { const row=el("div","dev-sel"); for(const [r,R] of Object.entries(RELICS)){ const on=devPick.relics.includes(r); const b=el("button","btn"+(on?" on":""),R.rar+" "+R.n); b.addEventListener("click",()=>{ devPick.relics=on?devPick.relics.filter(x=>x!==r):[...devPick.relics,r].slice(-2); openDev(); }); row.append(b); } card.append(row); }
     const ids=myOnlineIds();
@@ -2375,6 +2412,7 @@ function drawEnding(c,t,dt){
 }
 /* ================= ประกาศอัปเดต: newest first; the newest id is remembered once read ================= */
 const UPDATES=[
+  {id:"2026-11-26",t:"คลาสขั้นสูง ขยักที่ 2 (8 สาย)",items:["🌟 ได้ ★1 + ผ่านดันเจี้ยนชั้น 10 แล้ว เลื่อนขั้นคลาสได้ในหน้าอัปเกรด","⚔ นักรบ → ขุนพลวารี / นักดาบพายุ · 🛡 ผู้พิทักษ์ → อัศวินบัวสวรรค์ / ยักษ์ทวารบาล","🔮 จอมเวท → จอมเวทกาลเวลา (หยุดกาล!) / จอมขมังเวทสุริยะ · 🌈 นักซิ่ง → เงาวายุ / ดาวหางสายรุ้ง","แต่ละสายมีสกิลใหม่ อัปเกรดปุ่มสวน/หลบ และสกินขั้นสูง"]},
   {id:"2026-11-25c",t:"แก้บัคบอสติดมุม",items:["🐞 บอสที่โดนต้อนเข้ามุมจะเคลื่อนกลับเข้ากลางสนามเอง","🤝 ผู้เล่นทะลุผ่านเพื่อนร่วมทีมได้ ไม่โดนเพื่อนดันจนเข้าไปชนบอสไม่ได้ และเพื่อน AI จะเว้นทางให้","ขอบคุณผู้เล่นที่แจ้งมานะครับ 🙏"]},
   {id:"2026-11-25b",t:"แพรี่ & เพอร์เฟคดอดจ์",items:["🛡 นักรบ/ผู้พิทักษ์: ปุ่ม “สวน” กดตอนโดนชน = PARRY! ไม่เจ็บ ศัตรูมึนและโดนสวนกลับ","💨 จอมเวท/นักซิ่ง: ปุ่ม “หลบ” กดตอนกำลังจะโดน = PERFECT! เวลาศัตรูหน่วงลง 1 วินาที","⌨ คอมกด Space ได้เลย"]},
   {id:"2026-11-25",t:"สกินคลาส · ประกาศอัปเดต",items:["🎨 สกินกระทงประจำคลาส 4 แบบ (นักรบ / ผู้พิทักษ์ / จอมเวท / นักซิ่ง) เลือกใส่หรือถอดได้ในหน้าอัปเกรด ค่าพลังไม่เปลี่ยน","🪪 แตะกระทงในแม่น้ำ ดูการ์ดโปรไฟล์ ภาพขยับได้ ซูมได้ พร้อมเลเวล ค่าพลัง และเครื่องราง","🌊 เงาสะท้อนกระทงนุ่มขึ้น กระเพื่อมตามคลื่น","📢 ปุ่มประกาศ บอกว่ามีอะไรใหม่"]},
@@ -2416,7 +2454,7 @@ function openUpgrade(id){
   showCard(card=>{
     const S=statsFor(k.type,P), st=BSTATS[k.type]||BSTATS.banana;
     const cap=P.cap||20, stars=P.stars||0;
-    card.append(el("div","kind",`อัปเกรด · Lv.${P.level}`+(stars?` · ${starStr(stars)}`:"")+(P.cls?` · ${CLASS_INFO[P.cls].n}`:"")));
+    card.append(el("div","kind",`อัปเกรด · Lv.${P.level}`+(stars?` · ${starStr(stars)}`:"")+(P.cls?` · ${clsName(P)}`:"")));
     card.append(el("h3",null,k.name));
     card.append(el("div","coins","💰 "+P.coins+" เหรียญ"));
     card.append(statGrid(S));
@@ -2435,10 +2473,13 @@ function openUpgrade(id){
       ab.addEventListener("click",async()=>{ ab.disabled=true; try{ const j=await post("?action=ascend",{id,token:tokens[id]}); myProgs[id].prog=j.prog; sfx("win"); toast("ยกระดับเป็น "+starStr(j.prog.stars)+" แล้ว!"); openUpgrade(id); }catch(e){ toast(e.message); ab.disabled=false; } });
       box.append(ab); }
     { const cb=el("div","ascend cls-box"), can=classOpen(P); cb.append(el("b",null,P.cls?`คลาส: ${CLASS_INFO[P.cls].n}`:can?"ปลดล็อกคลาสแล้ว! เลือกได้เลย":`คลาส · ปลดล็อกที่ Lv.${CLASS_LV}`));
+      if(P.cls){ const box2=el("div","adv-box"); const ad=P.adv&&ADV_INFO[P.adv];
+        box2.append(el("b",null,ad?`คลาสขั้นสูง: ${ad.n}`:"คลาสขั้นสูง (ขยักที่ 2)")); box2.append(el("small",null,ad?`${ad.d} · ${ad.act}`:advOpen(P)?"ปลดล็อกแล้ว! เลือก 1 ใน 2 สายได้เลย":`ต้องได้ ★1 และผ่านดันเจี้ยนชั้น 10 (ตอนนี้ ${starStr(P.stars||0)||"☆0"} · ชั้น ${P.bestDungeon||0})`));
+        const ab=el("button","btn"+(advOpen(P)&&!ad?" primary glow":""),ad?"เปลี่ยนสาย":"เลื่อนขั้นคลาส"); ab.disabled=!advOpen(P); ab.addEventListener("click",()=>openAdvPicker(id)); box2.append(ab); cb._adv=box2; }
       cb.append(el("small",null,P.cls?CLASS_INFO[P.cls].d:can?"เลือกครั้งแรกฟรี ได้โบนัสค่าพลังและสกิลคลาสเพิ่มอีก 1 สกิล":`กด + อัปค่าพลังอีก ${CLASS_LV-P.level} ครั้ง (ค่าไหนก็ได้) ก็เลือกคลาสได้`));
-      const cbt=el("button","btn"+(P.cls||!can?"":" primary"),P.cls?`เปลี่ยนคลาส (${CLASS_COST})`:"เลือกคลาส"); cbt.disabled=!can; cbt.addEventListener("click",()=>openClassPicker(id)); cb.append(cbt); card.insertBefore(cb,tbl);
-      if(P.cls){ const sk=el("div","skin-row"); const im=document.createElement("img"); im.src="img/kr/skin_"+P.cls+".png"; im.alt=""; sk.append(im); const tx=el("div"); tx.append(el("b",null,`สกินคลาส: ${CLASS_INFO[P.cls].n}`)); tx.append(el("small",null,P.skin?"กำลังใช้อยู่ · คนอื่นเห็นในแม่น้ำด้วย (ค่าพลังไม่เปลี่ยน)":"เปลี่ยนหน้าตากระทงเป็นแบบประจำคลาส ค่าพลังไม่เปลี่ยน")); sk.append(tx);
-        const tg=el("button","btn"+(P.skin?"":" primary"),P.skin?"ถอดสกิน":"ใส่สกิน"); tg.addEventListener("click",async()=>{ tg.disabled=true; try{ const j=await post("?action=skin",{id,token:tokens[id],on:!P.skin}); myProgs[id].prog=j.prog; const kk=kOf(id); if(kk) kk.skin=j.prog.skin?j.prog.cls:null; spriteCache.clear(); sfx("bless"); toast(j.prog.skin?"ใส่สกินแล้ว!":"ถอดสกินแล้ว"); openUpgrade(id); }catch(e){ toast(e.message); tg.disabled=false; } }); sk.append(tg); cb.after(sk); } }
+      const cbt=el("button","btn"+(P.cls||!can?"":" primary"),P.cls?`เปลี่ยนคลาส (${CLASS_COST})`:"เลือกคลาส"); cbt.disabled=!can; cbt.addEventListener("click",()=>openClassPicker(id)); cb.append(cbt); card.insertBefore(cb,tbl); if(cb._adv) cb.after(cb._adv);
+      if(P.cls){ const sk=el("div","skin-row"); const im=document.createElement("img"); im.src="img/kr/"+(P.adv?"adv_"+P.adv:"skin_"+P.cls)+".png"; im.alt=""; sk.append(im); const tx=el("div"); tx.append(el("b",null,`สกินคลาส: ${clsName(P)}`)); tx.append(el("small",null,P.skin?"กำลังใช้อยู่ · คนอื่นเห็นในแม่น้ำด้วย (ค่าพลังไม่เปลี่ยน)":"เปลี่ยนหน้าตากระทงเป็นแบบประจำคลาส ค่าพลังไม่เปลี่ยน")); sk.append(tx);
+        const tg=el("button","btn"+(P.skin?"":" primary"),P.skin?"ถอดสกิน":"ใส่สกิน"); tg.addEventListener("click",async()=>{ tg.disabled=true; try{ const j=await post("?action=skin",{id,token:tokens[id],on:!P.skin}); myProgs[id].prog=j.prog; const kk=kOf(id); if(kk) kk.skin=j.prog.skin?(j.prog.adv?"adv_"+j.prog.adv:"skin_"+j.prog.cls):null; spriteCache.clear(); sfx("bless"); toast(j.prog.skin?"ใส่สกินแล้ว!":"ถอดสกินแล้ว"); openUpgrade(id); }catch(e){ toast(e.message); tg.disabled=false; } }); sk.append(tg); cb.after(sk); } }
     if(box) card.append(box);
     card.append(el("b",null,"เครื่องราง (แตะเพื่อเปลี่ยน)")); card.append(relicSlots(P,id));
     card.append(el("div","meta","ติดตัว: "+st.pas));
@@ -2451,12 +2492,27 @@ function openUpgrade(id){
     backBtn(acts,"ย้อนกลับ",openBattleMenu); card.append(acts);
   });
 }
+function openAdvPicker(id){
+  const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P||!P.cls){ openBattleMenu(); return; }
+  showCard(card=>{
+    card.append(el("div","kind",`เลื่อนขั้นคลาส · ${CLASS_INFO[P.cls].n}`+(P.adv?` · เปลี่ยนสาย 300 เหรียญ`:" · ครั้งแรก 1,000 เหรียญ")));
+    card.append(el("h3",null,k.name)); card.append(el("div","coins","💰 "+P.coins+" เหรียญ"));
+    const list=el("div","adv-list");
+    for(const aid of ADV_OF[P.cls]){ const A=ADV_INFO[aid], sk=SKILLS[A.skill], on=P.adv===aid; const b=el("button","adv-card"+(on?" on":"")); b.type="button";
+      const im=document.createElement("img"); im.src="img/kr/adv_"+aid+".png"; im.alt=""; b.append(im);
+      const tx=el("div"); tx.append(el("b",null,A.n+(on?" (ปัจจุบัน)":""))); tx.append(el("small",null,A.d)); tx.append(el("small","adv-sk",`สกิลใหม่ “${sk.n}”: ${sk.d}`)); tx.append(el("small","adv-act",`${A.act}`)); b.append(tx);
+      b.addEventListener("click",async()=>{ if(on){ openUpgrade(id); return; } b.disabled=true; try{ const j=await post("?action=advance",{id,token:tokens[id],adv:aid}); myProgs[id].prog=j.prog; const kk=kOf(id); if(kk&&j.prog.skin) kk.skin="adv_"+aid; spriteCache.clear(); sfx("win"); toast("เลื่อนขั้นเป็น "+A.n+" แล้ว!"); for(let i=0;i<5;i++) setTimeout(()=>launch(rnd(.2,.8)*W,"peony"),i*200); openUpgrade(id); }catch(e){ toast(e.message); b.disabled=false; } });
+      list.append(b); }
+    card.append(list); card.append(el("p","meta","สกินขั้นสูงใช้ได้ทันทีถ้าเปิดสกินคลาสไว้ · เปลี่ยนคลาสหลักจะกลับเป็นขั้นแรก"));
+    const acts=el("div","acts"); backBtn(acts,"ย้อนกลับ",()=>openUpgrade(id)); card.append(acts);
+  });
+}
 function openClassPicker(id){
   const k=kOf(id), P=myProgs[id]&&myProgs[id].prog; if(!k||!P){ openBattleMenu(); return; }
   showCard(card=>{
     card.append(el("div","kind","เลือกคลาส"+(P.cls?` · เปลี่ยนคลาสใช้ ${CLASS_COST} เหรียญ`:" · เลือกครั้งแรกฟรี")));
     card.append(el("h3",null,k.name+" "+starStr(P.stars)));
-    card.append(el("p","meta","แต่ละคลาสให้โบนัสค่าพลังและสกิลพิเศษ 1 สกิล เปลี่ยนทีหลังได้เสมอ"));
+    card.append(el("p","meta","แต่ละคลาสให้โบนัสค่าพลังและสกิลพิเศษ 1 สกิล เปลี่ยนทีหลังได้เสมอ"+(P.adv?" · ⚠ เปลี่ยนคลาสหลักแล้วคลาสขั้นสูงจะหายไป":"")));
     const list=el("div","pick");
     for(const [cid,ci] of Object.entries(CLASS_INFO)){ const sk=SKILLS[ci.skill]; const b=el("button"); if(P.cls===cid) b.className="on"; const tx=el("div");
       tx.append(el("b",null,ci.n+(P.cls===cid?" (คลาสปัจจุบัน)":""))); tx.append(el("small",null,ci.d)); tx.append(el("small",null,`สกิลคลาส: ${sk.n} · ${sk.d} · SP ${sk.cost}`)); b.append(tx);
@@ -2585,10 +2641,12 @@ function doClassAct(){ const B=battle; if(!B||B.over||B.count>0) return; const P
   if(act==="parry"){ P.buffs.parry=.26; runeBursts.push({x:P.x,y:P.y,life:0,dur:.35,r:s*1.8,flat:true,glyph:false,col:"255,230,160"}); sfx("drop"); }
   else { // dash toward where the player is steering (or away from the nearest foe), with i-frames
     let dx=B.target.x-P.x, dy=(B.target.y-P.y)*1.8; if(Math.hypot(dx,dy)<u){ const n=nearest(P); if(n){ dx=P.x-n.x; dy=(P.y-n.y)*1.8; } else dx=1; }
-    const d=Math.hypot(dx,dy)||1; P.vx=dx/d*u*13; P.vy=dy/d*u*13/1.8; P.buffs.dodge=.38; P.buffs.dodgeWin=.24; P.buffs.dash=0;
+    const d=Math.hypot(dx,dy)||1; P.vx=dx/d*u*13; P.vy=dy/d*u*13/1.8; P.buffs.dodge=P.k.adv==="comet"?.55:.38; P.buffs.dodgeWin=.24; P.buffs.dash=0; if(P.k.adv==="comet") P.buffs.haste=2;
     playVfx("evade",P.x,P.y,2.6,{dy:-.5,flip:dx<0}); sfx("drop"); }
   updateHud(); }
-function perfectDodge(P){ const B=battle; if(P.buffs.perfectCd>0) return; P.buffs.perfectCd=.6; B.witch=1; P.sp=Math.min(100,P.sp+25); P.nextCrit=true;
+function perfectDodge(P){ const B=battle; if(P.buffs.perfectCd>0) return; P.buffs.perfectCd=.6; const av=P.k.adv; B.witch=av==="chrono"?1.6:1;
+  if(av==="solar"){ const ox=P.x-P.vx*.08, oy=P.y-P.vy*.08; setTimeout(()=>{ if(!battle) return; playVfx(vfxOr("solarnova","impact"),ox,oy,3.4,{dy:-.4,add:true}); for(const o of foesOf(P)) if(Math.hypot(o.x-ox,(o.y-oy)*1.8)<bU()*3.5) hurt(o,25*skillMul(P),P); },200); }
+  if(av==="phantom"){ const cl=makeFighter({...P.k,id:"pclone"},true,{prog:B.opts.prog,hpS:.3,atkS:.6}); cl.skills=[]; cl.ally=true; cl.clone=true; cl.lifeT=3; cl.x=P.x; cl.y=P.y; cl.aref={hp:null}; B.allies.push(cl); B.all.push(cl); playVfx(vfxOr("shadowclone","evade"),cl.x,cl.y,2.6,{dy:-.6}); } P.sp=Math.min(100,P.sp+25); P.nextCrit=true;
   floater(P.x,P.y-fSize(P)*2.6,"PERFECT!","140,220,255","skill"); flash={a:.6,x:P.x,y:P.y,c:"140,200,255"}; sfx("chime");
   runeBursts.push({x:P.x,y:P.y,life:0,dur:.9,r:fSize(P)*5,flat:true,glyph:true,col:"140,220,255"}); }
 function buildSkillBar(){
@@ -2641,7 +2699,7 @@ function hurt(f,dmg,src,opts){
   return dmg;
 }
 /* ---- pixel VFX (PixelLab): sheets in img/vfx, frames left-to-right then top-to-bottom ---- */
-const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12},"frost":{"w":106,"h":78,"n":10,"fps":12},"voidhole":{"w":232,"h":212,"n":32,"fps":10},"tentacle":{"w":116,"h":255,"n":16,"fps":14},"hellaura":{"w":73,"h":115,"n":8,"fps":12},"holyaura":{"w":96,"h":112,"n":12,"fps":12},"gachaburst":{"w":150,"h":155,"n":7,"fps":16},"webshot":{"w":96,"h":96,"n":14,"fps":14},"necro":{"w":172,"h":70,"n":12,"fps":12},"shadowclone":{"w":69,"h":120,"n":16,"fps":12},"eclipse":{"w":128,"h":128,"n":16,"fps":12},"starimpact":{"w":146,"h":184,"n":18,"fps":18},"crystalbreak":{"w":60,"h":79,"n":12,"fps":12},"spiritpop":{"w":57,"h":45,"n":8,"fps":12},"bossportal":{"w":288,"h":412,"n":22,"fps":14},"lootdrop":{"w":83,"h":154,"n":14,"fps":15},"nagawave":{"w":187,"h":375,"n":10,"fps":14},"moonlight":{"w":96,"h":112,"n":16,"fps":12},"fireslash":{"w":164,"h":90,"n":8,"fps":16},"garudastorm":{"w":128,"h":136,"n":16,"fps":12}};
+const VFX_META={"crescent":{"w":189,"h":71,"n":16,"fps":16},"formation":{"w":96,"h":96,"n":16,"fps":12},"barrier2":{"w":128,"h":128,"n":16,"fps":10},"barrier":{"w":104,"h":112,"n":24,"fps":10},"firstaid":{"w":64,"h":128,"n":12,"fps":12},"evade":{"w":96,"h":96,"n":8,"fps":12},"comfort":{"w":64,"h":128,"n":12,"fps":12},"whirl":{"w":128,"h":112,"n":24,"fps":12},"toxic":{"w":64,"h":64,"n":8,"fps":12},"holyhand":{"w":76,"h":109,"n":16,"fps":8},"leaves":{"w":113,"h":108,"n":24,"fps":10},"crossclaw":{"w":62,"h":61,"n":9,"fps":16},"crit":{"w":96,"h":96,"n":9,"fps":16},"steam":{"w":64,"h":64,"n":13,"fps":10},"poisonfog":{"w":171,"h":63,"n":19,"fps":14},"dread":{"w":64,"h":64,"n":12,"fps":12},"fury":{"w":64,"h":128,"n":12,"fps":12},"bloodpillar":{"w":96,"h":189,"n":16,"fps":8},"lotus":{"w":96,"h":112,"n":14,"fps":12},"fish":{"w":134,"h":165,"n":16,"fps":22},"rainbow":{"w":171,"h":87,"n":12,"fps":12},"meteor":{"w":118,"h":119,"n":12,"fps":12},"impact":{"w":136,"h":121,"n":10,"fps":14},"abyssflame":{"w":162,"h":265,"n":16,"fps":12},"doomring":{"w":278,"h":110,"n":8,"fps":14},"soulstorm":{"w":96,"h":112,"n":24,"fps":12},"frost":{"w":106,"h":78,"n":10,"fps":12},"voidhole":{"w":232,"h":212,"n":32,"fps":10},"tentacle":{"w":116,"h":255,"n":16,"fps":14},"hellaura":{"w":73,"h":115,"n":8,"fps":12},"holyaura":{"w":96,"h":112,"n":12,"fps":12},"gachaburst":{"w":150,"h":155,"n":7,"fps":16},"webshot":{"w":96,"h":96,"n":14,"fps":14},"necro":{"w":172,"h":70,"n":12,"fps":12},"shadowclone":{"w":69,"h":120,"n":16,"fps":12},"eclipse":{"w":128,"h":128,"n":16,"fps":12},"starimpact":{"w":146,"h":184,"n":18,"fps":18},"crystalbreak":{"w":60,"h":79,"n":12,"fps":12},"spiritpop":{"w":57,"h":45,"n":8,"fps":12},"bossportal":{"w":288,"h":412,"n":22,"fps":14},"lootdrop":{"w":83,"h":154,"n":14,"fps":15},"nagawave":{"w":187,"h":375,"n":10,"fps":14},"moonlight":{"w":96,"h":112,"n":16,"fps":12},"fireslash":{"w":164,"h":90,"n":8,"fps":16},"garudastorm":{"w":128,"h":136,"n":16,"fps":12},"tsunami":{"w":240,"h":168,"n":16,"fps":12},"stormslash":{"w":55,"h":58,"n":6,"fps":8},"holylotus":{"w":72,"h":136,"n":14,"fps":14},"groundslam":{"w":130,"h":128,"n":14,"fps":16},"timestop":{"w":160,"h":128,"n":12,"fps":12},"solarnova":{"w":128,"h":128,"n":12,"fps":14},"comettrail":{"w":128,"h":40,"n":12,"fps":16}};
 const VFX={}; for(const [n,m] of Object.entries(VFX_META)){ const im=new Image(); VFX[n]={...m,img:im,ok:false}; im.onload=()=>{ VFX[n].ok=true; VFX[n].cols=Math.max(1,Math.floor(im.width/m.w)); }; im.src="img/vfx/"+n+".png"; }
 const vfxPlays=[];
 // size = drawn height in multiples of the fighter size; opts: follow (fighter), flip, flat (squash y), add (glow blend), dy (offset in sizes), back (draw behind fighters)
@@ -2720,6 +2778,15 @@ function castSkill(f,id){
       tele(f,{x:f.x,y:f.y,r:Math.max(W,H),dur:2.6,col:"255,40,80",global:true,then:()=>{ const sf=battle.safe; battle.safe=null; f.casting=null; playVfx(VFX.doomring&&VFX.doomring.ok?"doomring":"formation",f.x,f.y,8,{flat:.55,add:true,back:true}); runeBursts.push({x:f.x,y:f.y,life:0,dur:1.4,r:Math.max(W,H)*.6,flat:true,glyph:true,col:"255,40,80"}); battle.shake=18;
         for(const o of foesOf(f)){ if(sf&&Math.hypot(o.x-sf.x,(o.y-sf.y)*1.8)<sf.r){ floater(o.x,o.y-fSize(o)*2,"รอด!","255,230,140","skill"); continue; } hurt(o,55*m,f); o.buffs.cursed=5; o.vx+=Math.sign(o.x-f.x||1)*u*12; playVfx("dread",o.x,o.y,2.6,{follow:o,dy:-1.5}); } }}); break; }
     case "__setfx": break;
+    case "tsunami": { battle.banner={text:sk.n,col:sk.c,t:0}; battle.shake=16; const dir=tgt&&tgt.x<f.x?-1:1; for(let q=0;q<3;q++) playVfx(vfxOr("tsunami","nagawave"),W*(.25+q*.25),laneY(.5),6,{dy:-1.2,flip:dir<0}); for(const o of foesOf(f)){ hurt(o,38*m,f); o.vx+=dir*u*18; o.vy+=rnd(-1,1)*u*3; } break; }
+    case "stormslash": for(let q=0;q<3;q++) setTimeout(()=>{ if(!battle||!f.alive) return; const t2=nearest(f); if(!t2) return; const dx=t2.x-f.x, dy=(t2.y-f.y)*1.8, d=Math.hypot(dx,dy)||1; f.vx=dx/d*u*16; f.vy=dy/d*u*16/1.8; f.buffs.dash=.35; setTimeout(()=>{ if(!battle||!t2.alive) return; hurt(t2,30*m,f,{crit:true}); playVfx(vfxOr("stormslash","crossclaw"),t2.x,t2.y,3,{dy:-.6,flip:dx<0}); battle.bolts.push({x:t2.x,y:t2.y-fSize(t2),life:0}); },120); },q*300); break;
+    case "holylotus": playVfx(vfxOr("holylotus","lotus"),f.x,f.y,4.4,{follow:f,dy:-.8,add:true}); for(const al of battle.all.filter(o=>o.alive&&o.isPlayer===f.isPlayer)){ al.hp=Math.min(al.max,al.hp+al.max*.25); al.buffs.shield=3; floater(al.x,al.y-fSize(al)*2.2,"+"+Math.round(al.max*.25),"120,255,160","heal"); } break;
+    case "yakshaclub": { playVfx(vfxOr("groundslam","impact"),f.x,f.y,4.4,{dy:-.5}); battle.shake=18; ripples.push({x:f.x,y:f.y,r:u*4,life:0,dur:1.2,c:"255,200,120"}); for(const o of foesOf(f)){ const d=Math.hypot(o.x-f.x,(o.y-f.y)*1.8); if(d<u*5){ hurt(o,32*m,f); o.buffs.stun=Math.max(o.buffs.stun||0,o.boss?.8:1.5); } } break; }
+    case "timestop": battle.freeze=1.5; battle.freezeBoss=.8; battle.banner={text:sk.n,col:sk.c,t:0}; playVfx(vfxOr("timestop","formation"),W/2,laneY(.45),7,{add:true}); flash={a:.8,x:W/2,y:H/2,c:"255,230,170"}; sfx("bell"); break;
+    case "solarnova": { playVfx(vfxOr("solarnova","impact"),f.x,f.y,6,{dy:-.5,add:true}); flash={a:.9,x:f.x,y:f.y,c:"255,180,90"}; battle.shake=14; for(const o of foesOf(f)){ const d=Math.hypot(o.x-f.x,(o.y-f.y)*1.8), fall=Math.max(.35,1-d/(u*12)); hurt(o,55*m*fall,f); } break; }
+    case "stormclones": for(let q=0;q<2;q++){ const cl=makeFighter({...f.k,id:"clone"+q},true,{prog:battle.opts.prog,hpS:.4,atkS:.7}); cl.skills=[]; cl.ally=true; cl.clone=true; cl.lifeT=5; cl.x=f.x+(q?1:-1)*u*2; cl.y=f.y; cl.aref={hp:null,prog:battle.opts.prog}; battle.allies.push(cl); battle.all.push(cl); playVfx(vfxOr("shadowclone","evade"),cl.x,cl.y,3,{dy:-.6}); } break;
+    case "cometdash": { const t2=tgt||{x:f.x+u*10,y:f.y}; const a=Math.atan2((t2.y-f.y)*1.8,t2.x-f.x), L=Math.max(W,H); f.buffs.shield=.8; f.vx=Math.cos(a)*u*22; f.vy=Math.sin(a)*u*22/1.8; f.buffs.dash=.6; f.buffs.pierce=.6; playVfx(vfxOr("comettrail","rainbow"),f.x,f.y,3,{follow:f,dy:-.5,flip:Math.cos(a)<0,add:true});
+      for(const o of foesOf(f)){ const dx=o.x-f.x, dy=(o.y-f.y)*1.8, along=dx*Math.cos(a)+dy*Math.sin(a), off=Math.abs(-dx*Math.sin(a)+dy*Math.cos(a)); if(along>0&&along<L&&off<fSize(o)*1.8+u) setTimeout(()=>{ if(battle&&o.alive){ hurt(o,42*m,f,{crit:true}); playVfx("impact",o.x,o.y,2.6,{dy:-.4,add:true}); } },Math.min(600,along/(u*22)*1000)); } break; }
     case "gangablessing": { battle.banner={text:sk.n,col:sk.c,t:0}; flash={a:.8,x:f.x,y:f.y,c:"255,230,170"}; playVfx(vfxOr("holyaura","holyhand"),f.x,f.y,4.4,{follow:f,dy:-.4,add:true});
       for(const al of battle.all.filter(o=>o.alive&&o.isPlayer===f.isPlayer)){ al.hp=Math.min(al.max,al.hp+al.max*.2); for(const b of ["poison","cursed","slow"]) al.buffs[b]=0; floater(al.x,al.y-fSize(al)*2.2,"+"+Math.round(al.max*.2),"120,255,160","heal"); playVfx(vfxOr("moonlight","firstaid"),al.x,al.y,3,{follow:al,dy:-1,add:true}); }
       foesOf(f).forEach((o,i)=>setTimeout(()=>{ if(!battle||!o.alive) return; playVfx(vfxOr("nagawave","fish"),o.x,o.y,4.6,{dy:-1.3}); hurt(o,30*m,f); o.vx+=Math.sign(o.x-f.x||1)*u*9; },120+i*130)); break; }
@@ -2754,16 +2821,19 @@ function castSkill(f,id){
 function battleStep(dt,t){
   const B=battle; if(B.slow>0){ B.slow=Math.max(0,B.slow-dt); dt*=.22; } B.t+=dt; const u=bU(); const top=laneY(0), bot=laneY(1);
   // perfect-dodge "witch time": everything on the enemy side runs at a quarter speed for a moment
-  if(B.witch>0) B.witch=Math.max(0,B.witch-dt); const ws=B.witch>0?.25:1, dtAll=dt; if(B.actCd>0) B.actCd=Math.max(0,B.actCd-dt);
+  if(B.witch>0) B.witch=Math.max(0,B.witch-dt); if(B.freeze>0) B.freeze=Math.max(0,B.freeze-dt); if(B.freezeBoss>0) B.freezeBoss=Math.max(0,B.freezeBoss-dt);
+  const ws=B.freeze>0?0:B.witch>0?.25:1, dtAll=dt; if(B.actCd>0) B.actCd=Math.max(0,B.actCd-dt);
   if(B.count>0){ B.count-=dt; if(B.count<=0){ sfx("bell"); B.banner=B.foes.some(f=>f.voidBoss)?{text:"จักรพรรดิแห่งความว่างเปล่า!",col:"190,120,255",t:0}:B.foes.some(f=>f.titan)?{text:"ราชาปีศาจ!",col:"255,60,70",t:0}:B.foes.some(f=>f.boss)?{text:"บอส!",col:"255,120,140",t:0}:{text:"ชน!",col:"255,200,110",t:0}; } }
   const live=B.count<=0&&!B.over;
   // player input
   const P=B.P;
   if(bKeys.size){ let ix=0,iy=0; if(bKeys.has("ArrowLeft")||bKeys.has("a")) ix-=1; if(bKeys.has("ArrowRight")||bKeys.has("d")) ix+=1; if(bKeys.has("ArrowUp")||bKeys.has("w")) iy-=1; if(bKeys.has("ArrowDown")||bKeys.has("s")) iy+=1; B.target={x:P.x+ix*u*5,y:P.y+iy*u*3}; }
   for(const f of B.all){
-    const dt=f.isPlayer?dtAll:dtAll*ws;
+    const dt=f.isPlayer?dtAll:f.boss&&B.freeze>0?(B.freezeBoss>0?0:dtAll):dtAll*ws;
+    if(!f.isPlayer&&dt===0){ f.vx=0; f.vy=0; continue; }
     for(const k in f.buffs) f.buffs[k]=Math.max(0,f.buffs[k]-dt);
     f.hitT=Math.max(0,f.hitT-dt);
+    if(f.clone&&f.alive){ f.lifeT-=dt; if(f.lifeT<=0){ f.alive=false; f.sinkT=1.8; playVfx("steam",f.x,f.y,2,{alpha:.7}); } }
     if(!f.alive){ f.sinkT+=dt; f.vx*=.95; f.vy*=.95; continue; }
     if(live){
       f.sp=Math.min(100,f.sp+dt*(f.isPlayer?9:f.duel?8:6)*(f.k.type==="pride"?1.5:f.k.type==="ganga"?1.2:1)*(f.buffs.calm>0?2:1)*(f.spMul||1));
@@ -2815,7 +2885,13 @@ function battleStep(dt,t){
       if(parried){ const atk=parried===a?b:a, dxp=atk.x-parried.x, dyp=(atk.y-parried.y)*1.8, dp=Math.hypot(dxp,dyp)||1;
         parried.buffs.parry=0; atk.buffs.stun=atk.boss?.6:1; atk.vx=dxp/dp*u*14; atk.vy=dyp/dp*u*14/1.8; parried.sp=Math.min(100,parried.sp+20);
         hurt(atk,parried.atk*(parried.k.cls==="warrior"?2.2:1.6)*(atk.boss?.7:1),parried,{crit:true}); floater(parried.x,parried.y-fSize(parried)*2.6,"PARRY!","255,220,140","skill");
-        impactFx((a.x+b.x)/2,(a.y+b.y)/2,1,true); B.shake=12; sfx("bonk"); a.bump.set(b,B.t); continue; }
+        impactFx((a.x+b.x)/2,(a.y+b.y)/2,1,true); B.shake=12; sfx("bonk"); a.bump.set(b,B.t);
+        const av=parried.k.adv;
+        if(av==="tidelord"){ playVfx(vfxOr("tsunami","nagawave"),parried.x,parried.y,3,{dy:-.8}); for(const o of foesOf(parried)) if(o!==atk&&Math.hypot(o.x-parried.x,(o.y-parried.y)*1.8)<u*3.5){ hurt(o,20*skillMul(parried),parried); o.vx+=Math.sign(o.x-parried.x||1)*u*10; } }
+        if(av==="stormblade") setTimeout(()=>{ if(battle&&atk.alive){ hurt(atk,parried.atk*1.2,parried,{crit:true}); playVfx(vfxOr("stormslash","crossclaw"),atk.x,atk.y,2.8,{dy:-.6}); } },160);
+        if(av==="paladin"){ parried.hp=Math.min(parried.max,parried.hp+parried.max*.08); floater(parried.x,parried.y-fSize(parried)*2,"+"+Math.round(parried.max*.08),"120,255,160","heal"); }
+        if(av==="yaksha") atk.buffs.stun=atk.boss?1:2;
+        continue; }
       const A=dmgTo(0,0,ramA,a,b), Bd=dmgTo(0,0,ramB,b,a); A.crit=!!A.crit; Bd.crit=!!Bd.crit;
       for(const [R,att] of [[A,a],[Bd,b]]) if(att.nextCrit&&R.dmg>2){ att.nextCrit=false; R.dmg*=2; R.crit=true; }
       if(A.dmg>2){ hurt(b,A.dmg,a,{crit:A.crit}); if(b.buffs.reflect>0) hurt(a,A.dmg*.6,b); }
@@ -2941,6 +3017,7 @@ function battleDraw(c,t,dt){
     c.fillText(f.text,0,0); c.restore(); }
   if(B.banner){ B.banner.t+=dt; const k=B.banner.t; if(k>1.4) B.banner=null; else { const a=Math.min(1,(1.4-k)/.4), sc=k<.15?2.2-k/.15*1.2:1; c.save(); c.translate(W/2,H*.4); c.scale(sc,sc); c.font='800 72px "Bai Jamjuree",sans-serif'; c.textAlign="center"; c.textBaseline="middle"; c.shadowColor=`rgba(${B.banner.col},${a})`; c.shadowBlur=30; c.lineWidth=8; c.strokeStyle=`rgba(10,8,30,${a})`; c.strokeText(B.banner.text,0,0); c.fillStyle=`rgba(${B.banner.col},${a})`; c.fillText(B.banner.text,0,0); c.restore(); } }
   if(B.dark>0){ B.dark=Math.max(0,B.dark-dt); const a=Math.min(1,B.dark,(7-B.dark)*3)*.88, P0=B.P; c.save(); c.fillStyle=rg(c,P0.x,P0.y-fSize(P0),fSize(P0)*2,fSize(P0)*6,[[0,"rgba(4,0,12,0)"],[1,`rgba(4,0,12,${a})`]]); c.fillRect(0,0,W,H); c.restore(); }
+  if(B.freeze>0){ const a=Math.min(1,B.freeze*3)*.35; c.save(); c.globalCompositeOperation="saturation"; c.fillStyle=`rgba(80,80,80,${a})`; c.fillRect(0,0,W,H); c.globalCompositeOperation="source-over"; c.fillStyle=`rgba(255,230,170,${a*.25})`; c.fillRect(0,0,W,H); c.restore(); }
   if(B.witch>0){ const a=Math.min(1,B.witch*3)*.22; c.save(); c.fillStyle=`rgba(90,150,255,${a})`; c.fillRect(0,0,W,H); c.globalCompositeOperation="lighter"; c.strokeStyle=`rgba(160,220,255,${a*1.6})`; c.lineWidth=8; c.strokeRect(4,4,W-8,H-8); c.restore(); }
   const TT=B.foes.find(f=>f.titan&&f.alive);
   if(TT&&B.count<=0){ const bw=Math.min(W*.7,620), bx=(W-bw)/2, by=H-Math.max(150,H*.2)+40, r=TT.hp/TT.max; c.save();
@@ -3275,7 +3352,7 @@ function openKCard(k){
   const head=el("div","card-head"); const ht=el("div"); ht.style.minWidth="0";
   ht.append(el("div","kind",tp.name+(k.cat&&CAT_BY[k.cat]?" · ขอเรื่อง"+CAT_BY[k.cat].name:"")));
   const h=el("h3",null,k.name); if(k.partner){ h.append(" ♥ "); h.append(el("span","who2",k.partner)); } ht.append(h);
-  const chips=el("div","kchips"); chips.append(el("span","kchip lv",`Lv.${k.lv||1}`)); if(k.stars) chips.append(el("span","kchip star",starStr(k.stars))); if(k.cls&&CLASS_INFO[k.cls]) chips.append(el("span","kchip cls",CLASS_INFO[k.cls].n)); if(k.kills) chips.append(el("span","kchip",`⚔ ${k.kills}`)); if(k.type==="ganga") chips.append(el("span","kchip legend","🌊 ผู้พิชิตบาดาล"));
+  const chips=el("div","kchips"); chips.append(el("span","kchip lv",`Lv.${k.lv||1}`)); if(k.stars) chips.append(el("span","kchip star",starStr(k.stars))); if(k.cls&&CLASS_INFO[k.cls]) chips.append(el("span","kchip cls",clsName(k))); if(k.kills) chips.append(el("span","kchip",`⚔ ${k.kills}`)); if(k.type==="ganga") chips.append(el("span","kchip legend","🌊 ผู้พิชิตบาดาล"));
   ht.append(chips); head.append(ht); const pe=photoEl(k); if(pe) head.append(pe); card.append(head);
   const stats=el("div","kstats"); card.append(stats);
   if(!String(k.id).startsWith("local-")&&apiOK) (async()=>{ try{ const pr=(await api("?prog="+encodeURIComponent(k.id))).prog; if(!pr||!stats.isConnected) return;

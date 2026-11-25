@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "ee311d45-afa6-4ab9-9908-2b5adbdcb3d5",
+  "canvas": {
+   "h": 128,
+   "w": 128
+  },
+  "frames": 12,
+  "fps": 14,
+  "loop": false,
+  "anchor": {
+   "x": 64,
+   "y": 64,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-solarnova.gif": "https://api.pixellab.ai/mcp/pixel-tools/0d8161d4-6929-48b1-9402-d31048e474f8/lk-solarnova.gif",
+  "lk-solarnova.png": "https://api.pixellab.ai/mcp/pixel-tools/0d8161d4-6929-48b1-9402-d31048e474f8/lk-solarnova.png",
+  "lk-solarnova.json": "https://api.pixellab.ai/mcp/pixel-tools/0d8161d4-6929-48b1-9402-d31048e474f8/lk-solarnova.json"
+ }
+}

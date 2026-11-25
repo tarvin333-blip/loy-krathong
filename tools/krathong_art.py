@@ -33,6 +33,14 @@ DESC = {
  'skin_guardian': "a heavy fortress krathong for a guardian class, thick golden lotus petals shaped like armored plates with rivets, a sturdy round tower-like base with tiny crenellations, a large golden shield crest with a lotus emblem on the front, gold and ivory color scheme",
  'skin_mystic':   "an arcane krathong for a moon mage class, translucent violet crystal lotus petals with glowing silver rune engravings, a small floating crescent moon and orbiting tiny magic orbs above, a dark indigo base with a glowing magic circle, violet silver and midnight blue color scheme",
  'skin_racer':    "a sleek speed krathong for a rainbow racer class, a streamlined aerodynamic boat-like hull with swept-back fin petals like wings, rainbow light streaks along its sides, a pointed prow, white and rainbow gradient color scheme with motion lines",
+ 'adv_tidelord': "a majestic sea-lord war krathong, layered deep blue and silver blade petals like crashing waves, a coral and pearl crown, a golden trident standing beside the candle, foaming wave crests curling around the base, ornate and powerful",
+ 'adv_stormblade': "a storm swordsman krathong, slim dark steel sword-blade petals crackling with small cyan lightning, three crossed katana-like blades behind the candle, a dark grey storm-cloud base with lightning runes",
+ 'adv_paladin': "a holy lotus paladin krathong, radiant white and gold lotus petals shaped like knight armor with a glowing holy halo ring above, a white winged golden shield emblem on the front, soft divine light",
+ 'adv_yaksha': "a giant Thai temple guardian yaksha krathong, a fierce green-faced yaksha demon guardian mask with tusks and a tall golden crown on the front, a huge golden club across the base, red and gold Thai ornaments, heavy and imposing",
+ 'adv_chrono': "a time-mage krathong, translucent indigo crystal petals with glowing golden clock-face rings and roman numerals orbiting above, a small floating hourglass with glowing sand, cosmic blue and gold",
+ 'adv_solar': "a sun sorcerer krathong, blazing orange and gold flame-shaped petals radiating like a sun, a glowing solar disc with sun rays behind the candle, a ring of small floating fire runes, radiant and hot",
+ 'adv_phantom': "a phantom wind ninja krathong, sleek dark violet and black aerodynamic hull with flowing wind ribbons, faint translucent ghost after-images trailing behind it, small shuriken-shaped petals, mysterious",
+ 'adv_comet': "a rainbow comet racer krathong, a sleek white and gold streamlined comet-shaped hull with a long blazing rainbow comet tail trailing behind, star sparkles, wing fins, fast and dazzling",
  'star':    "magical crystal krathong with translucent glowing cyan and violet star-shaped crystal petals on a deep indigo base studded with golden sequins, tiny sparkles",
 }
 if __name__ == '__main__':

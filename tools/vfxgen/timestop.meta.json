@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "d40ba207-3c74-4f41-9c02-9d39890e371d",
+  "canvas": {
+   "h": 128,
+   "w": 160
+  },
+  "frames": 12,
+  "fps": 12,
+  "loop": true,
+  "anchor": {
+   "x": 64,
+   "y": 64,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-timestop.gif": "https://api.pixellab.ai/mcp/pixel-tools/791533d8-acd4-4207-ac75-c6c0908648e1/lk-timestop.gif",
+  "lk-timestop.png": "https://api.pixellab.ai/mcp/pixel-tools/791533d8-acd4-4207-ac75-c6c0908648e1/lk-timestop.png",
+  "lk-timestop.json": "https://api.pixellab.ai/mcp/pixel-tools/791533d8-acd4-4207-ac75-c6c0908648e1/lk-timestop.json"
+ }
+}

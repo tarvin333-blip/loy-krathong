@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "aae1714e-2f82-4148-bdc1-5eb3577dbd39",
+  "canvas": {
+   "h": 136,
+   "w": 72
+  },
+  "frames": 14,
+  "fps": 14,
+  "loop": false,
+  "anchor": {
+   "x": 36,
+   "y": 106,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-holylotus.gif": "https://api.pixellab.ai/mcp/pixel-tools/00cb0e83-c61b-4671-b8c8-1a377ebd1014/lk-holylotus.gif",
+  "lk-holylotus.png": "https://api.pixellab.ai/mcp/pixel-tools/00cb0e83-c61b-4671-b8c8-1a377ebd1014/lk-holylotus.png",
+  "lk-holylotus.json": "https://api.pixellab.ai/mcp/pixel-tools/00cb0e83-c61b-4671-b8c8-1a377ebd1014/lk-holylotus.json"
+ }
+}

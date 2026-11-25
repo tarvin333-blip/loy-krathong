@@ -1,0 +1,339 @@
+{
+ "frames": [
+  {
+   "filename": "lk-timestop 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 1.png",
+   "frame": {
+    "x": 160,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 2.png",
+   "frame": {
+    "x": 320,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 3.png",
+   "frame": {
+    "x": 480,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 4.png",
+   "frame": {
+    "x": 0,
+    "y": 128,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 5.png",
+   "frame": {
+    "x": 160,
+    "y": 128,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 6.png",
+   "frame": {
+    "x": 320,
+    "y": 128,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 7.png",
+   "frame": {
+    "x": 480,
+    "y": 128,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 8.png",
+   "frame": {
+    "x": 0,
+    "y": 256,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 9.png",
+   "frame": {
+    "x": 160,
+    "y": 256,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 10.png",
+   "frame": {
+    "x": 320,
+    "y": 256,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-timestop 11.png",
+   "frame": {
+    "x": 480,
+    "y": 256,
+    "w": 160,
+    "h": 128
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 160,
+    "h": 128
+   },
+   "sourceSize": {
+    "w": 160,
+    "h": 128
+   },
+   "pivot": {
+    "x": 0.4,
+    "y": 0.5
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-timestop.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 640,
+   "h": 384
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 64,
+   "y": 64
+  },
+  "frameTags": [
+   {
+    "name": "lk-timestop",
+    "from": 0,
+    "to": 11,
+    "direction": "forward"
+   }
+  ]
+ }
+}

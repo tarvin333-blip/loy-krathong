@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "effect_id": "f56a9c89-50d2-4a23-af84-a04cea3847ce",
+  "canvas": {
+   "h": 128,
+   "w": 130
+  },
+  "frames": 14,
+  "fps": 16,
+  "loop": false,
+  "anchor": {
+   "x": 58,
+   "y": 79,
+   "kind": "origin"
+  }
+ },
+ "files": {
+  "lk-groundslam.gif": "https://api.pixellab.ai/mcp/pixel-tools/f1d36872-ec72-42d9-8f92-a701ca0c015e/lk-groundslam.gif",
+  "lk-groundslam.png": "https://api.pixellab.ai/mcp/pixel-tools/f1d36872-ec72-42d9-8f92-a701ca0c015e/lk-groundslam.png",
+  "lk-groundslam.json": "https://api.pixellab.ai/mcp/pixel-tools/f1d36872-ec72-42d9-8f92-a701ca0c015e/lk-groundslam.json"
+ }
+}

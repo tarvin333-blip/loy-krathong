@@ -1,0 +1,183 @@
+{
+ "frames": [
+  {
+   "filename": "lk-stormslash 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "sourceSize": {
+    "w": 55,
+    "h": 58
+   },
+   "pivot": {
+    "x": 0.41818181818181815,
+    "y": 0.5
+   },
+   "duration": 125
+  },
+  {
+   "filename": "lk-stormslash 1.png",
+   "frame": {
+    "x": 55,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "sourceSize": {
+    "w": 55,
+    "h": 58
+   },
+   "pivot": {
+    "x": 0.41818181818181815,
+    "y": 0.5
+   },
+   "duration": 125
+  },
+  {
+   "filename": "lk-stormslash 2.png",
+   "frame": {
+    "x": 110,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "sourceSize": {
+    "w": 55,
+    "h": 58
+   },
+   "pivot": {
+    "x": 0.41818181818181815,
+    "y": 0.5
+   },
+   "duration": 125
+  },
+  {
+   "filename": "lk-stormslash 3.png",
+   "frame": {
+    "x": 0,
+    "y": 58,
+    "w": 55,
+    "h": 58
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "sourceSize": {
+    "w": 55,
+    "h": 58
+   },
+   "pivot": {
+    "x": 0.41818181818181815,
+    "y": 0.5
+   },
+   "duration": 125
+  },
+  {
+   "filename": "lk-stormslash 4.png",
+   "frame": {
+    "x": 55,
+    "y": 58,
+    "w": 55,
+    "h": 58
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "sourceSize": {
+    "w": 55,
+    "h": 58
+   },
+   "pivot": {
+    "x": 0.41818181818181815,
+    "y": 0.5
+   },
+   "duration": 125
+  },
+  {
+   "filename": "lk-stormslash 5.png",
+   "frame": {
+    "x": 110,
+    "y": 58,
+    "w": 55,
+    "h": 58
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 55,
+    "h": 58
+   },
+   "sourceSize": {
+    "w": 55,
+    "h": 58
+   },
+   "pivot": {
+    "x": 0.41818181818181815,
+    "y": 0.5
+   },
+   "duration": 125
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-stormslash.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 165,
+   "h": 116
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 23,
+   "y": 29
+  },
+  "frameTags": [
+   {
+    "name": "lk-stormslash",
+    "from": 0,
+    "to": 5,
+    "direction": "forward"
+   }
+  ]
+ }
+}

@@ -1,0 +1,443 @@
+{
+ "frames": [
+  {
+   "filename": "lk-tsunami 0.png",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 1.png",
+   "frame": {
+    "x": 240,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 2.png",
+   "frame": {
+    "x": 480,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 3.png",
+   "frame": {
+    "x": 720,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 4.png",
+   "frame": {
+    "x": 0,
+    "y": 168,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 5.png",
+   "frame": {
+    "x": 240,
+    "y": 168,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 6.png",
+   "frame": {
+    "x": 480,
+    "y": 168,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 7.png",
+   "frame": {
+    "x": 720,
+    "y": 168,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 8.png",
+   "frame": {
+    "x": 0,
+    "y": 336,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 9.png",
+   "frame": {
+    "x": 240,
+    "y": 336,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 10.png",
+   "frame": {
+    "x": 480,
+    "y": 336,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 11.png",
+   "frame": {
+    "x": 720,
+    "y": 336,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 12.png",
+   "frame": {
+    "x": 0,
+    "y": 504,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 13.png",
+   "frame": {
+    "x": 240,
+    "y": 504,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 14.png",
+   "frame": {
+    "x": 480,
+    "y": 504,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  },
+  {
+   "filename": "lk-tsunami 15.png",
+   "frame": {
+    "x": 720,
+    "y": 504,
+    "w": 240,
+    "h": 168
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 240,
+    "h": 168
+   },
+   "sourceSize": {
+    "w": 240,
+    "h": 168
+   },
+   "pivot": {
+    "x": 0.4166666666666667,
+    "y": 0.9047619047619048
+   },
+   "duration": 83
+  }
+ ],
+ "meta": {
+  "app": "PixelLab VFX Creator",
+  "image": "lk-tsunami.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 960,
+   "h": 672
+  },
+  "scale": "1",
+  "anchor": {
+   "kind": "origin",
+   "x": 100,
+   "y": 152
+  },
+  "frameTags": [
+   {
+    "name": "lk-tsunami",
+    "from": 0,
+    "to": 15,
+    "direction": "forward"
+   }
+  ]
+ }
+}
