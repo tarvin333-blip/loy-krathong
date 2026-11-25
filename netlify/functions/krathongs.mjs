@@ -53,6 +53,25 @@ const GACHA_COIN_COST = 3000, PITY = 40, RELIC_MAX = 5, DUP_REFUND = 500, RELIC_
 const BOSS_LOOT = [[5, 0.35, [["SR", 0.3], ["R", 0.7]]], [10, 1, [["UR", 0.04], ["SSR", 0.2], ["SR", 0.4], ["R", 0.36]]], [15, 1, [["UR", 0.08], ["SSR", 0.35], ["SR", 0.57]]], [20, 1, [["UR", 0.25], ["SSR", 0.75]]]];
 function giveRelic(p, id) { p.inv = p.inv || {}; const had = p.inv[id] || 0; let refund = 0; if (had >= RELIC_MAX) { refund = DUP_REFUND; p.coins += refund; } else p.inv[id] = had + 1; return { id, rar: RELICS[id], lv: p.inv[id], dup: had > 0, refund }; }
 function rollTable(tbl) { let x = Math.random(), rar = tbl[tbl.length - 1][0]; for (const [r, w] of tbl) { if (x < w) { rar = r; break; } x -= w; } const pool = Object.keys(RELICS).filter((k) => RELICS[k] === rar); return pool[Math.floor(Math.random() * pool.length)]; }
+// ---- shop: a stock that every visitor shares, re-rolled every 30 minutes from the slot number ----
+const SHOP_SLOT_MS = 30 * 60_000;
+const SHOP_PRICE = { R: 2000, SR: 5000, SSR: 12000, UR: 30000 }, SELL_PRICE = { R: 400, SR: 1000, SSR: 2500, UR: 6000 }, MARKET_PRICE = { R: 1200, SR: 3000, SSR: 7500, UR: 18000 };
+const TICKET_PRICE = 3500, SCROLL_PRICE = 4000;
+function seeded(n) { let x = (n * 2654435761) >>> 0; return () => { x ^= x << 13; x >>>= 0; x ^= x >> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; }
+function shopStock(slot) {
+  const r = seeded(slot + 7), items = [];
+  for (let i = 0; i < 4; i++) { const x = r(); const rar = x < 0.05 ? "UR" : x < 0.25 ? "SSR" : x < 0.6 ? "SR" : "R"; const pool = Object.keys(RELICS).filter((k) => RELICS[k] === rar);
+    items.push({ kind: "relic", id: pool[Math.floor(r() * pool.length)], rar, price: SHOP_PRICE[rar], qty: rar === "UR" ? 1 : 3 }); }
+  items.push({ kind: "scroll", stick: Math.floor(r() * N_FORTUNES), price: SCROLL_PRICE, qty: 3 });
+  items.push({ kind: "ticket", price: TICKET_PRICE, qty: 5 });
+  return items;
+}
+async function shopView(store) {
+  const slot = Math.floor(Date.now() / SHOP_SLOT_MS), stock = shopStock(slot), sold = (await store.get("shop/" + slot, { type: "json" })) || {};
+  const { blobs } = await store.list({ prefix: "market/" }); const keys = blobs.map((b) => b.key).sort().reverse().slice(0, 24);
+  const market = (await Promise.all(keys.map(async (k) => { const m = await store.get(k, { type: "json" }); return m && { key: k, ...m }; }))).filter(Boolean);
+  return { slot, endsAt: (slot + 1) * SHOP_SLOT_MS, items: stock.map((it, i) => ({ ...it, left: Math.max(0, it.qty - (sold[i] || 0)) })), market, sellPrice: SELL_PRICE, marketPrice: MARKET_PRICE };
+}
 function rollRelic(p) {
   p.pity = (p.pity || 0) + 1; let rar = "R";
   if (p.pity >= PITY) rar = "UR"; else { let x = Math.random(); for (const [r, w] of RARITY_RATE) { if (x < w) { rar = r; break; } x -= w; } }
@@ -110,6 +129,7 @@ export default async (req, context) => {
         },
       });
     }
+    if (url.searchParams.get("shop") !== null) return json(await shopView(store));
     const progId = url.searchParams.get("prog");
     if (progId !== null) {
       if (!ID_RE.test(progId)) return json({ error: "ไม่พบ" }, 404);
@@ -207,6 +227,35 @@ export default async (req, context) => {
         const cost = p.adv ? ADV_SWITCH : ADV_COST; if (p.coins < cost) return json({ error: "เหรียญไม่พอ" }, 400);
         p.coins -= cost; p.adv = a; await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
         return json({ prog: publicProg(p) });
+      }
+      if (action === "shopbuy") {
+        const v = await shopView(store), i = Math.floor(Number(b.idx)); const it = v.items[i];
+        if (!it || it.left <= 0) return json({ error: "ของชิ้นนี้หมดแล้ว" }, 400);
+        if (p.coins < it.price) return json({ error: "เหรียญไม่พอ" }, 400);
+        const soldKey = "shop/" + v.slot, sold = (await store.get(soldKey, { type: "json" })) || {}; sold[i] = (sold[i] || 0) + 1; await store.setJSON(soldKey, sold);
+        p.coins -= it.price; let got = null;
+        if (it.kind === "relic") got = giveRelic(p, it.id);
+        if (it.kind === "ticket") { p.tickets = (p.tickets || 0) + 1; got = { ticket: 1 }; }
+        if (it.kind === "scroll") { p.sticks = [it.stick]; got = { stick: it.stick }; }
+        await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        return json({ got, prog: publicProg(p) });
+      }
+      if (action === "sell") {                       // sell one level of a relic to the shop; it then shows up in the players' market
+        const r = String(b.relic || ""); const lv = p.inv?.[r] || 0; if (!RELICS[r] || lv <= 0) return json({ error: "ไม่มีเครื่องรางนี้" }, 400);
+        const rar = RELICS[r]; p.inv[r] = lv - 1; if (p.inv[r] <= 0) { delete p.inv[r]; p.relics = (p.relics || []).filter((x) => x !== r); }
+        p.coins += SELL_PRICE[rar]; const now = Date.now();
+        await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        await store.setJSON("market/" + String(now).padStart(15, "0") + "-" + Math.random().toString(36).slice(2, 7), { relic: r, rar, price: MARKET_PRICE[rar], seller: p.name, at: now });
+        const { blobs } = await store.list({ prefix: "market/" }); const ks = blobs.map((x) => x.key).sort(); for (const k of ks.slice(0, Math.max(0, ks.length - 60))) await store.delete(k);
+        return json({ coins: SELL_PRICE[rar], prog: publicProg(p) });
+      }
+      if (action === "marketbuy") {
+        const key = String(b.key || ""); if (!/^market\/[0-9]{15}-[a-z0-9]{1,8}$/.test(key)) return json({ error: "ไม่พบสินค้า" }, 400);
+        const m = await store.get(key, { type: "json" }); if (!m) return json({ error: "มีคนซื้อไปแล้ว" }, 400);
+        if (p.coins < m.price) return json({ error: "เหรียญไม่พอ" }, 400);
+        await store.delete(key); p.coins -= m.price; const got = giveRelic(p, m.relic);
+        await store.setJSON("prog/" + p.id, p); await syncSummary(store, p);
+        return json({ got, prog: publicProg(p) });
       }
       if (action === "class") {
         const c = String(b.cls || ""); if (!CLASSES.includes(c)) return json({ error: "ไม่มีคลาสนี้" }, 400);

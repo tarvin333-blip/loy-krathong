@@ -355,6 +355,14 @@ body.in-ending .top,body.in-ending .scenes,body.in-ending .cta-wrap,body.in-endi
 .adv-card img{width:84px;height:84px;object-fit:contain;image-rendering:pixelated;flex:none;filter:drop-shadow(0 0 10px rgba(255,220,160,.4))}
 .adv-card b{display:block;font-size:15px;color:#ffe2a0} .adv-card small{display:block;font-size:11.5px;color:var(--ink-dim);margin-top:2px}
 .adv-card .adv-sk{color:#bfe3ff} .adv-card .adv-act{color:#ffd0f2}
+.shop-tabs{display:flex;gap:6px;margin:8px 0}
+.shop-tabs .btn{flex:1;padding:7px 4px;font-size:13px} .shop-tabs .btn.on{background:var(--gold);color:#2a1600;border-color:var(--gold)}
+.shop-timer{font-size:12px;color:#ffd88a;margin:4px 0}
+.shop-list{display:grid;gap:6px;margin:6px 0 10px;max-height:52vh;overflow:auto}
+.shop-row{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;border:1px solid rgba(var(--rc,255,255,255),.45);background:linear-gradient(90deg,rgba(var(--rc,255,255,255),.12),rgba(var(--rc,255,255,255),.02))}
+.shop-row img{width:40px;height:40px;image-rendering:pixelated;flex:none} .shop-ic{font-size:30px;width:40px;text-align:center;flex:none}
+.shop-row div{flex:1;min-width:0} .shop-row b{display:block;font-size:13px} .shop-row small{display:block;font-size:11px;color:var(--ink-dim)}
+.shop-row .btn{flex:none;padding:7px 10px;font-size:12px;white-space:nowrap}
 .cls-box{border-color:rgba(170,200,255,.45);background:linear-gradient(90deg,rgba(140,180,255,.14),rgba(200,140,255,.08))}
 .cls-box b{color:#bcd4ff}
 .tut-ic{font-size:44px;line-height:1;text-align:center;margin:6px 0 2px;filter:drop-shadow(0 0 14px rgba(255,200,97,.55))}
@@ -2025,6 +2033,7 @@ async function openBattleMenu(){
       const a=el("button","btn"+((!P.sticks||(classOpen(P)&&!P.cls))?" glow":""),"อัปเกรด"); a.addEventListener("click",()=>openUpgrade(id)); bt.append(a);
       const b=el("button","btn","ด่านฝึก"); b.addEventListener("click",()=>prepareFight(id,"pve")); bt.append(b);
       const dg=el("button","btn dun","ดันเจี้ยน"); dg.addEventListener("click",()=>openDungeonIntro(id)); bt.append(dg);
+      const sh=el("button","btn","ร้านค้า"); sh.addEventListener("click",()=>openShop(id)); bt.append(sh);
       const gc=el("button","btn"+((P.tickets||0)>0?" glow":""),"หีบสมบัติ"+((P.tickets||0)>0?` 🎟${P.tickets}`:"")); gc.addEventListener("click",()=>openRelics(id)); bt.append(gc);
       const c=el("button","btn primary","ท้าดวล"); c.addEventListener("click",()=>openDuelPicker(id)); bt.append(c);
       row.append(bt); list.append(row); }
@@ -2048,6 +2057,7 @@ const TUTORIAL=[
   ["🌟","คลาสขั้นสูง (ขยักที่ 2)","ได้ ★1 และผ่านดันเจี้ยนชั้น 10 แล้ว เลื่อนขั้นคลาสได้ (1,000 เหรียญ) แต่ละคลาสแยก 2 สาย มีสกิลใหม่ อัปเกรดปุ่มสวน/หลบ และสกินขั้นสูง"],
   ["🏰","ดันเจี้ยน","ลงไปปราบกระทงปีศาจ 10 ชั้น เลือดไม่รีเซ็ต (ฟื้น 30% ทุกชั้น) ผ่านแต่ละชั้นจะเลือกลงต่อหรือถอยกลับพร้อมเหรียญก็ได้ ชั้น 5 มีขุนพลปีศาจ ชั้น 10 คือราชาปีศาจยักษ์"],
   ["🎁","หีบสมบัติ & เครื่องราง","ผ่านดันเจี้ยนชั้น 10 / 15 / 20 ได้ตั๋วหีบสมบัติ (หรือซื้อด้วยเหรียญ) สุ่มเครื่องราง 4 แรร์ R / SR / SSR / UR ใส่ได้ 2 ช่อง ได้ซ้ำเลเวลขึ้น UR มีออร่าสวยๆ ติดกระทงด้วย · ใส่ 2 ชิ้นของเซ็ตเดียวกัน (พญานาค / จันทรา / อสูรเพลิง / ครุฑวายุ) ได้สกิลเซ็ตเพิ่มอีก 1 ปุ่ม"],
+  ["🏪","ร้านค้าบาดาล","ปุ่ม “ร้านค้า” ที่กระทง · ของในร้านเปลี่ยนทุก 30 นาที มีเครื่องราง ตำราสกิล และตั๋วหีบ ราคาแพงหน่อยแต่ไม่ต้องลุ้น · ขายเครื่องรางที่ไม่ใช้ได้ และของที่คนขายจะไปอยู่ใน “ตลาดผู้เล่น”"],
   ["🤺","ท้าดวล","ท้ากระทงของคนอื่นได้ ระบบจะใช้ค่าพลังที่เขาอัปไว้สู้แทน ใครมาท้าคุณ ดูได้ที่ “ใครมาท้าฉัน”"],
   ["★","ยกระดับดาว (เป้าหมายระยะยาว)","อัปค่าพลังทุกตัวจนตัน แล้วกดยกระดับ จะได้ ★ ค่าพลัง +8% และเพดานเลเวลสูงขึ้น"]
 ];
@@ -2302,7 +2312,7 @@ function openRelics(id){
       if(L){ const on=eq.includes(r); const btn=el("button","btn"+(on?"":" primary"),on?"ถอด":"ใส่"); btn.addEventListener("click",()=>{ let nx=eq.filter(x=>x!==r); if(!on){ if(nx.length>=2) nx=nx.slice(1); nx.push(r); } equipRelics(id,nx); }); it.append(btn); }
       grid.append(it); }
     card.append(grid);
-    const acts=el("div","acts"); backBtn(acts,"อัปเกรด",()=>openUpgrade(id)); backBtn(acts,"เมนูศึก",openBattleMenu); card.append(acts);
+    const acts=el("div","acts"); backBtn(acts,"🏪 ร้านค้า",()=>openShop(id)); backBtn(acts,"อัปเกรด",()=>openUpgrade(id)); backBtn(acts,"เมนูศึก",openBattleMenu); card.append(acts);
   });
 }
 function showGacha(id,got){
@@ -2412,6 +2422,7 @@ function drawEnding(c,t,dt){
 }
 /* ================= ประกาศอัปเดต: newest first; the newest id is remembered once read ================= */
 const UPDATES=[
+  {id:"2026-11-26b",t:"ร้านค้าบาดาล 🏪",items:["🛒 ร้านสุ่มของใหม่ทุก 30 นาที ทุกคนเห็นชุดเดียวกัน ของมีจำกัด: เครื่องราง, ตำราสกิล (เลือกสกิลเซียมซีได้), ตั๋วหีบ","💰 ขายเครื่องรางให้ร้านได้ทีละเลเวล","🤝 ของที่ผู้เล่นขาย ไปวางใน “ตลาดผู้เล่น” ให้คนอื่นซื้อต่อในราคาถูกกว่าร้าน"]},
   {id:"2026-11-26",t:"คลาสขั้นสูง ขยักที่ 2 (8 สาย)",items:["🌟 ได้ ★1 + ผ่านดันเจี้ยนชั้น 10 แล้ว เลื่อนขั้นคลาสได้ในหน้าอัปเกรด","⚔ นักรบ → ขุนพลวารี / นักดาบพายุ · 🛡 ผู้พิทักษ์ → อัศวินบัวสวรรค์ / ยักษ์ทวารบาล","🔮 จอมเวท → จอมเวทกาลเวลา (หยุดกาล!) / จอมขมังเวทสุริยะ · 🌈 นักซิ่ง → เงาวายุ / ดาวหางสายรุ้ง","แต่ละสายมีสกิลใหม่ อัปเกรดปุ่มสวน/หลบ และสกินขั้นสูง"]},
   {id:"2026-11-25c",t:"แก้บัคบอสติดมุม",items:["🐞 บอสที่โดนต้อนเข้ามุมจะเคลื่อนกลับเข้ากลางสนามเอง","🤝 ผู้เล่นทะลุผ่านเพื่อนร่วมทีมได้ ไม่โดนเพื่อนดันจนเข้าไปชนบอสไม่ได้ และเพื่อน AI จะเว้นทางให้","ขอบคุณผู้เล่นที่แจ้งมานะครับ 🙏"]},
   {id:"2026-11-25b",t:"แพรี่ & เพอร์เฟคดอดจ์",items:["🛡 นักรบ/ผู้พิทักษ์: ปุ่ม “สวน” กดตอนโดนชน = PARRY! ไม่เจ็บ ศัตรูมึนและโดนสวนกลับ","💨 จอมเวท/นักซิ่ง: ปุ่ม “หลบ” กดตอนกำลังจะโดน = PERFECT! เวลาศัตรูหน่วงลง 1 วินาที","⌨ คอมกด Space ได้เลย"]},
@@ -2435,6 +2446,44 @@ $("btnNews").addEventListener("click",()=>{ unlockAudio(); openNews(); });
 setNewsBadge();
 // show the newest update once to returning visitors (first-time visitors just get the badge)
 setTimeout(()=>{ if(newsUnseen()&&lsGet("lk.visited",0)&&$("card").hidden&&!battle) openNews(); lsSet("lk.visited",1); },2500);
+/* ================= ร้านค้าบาดาล: shared stock re-rolled every 30 min · sell relics · players' market ================= */
+let shopTab="shop", shopTimer=0;
+function fmtCoins(n){ return Number(n).toLocaleString(); }
+async function openShop(id,tab){
+  const k=kOf(id), P0=myProgs[id]&&myProgs[id].prog; if(!k||!P0){ openBattleMenu(); return; } if(tab) shopTab=tab;
+  showCard(card=>{ card.append(el("div","kind","🏪 ร้านค้าบาดาล")); card.append(el("p","meta","กำลังโหลด…")); });
+  let v=null; try{ v=await api("?shop"); }catch(e){ toast(e.message); openBattleMenu(); return; }
+  const P=myProgs[id].prog;
+  const buy=async(body,btn,label)=>{ btn.disabled=true; try{ const j=await post("?action="+body.action,{id,token:tokens[id],...body}); myProgs[id].prog=j.prog; sfx("win");
+      if(j.got&&j.got.id) toast(`ได้ ${RELICS[j.got.id].n} ${j.got.refund?"(เต็ม Lv.5 คืน "+j.got.refund+" เหรียญ)":"Lv."+j.got.lv}!`); else if(j.got&&j.got.ticket) toast("ได้ตั๋วหีบสมบัติ 1 ใบ"); else if(j.got&&j.got.stick!=null) toast(`ได้สกิล “${SKILLS[FORTUNE_SKILL[j.got.stick]].n}” แล้ว`); else if(j.coins) toast(`ขายได้ ${fmtCoins(j.coins)} เหรียญ`);
+      openShop(id); }catch(e){ toast(e.message); btn.disabled=false; } };
+  showCard(card=>{
+    card.append(el("div","kind","🏪 ร้านค้าบาดาล")); card.append(el("h3",null,k.name)); card.append(el("div","coins",`💰 ${fmtCoins(P.coins)} เหรียญ · 🎟 ${P.tickets||0}`));
+    const tabs=el("div","shop-tabs"); for(const [t,n] of [["shop","ร้าน"],["market","ตลาดผู้เล่น"+(v.market.length?` (${v.market.length})`:"")],["sell","ขายของ"]]){ const b=el("button","btn"+(shopTab===t?" on":""),n); b.addEventListener("click",()=>{ shopTab=t; openShop(id); }); tabs.append(b); } card.append(tabs);
+    const list=el("div","shop-list");
+    const row=(icon,title,sub,price,btnLabel,ok,fn,rc)=>{ const r=el("div","shop-row"); if(rc) r.style.setProperty("--rc",rc); r.append(icon); const t=el("div"); t.append(title); t.append(el("small",null,sub)); r.append(t); const b=el("button","btn"+(ok?" primary":""),btnLabel); b.disabled=!ok; b.addEventListener("click",()=>fn(b)); r.append(b); list.append(r); };
+    const txt=(n)=>{ const b=el("b"); b.append(n); return b; };
+    if(shopTab==="shop"){
+      const tm=el("p","shop-timer"); card.append(tm); clearInterval(shopTimer); const tick=()=>{ if(!tm.isConnected){ clearInterval(shopTimer); return; } const ms=v.endsAt-Date.now(); if(ms<=0){ clearInterval(shopTimer); openShop(id); return; } tm.textContent=`⏳ ของชุดใหม่ใน ${Math.floor(ms/60000)}:${String(Math.floor(ms/1000)%60).padStart(2,"0")} นาที · ทุกคนเห็นของชุดเดียวกัน ใครเร็วได้ก่อน`; }; tick(); shopTimer=setInterval(tick,1000);
+      v.items.forEach((it,i)=>{ const ok=it.left>0&&P.coins>=it.price;
+        if(it.kind==="relic"){ const R=RELICS[it.id]; const tt=txt(""); tt.append(rarTag(it.rar),R.n); row(relicIcon(it.id),tt,`${R.d(1)}${R.set?" · "+SETS[R.set].n:""} · เหลือ ${it.left}`,it.price,it.left?`💰 ${fmtCoins(it.price)}`:"หมดแล้ว",ok,b=>buy({action:"shopbuy",idx:i},b),RAR_COL[it.rar]); }
+        if(it.kind==="scroll"){ const sk=SKILLS[FORTUNE_SKILL[it.stick]]; const ic=el("span","shop-ic","📜"); row(ic,txt(`ตำราสกิล “${sk.n}”`),`${sk.d} · แทนสกิลเซียมซีเดิม · เหลือ ${it.left}`,it.price,it.left?`💰 ${fmtCoins(it.price)}`:"หมดแล้ว",ok,b=>buy({action:"shopbuy",idx:i},b),"180,220,255"); }
+        if(it.kind==="ticket"){ const ic=el("span","shop-ic","🎟"); row(ic,txt("ตั๋วหีบสมบัติ"),`ใช้เปิดหีบสุ่มเครื่องราง · เหลือ ${it.left}`,it.price,it.left?`💰 ${fmtCoins(it.price)}`:"หมดแล้ว",ok,b=>buy({action:"shopbuy",idx:i},b),"255,215,130"); } });
+    }
+    if(shopTab==="market"){
+      card.append(el("p","meta","ของที่ผู้เล่นคนอื่นขายให้ร้าน ราคาถูกกว่าร้านหลัก · ชิ้นละ 1 คนเท่านั้น"));
+      if(!v.market.length) list.append(el("p","meta","ยังไม่มีใครขายของ ลองแวะมาใหม่นะ"));
+      for(const m of v.market){ const R=RELICS[m.relic]; if(!R) continue; const tt=txt(""); tt.append(rarTag(m.rar),R.n); row(relicIcon(m.relic),tt,`${R.d(1)} · ขายโดย ${m.seller} · ${ago(m.at)}`,m.price,`💰 ${fmtCoins(m.price)}`,P.coins>=m.price,b=>buy({action:"marketbuy",key:m.key},b),RAR_COL[m.rar]); }
+    }
+    if(shopTab==="sell"){
+      card.append(el("p","meta","ขายทีละ 1 เลเวล ได้เหรียญทันที · ของที่ขายจะไปวางในตลาดผู้เล่นให้คนอื่นซื้อต่อ · ถ้าขายจนหมดและใส่อยู่ จะถอดออกให้"));
+      const own=Object.entries(P.inv||{}).filter(([r,L])=>RELICS[r]&&L>0); if(!own.length) list.append(el("p","meta","ยังไม่มีเครื่องรางให้ขาย"));
+      for(const [r,L] of own){ const R=RELICS[r]; const tt=txt(""); tt.append(rarTag(R.rar),`${R.n} Lv.${L}`); const worn=(P.relics||[]).includes(r); row(relicIcon(r),tt,`ขายแล้วเหลือ Lv.${L-1}${worn&&L===1?" · ⚠ กำลังใส่อยู่":""}`,v.sellPrice[R.rar],`ขาย +${fmtCoins(v.sellPrice[R.rar])}`,true,b=>{ if(b.dataset.c!=="1"){ b.dataset.c="1"; b.textContent="แตะอีกครั้งเพื่อยืนยัน"; return; } buy({action:"sell",relic:r},b); },RAR_COL[R.rar]); }
+    }
+    card.append(list);
+    const acts=el("div","acts"); backBtn(acts,"คลังเครื่องราง",()=>openRelics(id)); backBtn(acts,"เมนูศึก",openBattleMenu); card.append(acts);
+  });
+}
 function openPractice(){
   showCard(card=>{
     card.append(el("div","kind","ฝึกซ้อม"));
