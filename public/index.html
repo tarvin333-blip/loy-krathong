@@ -868,9 +868,16 @@ function sprite(k,s){
 /* sitting in the water: the bottom of the krathong dips below a water line, with its reflection and a ring of ripples */
 function waterLine(k,s){ const a=artOf(k.type); return a?ART_BASE*s-artBox(a,s).h*.14:.3*s; }
 function hullRx(k,s){ const a=artOf(k.type); return a?artBox(a,s).w*.44:s*.95; }
+// a soft, blurred copy of each cached sprite, made once, for reflections
+function spriteBlur(sp){ if(sp.bl) return sp.bl; const cv2=document.createElement("canvas"); cv2.width=sp.cvs.width; cv2.height=sp.cvs.height; const x=cv2.getContext("2d");
+  try{ x.filter=`blur(${Math.max(1.2,sp.sb*.09)*DPR}px)`; }catch(e){} x.drawImage(sp.cvs,0,0); if(!x.filter||x.filter==="none"){ x.globalAlpha=.5; x.drawImage(sp.cvs,DPR,0); x.drawImage(sp.cvs,-DPR,0); } sp.bl={cvs:cv2,w:sp.w,h:sp.h,ox:sp.ox,oy:sp.oy,sb:sp.sb}; return sp.bl; }
+// reflection: upright (it does not copy the hull's tilt), blurred, cut into thin bands that sway like ripples and fade with depth
 function drawReflection(c,k,s,sp,t,rot,alpha){
-  const wl=waterLine(k,s); c.save(); c.beginPath(); c.rect(-s*4,wl,s*8,s*5); c.clip();
-  c.translate(Math.sin(t*1.7+k.seed*9)*1.2,wl); c.scale(1,-.62); c.translate(0,-wl); c.globalAlpha*=alpha; c.rotate(rot); blitSprite(c,sp,s); c.restore();
+  const wl=waterLine(k,s), bl=spriteBlur(sp), N=s>14?7:4, depth=s*1.15, sd=(k.seed||0)*9, a0=c.globalAlpha;
+  for(let i=0;i<N;i++){ const y0=wl+i*depth/N, h=depth/N+.6, u=(i+.5)/N, wob=Math.sin(t*1.9+i*1.3+sd)*s*.05*(.4+u)+Math.sin(t*.8+sd)*s*.02;
+    c.save(); c.beginPath(); c.rect(-s*4,y0,s*8,h); c.clip();
+    c.translate(wob,wl); c.scale(1+u*.06,-.58); c.translate(0,-wl); c.globalAlpha=a0*alpha*(1-u)*(1-u*.4)*1.25; blitSprite(c,bl,s); c.restore(); }
+  c.globalAlpha=a0;
 }
 function drawContactShadow(c,k,s){ const wl=waterLine(k,s), rx=hullRx(k,s);
   c.save(); c.translate(0,wl+rx*.05); c.scale(1,.24); c.fillStyle=rg(c,0,0,0,rx*1.25,[[0,"rgba(3,6,26,.42)"],[.6,"rgba(3,6,26,.22)"],[1,"rgba(3,6,26,0)"]]); c.beginPath(); c.arc(0,0,rx*1.25,0,TAU); c.fill(); c.restore(); }
