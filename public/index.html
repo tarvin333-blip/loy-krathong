@@ -787,6 +787,9 @@ for(const [t,a] of Object.entries(KR_ART)){ a.img=new Image(); a.ok=false; a.img
 const ART_W=2.3, ART_BASE=.45;
 // which picture to draw: a class skin (cosmetic) when the owner turned it on, else the krathong's own type
 function artKey(k){ return !k.skin?k.type:KR_ART[k.skin]?k.skin:KR_ART["skin_"+k.skin]?"skin_"+k.skin:k.type; }
+// which way a sprite's art faces (+1 right, -1 left); asymmetric art turns to face where it is going
+const ART_FACE={skin_racer:-1,adv_comet:-1,adv_phantom:-1};
+function faceToward(o,vx,dt){ const th=4; if(vx>th) o._dir=1; else if(vx<-th) o._dir=-1; const want=(o._dir||1)*(ART_FACE[artKey(o.k||o)]||1); o._fs=o._fs==null?want:o._fs+(want-o._fs)*Math.min(1,dt*9); return Math.abs(o._fs)<.15?Math.sign(o._fs||1)*.15:o._fs; }
 function artOf(type){ const a=KR_ART[type]; return a&&a.ok?a:null; }
 function artBox(a,s){ const w=ART_W*s, h=w*a.img.height/a.img.width; return {w,h,top:ART_BASE*s-h}; }
 function krTop(k,s){ const a=artOf(artKey(k)); return a?-artBox(a,s).top:1.6*s; }
@@ -1559,6 +1562,7 @@ function frame(nowP){
     const sp=sprite(k,p.s), photo=k.photoUrl?getImg(k.photoUrl):null;
     const onWater=p.drop<.05;
     c.save(); c.translate(p.x,p.y); if(k.amb) c.globalAlpha=.5;
+    { const vx=k._px==null?0:(p.x-k._px)/Math.max(.001,dt); k._px=p.x; const fsr=faceToward(k,vx,dt); c.scale(fsr,1); k._flip=fsr; }
     // reflection
     if(onWater && p.s>9){
       drawReflection(c,k,p.s,sp,t,p.rot,.3);
@@ -1572,7 +1576,7 @@ function frame(nowP){
     c.save(); c.rotate(p.rot);
     drawAccessory(c,k,p.s,t,"back",!!photo);
     if(onWater) drawHull(c,sp,p.s,k,t); else blitSprite(c,sp,p.s);
-    if(photo) drawPhoto(c,photo,p.s,artKey(k));
+    if(photo){ c.save(); c.scale(Math.sign(k._flip||1),1); drawPhoto(c,photo,p.s,artKey(k)); c.restore(); }
     drawAccessory(c,k,p.s,t,"front",!!photo);
     krDynamic(c,k,p.s,t);
     if(onWater) drawRelicCharms(c,k,p.s,t);
@@ -2239,7 +2243,7 @@ let devOn=!!lsGet("lk.dev",0), devPick={type:"star",cls:null,full:true,relics:[]
 async function sha256hex(t){ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
 function setDev(on){ devOn=on; lsSet("lk.dev",on?1:0); $("devfab").hidden=!on; }
 async function askDevCode(){ const code=prompt("รหัสลับ"); if(!code) return; try{ if(await sha256hex(code.trim())===DEV_HASH){ lsSet("lk.devcode",code.trim()); setDev(true); sfx("win"); toast("เปิด Dev mode แล้ว"); openDev(); } else toast("รหัสไม่ถูกต้อง"); }catch(e){ toast("เบราว์เซอร์นี้ใช้ Dev mode ไม่ได้"); } }
-function devProg(){ const L=devPick.full?20:0; return {level:1+L*5,lv:{hp:L,atk:L,def:L,spd:L,sk:L},stars:0,cls:devPick.cls,adv:devPick.cls?devPick.adv||null:null,sticks:[11],bestDungeon:0,coins:0,relics:devPick.relics.slice(),inv:Object.fromEntries(Object.keys(RELICS).map(r=>[r,5]))}; }
+function devProg(){ const L=devPick.full?20:0; return {level:1+L*5,lv:{hp:L,atk:L,def:L,spd:L,sk:L},stars:0,cls:devPick.cls,adv:devPick.cls?devPick.adv||null:null,skin:!!devPick.cls,sticks:[11],bestDungeon:0,coins:0,relics:devPick.relics.slice(),inv:Object.fromEntries(Object.keys(RELICS).map(r=>[r,5]))}; }
 function devStart(floor){ const tp=TYPE_BY[devPick.type]||TYPES[0], k={id:"dev",name:"DEV · "+tp.name,type:tp.id,candle:"gold",seed:Math.random()};
   const dp=devProg(); k.cls=dp.cls; k.adv=dp.adv; dunRun={id:"dev",runId:"dev",from:segOf(floor),floor,hp:null,kills:0,k,prog:dp,dev:true}; startDungeonFloor(); }
 function openDev(){
@@ -2422,6 +2426,7 @@ function drawEnding(c,t,dt){
 }
 /* ================= ประกาศอัปเดต: newest first; the newest id is remembered once read ================= */
 const UPDATES=[
+  {id:"2026-11-26c",t:"กระทงหันซ้าย-ขวาได้",items:["↔ กระทงหันตามทิศที่กำลังไป ทั้งในแม่น้ำและในศึก กลับตัวแบบนุ่มๆ (สกินที่ไม่สมมาตรอย่างนักซิ่ง/ดาวหาง/เงาวายุ จะหันหัวไปทางที่วิ่ง)","🖼 รูปถ่ายบนกระทงไม่กลับด้าน"]},
   {id:"2026-11-26b",t:"ร้านค้าบาดาล 🏪",items:["🛒 ร้านสุ่มของใหม่ทุก 30 นาที ทุกคนเห็นชุดเดียวกัน ของมีจำกัด: เครื่องราง, ตำราสกิล (เลือกสกิลเซียมซีได้), ตั๋วหีบ","💰 ขายเครื่องรางให้ร้านได้ทีละเลเวล","🤝 ของที่ผู้เล่นขาย ไปวางใน “ตลาดผู้เล่น” ให้คนอื่นซื้อต่อในราคาถูกกว่าร้าน"]},
   {id:"2026-11-26",t:"คลาสขั้นสูง ขยักที่ 2 (8 สาย)",items:["🌟 ได้ ★1 + ผ่านดันเจี้ยนชั้น 10 แล้ว เลื่อนขั้นคลาสได้ในหน้าอัปเกรด","⚔ นักรบ → ขุนพลวารี / นักดาบพายุ · 🛡 ผู้พิทักษ์ → อัศวินบัวสวรรค์ / ยักษ์ทวารบาล","🔮 จอมเวท → จอมเวทกาลเวลา (หยุดกาล!) / จอมขมังเวทสุริยะ · 🌈 นักซิ่ง → เงาวายุ / ดาวหางสายรุ้ง","แต่ละสายมีสกิลใหม่ อัปเกรดปุ่มสวน/หลบ และสกินขั้นสูง"]},
   {id:"2026-11-25c",t:"แก้บัคบอสติดมุม",items:["🐞 บอสที่โดนต้อนเข้ามุมจะเคลื่อนกลับเข้ากลางสนามเอง","🤝 ผู้เล่นทะลุผ่านเพื่อนร่วมทีมได้ ไม่โดนเพื่อนดันจนเข้าไปชนบอสไม่ได้ และเพื่อน AI จะเว้นทางให้","ขอบคุณผู้เล่นที่แจ้งมานะครับ 🙏"]},
@@ -2985,7 +2990,7 @@ function battleStep(dt,t){
 function drawFighter(c,f,t){
   const s=fSize(f), sp=sprite(f.k,s), photo=f.k.photoUrl?getImg(f.k.photoUrl):null;
   const sk=f.alive?0:Math.min(1,f.sinkT/1.8); if(sk>=1) return;
-  c.save(); c.translate(f.x,f.y+sk*s*1.2);
+  c.save(); c.translate(f.x,f.y+sk*s*1.2); const fs=faceToward(f,f.vx,1/60); c.scale(fs,1); f._flip=fs;
   c.globalAlpha=1-sk*.9; if(f.mirror) c.filter="brightness(.55) saturate(1.6) hue-rotate(230deg)";
   if(!sk){ drawReflection(c,f.k,s,sp,t,0,.28); drawStarAura(c,f.k,s,t); drawRelicAura(c,f.k,s,t); drawContactShadow(c,f.k,s); }
   drawGlow(c,f.k,s,sk?.3:1);
@@ -2995,7 +3000,7 @@ function drawFighter(c,f,t){
   if(sk){ c.beginPath(); c.rect(-s*4,-s*4,s*8,s*4+waterLine(f.k,s)-sk*s*1.2); c.clip(); blitSprite(c,sp,s); }
   else drawHull(c,sp,s,f.k,t);
   if(!sk&&f.flashT>0){ f.flashT=Math.max(0,f.flashT-1/60); c.save(); c.globalCompositeOperation="lighter"; c.globalAlpha=f.flashT/.18*.8; blitSprite(c,sp,s); c.restore(); }
-  if(photo) drawPhoto(c,photo,s,artKey(f.k));
+  if(photo){ c.save(); c.scale(Math.sign(f._flip||1),1); drawPhoto(c,photo,s,artKey(f.k)); c.restore(); }
   if(!sk) drawAccessory(c,f.k,s,t,"front",!!photo);
   if(!sk){ krDynamic(c,f.k,s,t); drawRelicCharms(c,f.k,s,t); } else { const fp=flamePos(f.k,s); c.strokeStyle="rgba(200,200,220,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(fp.x,fp.y); for(let j=1;j<6;j++) c.lineTo(fp.x+Math.sin(t*2+j)*s*.15*j,fp.y-j*s*.25); c.stroke(); }
   c.restore();
